@@ -19,7 +19,6 @@ const ProductForm = ({ productForms, handleInputChange, addProductForm, deletePr
                                 <option value="" disabled>Seleccionar</option>
                                 <option value="urea">Urea</option>
                                 <option value="fosfato">Fosfato</option>
-                                {/* Agregar más opciones según sea necesario */}
                             </select>
                             {product.errors.producto && <p className="text-red-500 text-xs">{product.errors.producto}</p>}
                         </div>

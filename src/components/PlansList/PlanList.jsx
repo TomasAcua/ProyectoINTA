@@ -8,8 +8,8 @@ const PlanList = ({ plans, onAddPlan, onCleanPlans, currentDolarValue }) => {
                 <p>No hay planes cargados aún.</p>
             ) : (
                 <div className="flex flex-col items-center gap-4">
-                    {plans.map((plan) => (
-                        <table className="table-auto w-[90%] border-collapse text-center" key={plan.nombre}>
+                    {plans.map((plan, planIdx) => (
+                        <table className="table-auto w-[90%] border-collapse text-center" key={`${plan.nombre}-${planIdx}`}>
                             <caption className="font-bold py-2 text-lg">{plan.nombre}</caption>
                             <thead>
                                 <tr>
@@ -24,14 +24,21 @@ const PlanList = ({ plans, onAddPlan, onCleanPlans, currentDolarValue }) => {
                             </thead>
                             <tbody>
                                 {plan.productos.map((prod, idx) => (
-                                    <tr key={idx}>
+                                    <tr key={`${prod.producto}-${idx}`}>
                                         <td className="border px-4 py-2">{prod.producto}</td>
+                                        {console.log("Producto " + prod.producto)}
                                         <td className="border px-4 py-2">{prod.unidad}</td>
+                                        {console.log("Unidad " + prod.unidad)}
                                         <td className="border px-4 py-2">{prod.dosis}</td>
+                                        {console.log("Dosis " + prod.dosis)}
                                         <td className="border px-4 py-2">{prod.presentacion}</td>
+                                        {console.log("Presentacion " + prod.presentacion)}
                                         <td className="border px-4 py-2">${prod.precio}</td>
+                                        {console.log("Precio " + prod.precio)}
                                         <td className="border px-4 py-2">{prod.tratamientos}</td>
+                                        {console.log("Tratamientos " + prod.tratamientos)}
                                         <td className="border px-4 py-2">${prod.costo}</td>
+                                        {console.log("Costo " + prod.costo)}
                                     </tr>
                                 ))}
                             </tbody>
@@ -40,7 +47,8 @@ const PlanList = ({ plans, onAddPlan, onCleanPlans, currentDolarValue }) => {
                                     <td colSpan="7" className="border px-4 py-2 font-bold">
                                         <p className="text-center">Total</p>
                                         <p>
-                                            USD: ${plan.total} / ARS: ${(plan.total * currentDolarValue).toFixed(2)}
+                                            USD: ${plan.costoTotal} / ARS: ${(plan.costoTotal * currentDolarValue).toFixed(2)}
+                                            {console.log("Total " + plan.total)}
                                         </p>
                                     </td>
                                 </tr>

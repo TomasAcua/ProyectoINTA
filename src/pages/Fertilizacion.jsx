@@ -29,8 +29,7 @@ const Fertilizacion = () => {
     resetProductForms,
   } = useProductForm();
 
-  const { plans, showForm, addPlan, cleanPlans, showAddPlanForm } =
-    usePlanList();
+  const { plans, showForm, addPlan, cleanPlans, showAddPlanForm } = usePlanList();
 
   const { downloadPDF } = useGeneradorPDF();
 
