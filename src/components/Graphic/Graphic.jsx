@@ -11,7 +11,6 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const Graphic = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnasPDF }) => {
 
-    // console.log('PLANS: ' + plans)
     const [chartImage, setChartImage] = useState(null);
 
     useEffect(() => {
@@ -37,7 +36,6 @@ const Graphic = ({ isFormValid, chartData, chartOptions, chartRef, plans, column
                 <BarChart2 className="w-5 h-5 text-gray-700" />
                 <h2 className="font-semibold text-lg">VISUALIZACIÓN GRÁFICA</h2>
             </div>
-            {/* {console.log('chartData', chartData)} */}
 
             {isFormValid ? (
                 <>
