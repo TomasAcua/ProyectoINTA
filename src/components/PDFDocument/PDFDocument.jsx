@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PDFDocument = ({ chartImage, plansToRender }) => {
+const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -88,24 +88,22 @@ const PDFDocument = ({ chartImage, plansToRender }) => {
           plansToRender.map((plan, idx) => (
             <View key={idx} wrap={false}>
               <Text style={styles.planTitle}>
-                {plan.name} - Total: ${plan.costoTotal.toLocaleString()}
+                {plan.name} - Total: ${plan.costoTotal?.toLocaleString()}
               </Text>
               {plan.productos.length > 0 ? (
                 <View style={styles.table}>
                   <View style={[styles.tableRow, styles.tableHeader]}>
-                    <Text style={styles.tableCell}>Producto</Text>
-                    <Text style={styles.tableCell}>Dosis</Text>
-                    <Text style={styles.tableCell}>Volumen</Text>
-                    <Text style={styles.tableCell}>Cantidad</Text>
-                    <Text style={styles.tableCell}>Precio Unitario</Text>
+                    {columnasPDF.map(col => (
+                      <Text style={styles.tableCell} key={col.key}>{col.label}</Text>
+                    ))}
                   </View>
                   {plan.productos.map((prod, i) => (
                     <View style={styles.tableRow} key={i}>
-                      <Text style={styles.tableCell}>{prod.producto}</Text>
-                      <Text style={styles.tableCell}>{prod.dosis}</Text>
-                      <Text style={styles.tableCell}>{prod.volumen}</Text>
-                      <Text style={styles.tableCell}>{prod.cantidad}</Text>
-                      <Text style={styles.tableCell}>${prod.precioUnitario}</Text>
+                      {columnasPDF.map(col => (
+                        <Text style={styles.tableCell} key={col.key}>
+                          {prod[col.key] !== undefined ? prod[col.key] : ""}
+                        </Text>
+                      ))}
                     </View>
                   ))}
                 </View>

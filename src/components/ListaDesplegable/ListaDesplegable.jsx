@@ -1,11 +1,6 @@
-import { useEffect } from "react";
-
-const ListaDesplegable = ({ text, name, id, array, value, onChange }) => {
-  useEffect;
+const ListaDesplegable = ({ text, name, id, array = [], value, onChange }) => {
   return (
-    
     <div className="flex flex-col md:flex-row gap-x-5 items-start md:items-center justiffy-center">
-        
       <label htmlFor={name} className="block">
         {text}
       </label>
@@ -18,17 +13,19 @@ const ListaDesplegable = ({ text, name, id, array, value, onChange }) => {
       >
         <option value="" disabled>
           -- Seleccione una opción --
-        </option>{" "}
-        {array.map((item) => (
-          <option
-            value={typeof item === "object" ? item.producto : item}
-            key={typeof item === "object" ? item.id : item}
-          >
-            {typeof item === "object" ? item.producto : item}
-          </option>
-        ))}
+        </option>
+        {Array.isArray(array) &&
+          array.map((item) => (
+            <option
+              value={typeof item === "object" ? item.producto || item.value : item}
+              key={typeof item === "object" ? item.id || item.producto || item.value : item}
+            >
+              {typeof item === "object" ? item.producto || item.label : item}
+            </option>
+          ))}
       </select>
     </div>
   );
-};
+}
+
 export default ListaDesplegable;
