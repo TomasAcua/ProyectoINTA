@@ -1,15 +1,13 @@
-import { useRef, useState } from "react";
-import useProductForm from "../hooks/useProductForm";
-import usePlanList from "../hooks/usePlanList";
-import useGeneradorPDF from "../hooks/useGeneradorPDF";
-import Graphic from "../components/Graphic/Graphic";
-import Dolar from "../components/Dolar/Dolar";
-import ProductForm from "../components/FormularioPlan/ProductForm";
-import PlanList from "../components/PlansList/PlanList";
-import Button from "../components/Button/Button";
-import { FaArrowRight } from "react-icons/fa";
-import { PDFViewer } from "@react-pdf/renderer";
-import PDFDocument from "../components/PDF/PDFDocument";
+import { useRef, useState } from "react"
+import { FIELDS_FERTILIZATION } from "../consts/fertilization"
+import useProductForm from "../hooks/useProductForm"
+import usePlanList from "../hooks/usePlanList"
+import Graphic from "../components/Graphic/Graphic"
+import Dolar from "../components/Dolar/Dolar"
+import ProductForm from "../components/FormularioPlan/ProductForm"
+import useChartData from "../hooks/useChartData"
+import PlanListB from "../components/PlansList/PlanListB"
+import { calcularCostoFertilizacion } from "../utils/calcularCosto"
 
 /**
  * Acá traemos la importacion de la lógica de los hooks y el renderizado de los componentes
@@ -19,6 +17,16 @@ import PDFDocument from "../components/PDF/PDFDocument";
  */
 
 const Fertilizacion = () => {
+
+  // const camposFormulario = [
+  //   { key: "producto", label: "Producto", required: true },
+  //   { key: "unidad", label: "Unidad", required: true },
+  //   { key: "dosis", label: "Dosis", required: true, type: "number" },
+  //   { key: "presentacion", label: "Presentación", required: true },
+  //   { key: "precio", label: "Precio", required: true, type: "number" },
+  //   { key: "tratamientos", label: "Tratamientos", required: true, type: "number" }
+  // ]
+
   const {
     productForms,
     addProductForm,
@@ -27,13 +35,25 @@ const Fertilizacion = () => {
     cleanProducts,
     isCurrentPlanValid,
     resetProductForms,
-  } = useProductForm();
+  } = useProductForm(FIELDS_FERTILIZATION, calcularCostoFertilizacion, "productFormsFertilization")
 
-  const { plans, showForm, addPlan, cleanPlans, showAddPlanForm } = usePlanList();
+  const { plans, showForm, addPlan, cleanPlans, showAddPlanForm } = usePlanList("plansFertilizacion")
 
-  const { downloadPDF } = useGeneradorPDF();
+  const { chartData, chartOptions, isFormValid } = useChartData(plans)
 
-  const chartRef = useRef(null); // <- buscar
+  const columnasPDF = [
+    { label: "Producto", key: "producto" },
+    { label: "Unidad", key: "unidad" },
+    { label: "Dosis", key: "dosis" },
+    { label: "Presentación", key: "presentacion" },
+    { label: "Precio", key: "precio" },
+    { label: "Tratamientos", key: "tratamientos" },
+    { label: "Costo", key: "costo" }
+  ]
+
+  // const { downloadPDF } = useGeneradorPDF();
+
+  const chartRef = useRef(null) // <- buscar
 
   const [currentDolarValue, setCurrentDolarValue] = useState(
     localStorage.getItem("dolar") || 0
@@ -57,16 +77,6 @@ const Fertilizacion = () => {
     resetProductForms();
   };
 
-  const generarPDF = () => {
-    setMostrarPDF(true);
-  };
-
-  // Normaliza los planes para el gráfico y el PDF
-  const plansToRender = plans.map((plan) => ({
-    ...plan,
-    name: plan.nombre,
-    costoTotal: plan.total,
-  }));
 
   return (
     <div className="p-6 bg-gray-50 text-black min-h-screen w-full font-sans flex flex-col items-center">
@@ -79,6 +89,7 @@ const Fertilizacion = () => {
 
       {showForm && (
         <ProductForm
+          fields={FIELDS_FERTILIZATION}
           productForms={productForms}
           handleInputChange={handleInputChange}
           addProductForm={addProductForm}
@@ -88,39 +99,32 @@ const Fertilizacion = () => {
         />
       )}
 
-      <PlanList
+      {/* <PlanList
         plans={plans}
         onAddPlan={showAddPlanForm}
         onCleanPlans={cleanPlans}
         currentDolarValue={currentDolarValue}
+      /> */}
+
+      <PlanListB
+        plans={plans}
+        columnasPDF={columnasPDF}
+        planNameKey="nombre"
+        currentDolarValue={currentDolarValue}
+        onAddPlan={showAddPlanForm}
+        onCleanPlans={cleanPlans}
       />
 
-      <Graphic plans={plansToRender} setChartImage={setChartImage} />
-
-      <div className="flex flex-col items-center w-full">
-        <Button
-          onClick={generarPDF}
-          className="flex items-center justify-center gap-x-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition hover:bg-sky-600 px-6 py-2 cursor-pointer h-10 text-center mt-6"
-        >
-          <span>Generar PDF</span>
-          <span className="bg-sky-600 p-1 rounded">
-            <FaArrowRight className="text-white" />
-          </span>
-        </Button>
-
-        {mostrarPDF && (
-          <div className="w-full flex justify-center mt-8">
-            <PDFViewer width="80%" height="600">
-              <PDFDocument
-                chartImage={chartImage}
-                plansToRender={plansToRender}
-              />
-            </PDFViewer>
-          </div>
-        )}
-      </div>
+      <Graphic
+        isFormValid={isFormValid}
+        chartData={chartData}
+        chartOptions={chartOptions}
+        chartRef={chartRef}
+        plans={plans}
+        columnasPDF={columnasPDF}
+      />
     </div>
-  );
-};
+  )
+}
 
-export default Fertilizacion;
+export default Fertilizacion

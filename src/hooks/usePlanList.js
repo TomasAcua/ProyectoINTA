@@ -5,11 +5,11 @@ import { useState, useEffect } from 'react'
  * @returns estados, handles, funciones necesarias
  */
 
-const usePlanList = () => {
+const usePlanList = (storageKey = "plans") => {
 
     // Estado para almacenar todos los planes con detalles de productos
     // Controla mostrar u ocultar el formulario de carga
-    const [plans, setPlans] = useState(JSON.parse(localStorage.getItem("plans")) || []);
+    const [plans, setPlans] = useState(JSON.parse(localStorage.getItem(storageKey)) || []);
     const [showForm, setShowForm] = useState(true);
 
     const addPlan = (productForms) => {
@@ -33,8 +33,8 @@ const usePlanList = () => {
     };
 
     useEffect(() => {
-        localStorage.setItem("plans", JSON.stringify(plans));
-    }, [plans]);
+        localStorage.setItem(storageKey, JSON.stringify(plans));
+    }, [plans, storageKey])
 
     return {
         plans,
