@@ -3,18 +3,30 @@ import { FaArrowRight } from "react-icons/fa";
 import Input from "../Input/Input";
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
 import Button from "../Button/Button";
+import useFormulario from "../../hooks/useForm";
 
 const FormularioPlan = ({ formId, plans, setPlans, onEliminar }) => {
-  const [form, setForm] = useState({
+  const initialForm = {
     unidad: "",
     volumen: "",
     precio: "",
     producto: "",
     dosis: "",
+  };
+  const {
+    form,
+    actualizarCampo,
+    calcularCostoTotal,
+    costoTotal,
+    mensaje,
+    mostrarMensaje,
+    setForm
+  } = useFormulario({
+    formId,
+    initialForm,
+    onCalcularCosto: () => ({ costoTotal: 0 }),
   });
-  const [mensaje, setMensaje] = useState("");
   const [cantidadTotal, setCantidadTotal] = useState(null);
-  const [costoTotal, setCostoTotal] = useState(0);
   const unidades = ["Litros", "cc", "Kg"];
   const productosDisponibles = [
     { id: 1, producto: "Aceite de Verano", unidad: "Litros", dosis: 0.25, volumen: 20, cantidad: 5, precioUnitario: 2400, costoTotal: 12000 },
@@ -46,9 +58,6 @@ const FormularioPlan = ({ formId, plans, setPlans, onEliminar }) => {
     setCantidadTotal(total);
   }, [productos]);
 
-  const actualizarForm = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
 
 const agregarProducto = () => {
   const { producto, unidad, dosis, volumen, precio } = form;
@@ -93,7 +102,7 @@ const agregarProducto = () => {
       productos: productosActualizados,
       costoTotal,
     };
-
+    
     return nuevosPlanes;
   });
   setForm({ unidad: "", volumen: "", precio: "", producto: "", dosis: "" });
@@ -101,10 +110,7 @@ const agregarProducto = () => {
 };
 
 
-  const mostrarMensaje = (msg) => {
-    setMensaje(msg);
-    setTimeout(() => setMensaje(""), 2000);
-  };
+ 
 
   return (
     <div className="bg-white rounded-2xl shadow-lg w-full max-w-6xl mx-auto space-y-8 px-5">
@@ -116,7 +122,7 @@ const agregarProducto = () => {
           name="dosis"
           type="number"
           value={form.dosis}
-          onChange={(e) => actualizarForm("dosis", e.target.value)}
+          onChange={(e) => actualizarCampo("dosis", e.target.value)}
           placeholder="Ingrese una dosis"
         />
         <Input
@@ -124,7 +130,7 @@ const agregarProducto = () => {
           name="volumen"
           type="number"
           value={form.volumen}
-          onChange={(e) => actualizarForm("volumen", e.target.value)}
+          onChange={(e) => actualizarCampo("volumen", e.target.value)}
           placeholder="Ingrese un volumen"
         />
         <Input
@@ -132,7 +138,7 @@ const agregarProducto = () => {
           name="precio"
           type="number"
           value={form.precio}
-          onChange={(e) => actualizarForm("precio", e.target.value)}
+          onChange={(e) => actualizarCampo("precio", e.target.value)}
           placeholder="Ingrese un precio"
         />
         <ListaDesplegable
@@ -141,7 +147,7 @@ const agregarProducto = () => {
           id="producto"
           array={productosDisponibles}
           value={form.producto}
-          onChange={(e) => actualizarForm("producto", e.target.value)}
+          onChange={(e) => actualizarCampo("producto", e.target.value)}
         />
         <ListaDesplegable
           text="Unidad de dosis"
@@ -149,7 +155,7 @@ const agregarProducto = () => {
           id="unidad"
           array={unidades}
           value={form.unidad}
-          onChange={(e) => actualizarForm("unidad", e.target.value)}
+          onChange={(e) => actualizarCampo("unidad", e.target.value)}
         />
         
       </div>

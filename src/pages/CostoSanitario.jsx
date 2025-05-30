@@ -16,7 +16,7 @@ function CostoSanitario() {
     const storedPlans = localStorage.getItem("productosPorFormulario");
     return storedPlans
       ? JSON.parse(storedPlans)
-      : [{ name: "Plan 1", productos: [], costoTotal: 0 }];
+      : [];
   });
 
   useEffect(() => {
