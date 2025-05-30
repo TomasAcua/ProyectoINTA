@@ -18,7 +18,6 @@ const useFormulario = ({ formId, initialForm,  onCalcularCosto  }) => {
     } else {
       setCostoTotal(resultado.costoTotal);
       setMensaje("Calculado con éxito");
-     // setCostoTotalMaquinarias?.(resultado.costoTotal);
 
     }
   };

@@ -28,7 +28,6 @@ const initialForm = datosPrevios ? datosPrevios.form : { tractor: "", implemento
     onCalculoRealizado?.(); 
     const formConTotal = { ...form, totalMaquinaria: resultado.costoTotal };
 
-    // Actualizá el formulario padre con el nuevo total
     onActualizarFormulario?.(formConTotal);
   }
   mostrarMensaje()

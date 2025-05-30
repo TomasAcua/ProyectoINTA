@@ -114,9 +114,8 @@ useEffect(() => {
                 <FormularioMaquinaria
                   formId={index}
                   form={costoMaq.form || { tractor: "", implemento: "", precioCombustible: "" }}
-                  /*costoTotalMaquinarias={costoMaq.costoTotalMaquinarias}
-  setCostoTotalMaquinarias={(total) => actualizarCostoMaquinaria(index, { costoTotalMaquinarias: total })}
-   */onActualizarFormulario={(nuevoForm) => actualizarCostoMaquinaria(index, { form: nuevoForm })
+                  
+   onActualizarFormulario={(nuevoForm) => actualizarCostoMaquinaria(index, { form: nuevoForm })
   }
    onCalculoRealizado={() => {
     setMostrarMaquinarias(true);
