@@ -107,9 +107,8 @@ const agregarProducto = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg w-full max-w-6xl mx-auto space-y-8 px-5">
-      <h2 className="text-3xl font-bold text-center text-gray-800">Formulario de Plan {formId + 1} </h2>
-
+    <>
+      <h2 className="text-3xl font-bold text-center text-gray-800 py-2">Formulario de Plan {formId + 1} </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Input
           text="Dosis"
@@ -128,7 +127,7 @@ const agregarProducto = () => {
           placeholder="Ingrese un volumen"
         />
         <Input
-          text="Precio"
+          text="Precio USD$"
           name="precio"
           type="number"
           value={form.precio}
@@ -151,12 +150,11 @@ const agregarProducto = () => {
           value={form.unidad}
           onChange={(e) => actualizarForm("unidad", e.target.value)}
         />
-        
       </div>
 
-      <div className="grid grid-cols-2 w-100 gap-8">
+      <div className="grid grid-cols-2 w-full gap-8 py-2">
         <Button 
-        className={'flex items-center gap-x-2 bg-red-700 hover:bg-red-600 text-white font-medium rounded-xl px-5 py-2 shadow  transition cursor-pointer'}
+        className={'flex items-center gap-x-2 bg-red-700 hover:bg-red-600 text-white font-medium rounded-xl px-5 py-2 shadow transition cursor-pointer'}
         onClick={onEliminar}
         >
             <span>Eliminar Formulario</span>
@@ -174,13 +172,7 @@ const agregarProducto = () => {
       {mensaje && (
         <p className="text-center text-green-600 font-semibold">{mensaje}</p>
       )}
-
-      {cantidadTotal !== null && (
-        <p className="mt-6 text-center text-lg font-semibold text-gray-700">
-          Cantidad total: {cantidadTotal} unidades/ha
-        </p>
-      )}
-    </div>
+    </>
   );
 
 };

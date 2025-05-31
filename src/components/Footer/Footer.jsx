@@ -1,5 +1,5 @@
 import FooterImage from '../../assets/Logos_INTAFooter.png'
-import CardFooter from '../CardFooter/CardFooter';
+import CardFooter from '../Card/CardFooter';
 
 const informationArray = [
     {
@@ -39,8 +39,8 @@ const informationArray = [
 
 const Footer = () => {
     return (
-        <footer className="bg-gradient-to-b from-[#384454] to-[#324352] py-2 px-3 flex flex-col items-center text-[#6f8497]">
-            <div className="flex justify-around flex-wrap py-5 md:w-300">
+        <footer className="bg-gradient-to-br from-slate-900 via-gray-900 to-black py-2 px-3 flex flex-col items-center text-[#6f8497]">
+            <div className="flex justify-around flex-wrap py-5 md:w-320">
                 {informationArray.map((info, index) => (
                     <CardFooter key={index} info={info} />
                 ))}
@@ -52,7 +52,7 @@ const Footer = () => {
                 <div className='text-right text-xs md:text-sm leading-relaxed pt-5'>
                     <p>SIPAN © 2021. Todos los derechos reservados</p>
                     <p>Unidad: Sin unidad detectada</p>
-                    <p>IP Cliente: {/* Aquí podrías insertar dinámicamente la IP si hace falta */}</p>
+                    <p>IP Cliente:</p>
                 </div>
             </div>
         </footer>

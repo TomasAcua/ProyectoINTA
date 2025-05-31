@@ -1,6 +1,6 @@
 const CardFooter = ({ info }) => {
     return (
-        <div className="w-72 md:w-80 px-4 py-2 flex flex-col justify-start text-left text-[16px] text-[#6f8497]">
+        <div className="w-72 md:w-70 px-4 py-2 flex flex-col justify-start text-left text-[16px] text-[#6f8497]">
             <div className="font-semibold text-white mb-1">{info.nombre}</div>
             <hr className="h-[2px] bg-[#6f8497] border-none mb-2" />
             <div className="mb-1">

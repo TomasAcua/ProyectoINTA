@@ -107,7 +107,7 @@ function CostoSanitario() {
             {plans.map((plan, index) => (
               <div
                 key={index}
-                className="border p-4 rounded shadow-sm bg-white"
+                className="p-4 rounded shadow-sm bg-white"
               >
                 <FormularioPlan
                   formId={index}
