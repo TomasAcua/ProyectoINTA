@@ -16,7 +16,7 @@ export const cardData = [
       title: "Cálculos de Insumos para Fertilizar",
       subtitle: "Análisis de costos en fertilización y tratamiento de suelos",
       description:
-        "Este módulo permite calcular el costo de fertilización por hectárea considerando diferentes productos, dosis y estrategias aplicadas estratégicas de aplicación e integra la eficiencia económica de los planes de fertilización.",
+        "Este módulo permite calcular el costo de fertilización por hectárea considerando diferentes productos, dosis y estrategias aplicadas. Integra la eficiencia económica de los planes de fertilización.",
       icon: 'Pill',
       color: "bg-gradient-to-br from-blue-600 via-indigo-500 to-sky-500",
       
@@ -27,7 +27,7 @@ export const cardData = [
       title: "Cálculos de Maquinaria",
       subtitle: "Evaluación de costos operativos y mantenimiento de equipos",
       description:
-        "Aquí se pueden calcular los costos de operación de tractores y implementos, incluyendo gastos de combustible, mantenimiento y depreciación. También permite incluir la planificación de maquinaria y la eficiencia del uso de la maquinaria en las tareas productivas.",
+        "Aquí se pueden calcular los costos de operación de tractores y implementos, incluyendo gastos de combustible, mantenimiento y depreciación. También permite incluir la planificación de maquinaria y la eficiencia del uso de la misma en las tareas productivas.",
       icon: 'Tractor',
       color: "bg-gradient-to-br from-yellow-500 via-amber-500 to-red-500",
       href: ROUTES.costoMaquinaria,

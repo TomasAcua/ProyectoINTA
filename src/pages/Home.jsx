@@ -6,7 +6,6 @@ function Home() {
   return (
     <div className="w-full h-full">
       <MainTitle title={"Calculadoras de"} emphasis={" Costos Agropecuarios"}/>
-      
       <CardGrid/>
       <FeaturesOverview />
     </div>
