@@ -7,6 +7,7 @@ import Dolar from "../components/Dolar/Dolar";
 import ProductForm from "../components/FormularioPlan/ProductForm";
 import PlanList from "../components/PlansList/PlanList";
 import Button from "../components/Button/Button";
+import QuickNavigate from '../components/QuickNavigate/QuickNavigate';
 import { FaArrowRight } from "react-icons/fa";
 import { PDFViewer } from "@react-pdf/renderer";
 import PDFDocument from "../components/PDF/PDFDocument";
@@ -70,6 +71,7 @@ const Fertilizacion = () => {
 
   return (
     <div className="p-6 bg-gray-50 text-black min-h-screen w-full font-sans flex flex-col items-center">
+      <QuickNavigate/>
       <h1 className="text-3xl font-bold text-center">
         VISUALIZADOR DE COSTO{" "}
         <span className="text-gray-700">Fertilización</span>

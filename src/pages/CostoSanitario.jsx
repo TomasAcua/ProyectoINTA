@@ -8,6 +8,8 @@ import PlansList from "../components/PlansList/PlansList";
 import PDFDocument from "../components/PDF/PDFDocument";
 import Dolar from "../components/Dolar/Dolar";
 import "../App.css";
+import QuickNavigate from '../components/QuickNavigate/QuickNavigate';
+
 
 function CostoSanitario() {
   const [chartImage, setChartImage] = useState(null);
@@ -82,6 +84,7 @@ function CostoSanitario() {
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
       <main className="flex-1 flex flex-col items-center justify-center w-full px-6 py-6">
+      <QuickNavigate/>
         <h1 className="text-3xl font-bold text-center text-green-800 mb-6">
           Visualizador de Costos Sanitarios
         </h1>

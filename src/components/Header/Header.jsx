@@ -18,18 +18,6 @@ const Header = () => {
           >
             HOME
           </Link>
-          <Link
-            to="/costo-sanitario"
-            className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
-          >
-            COSTO SANITARIO
-          </Link>
-          <Link
-            to="/fertilizacion"
-            className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
-          >
-            FERTILIZACIÓN
-          </Link>
           <a
             href="#"
             className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
