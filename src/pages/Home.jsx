@@ -1,5 +1,17 @@
+import CardGrid from '../components/CardGrid/CardGrid'
+import MainTitle from '../components/MainTitle/MainTitle';
+import FeaturesOverview from '../components/FeaturesOverview/FeaturesOverview';
+import QuickNavigate from '../components/QuickNavigate/QuickNavigate';
+
 function Home() {
-  return <div>Home</div>;
+
+  return (
+    <div className="w-full h-full">      
+      <MainTitle title={"Calculadoras de"} emphasis={" Costos Agropecuarios"}/>
+      <CardGrid/>
+      <FeaturesOverview />
+    </div>
+  );
 }
 
 export default Home;

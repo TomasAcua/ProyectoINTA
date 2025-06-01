@@ -2,12 +2,14 @@ import { useRef, useState } from "react"
 import { FIELDS_FERTILIZATION } from "../consts/fertilization"
 import useProductForm from "../hooks/useProductForm"
 import usePlanList from "../hooks/usePlanList"
-import Graphic from "../components/Graphic/Graphic"
+import Chart from "../components/Chart/Chart"
 import Dolar from "../components/Dolar/Dolar"
 import ProductForm from "../components/FormularioPlan/ProductForm"
 import useChartData from "../hooks/useChartData"
 import PlanListB from "../components/PlansList/PlanListB"
 import { calcularCostoFertilizacion } from "../utils/calcularCosto"
+import QuickNavigate from "../components/QuickNavigate/QuickNavigate";
+
 
 /**
  * Acá traemos la importacion de la lógica de los hooks y el renderizado de los componentes
@@ -80,6 +82,7 @@ const Fertilizacion = () => {
 
   return (
     <div className="p-6 bg-gray-50 text-black min-h-screen w-full font-sans flex flex-col items-center">
+      <QuickNavigate/>
       <h1 className="text-3xl font-bold text-center">
         VISUALIZADOR DE COSTO{" "}
         <span className="text-gray-700">Fertilización</span>
@@ -115,7 +118,7 @@ const Fertilizacion = () => {
         onCleanPlans={cleanPlans}
       />
 
-      <Graphic
+      <Chart
         isFormValid={isFormValid}
         chartData={chartData}
         chartOptions={chartOptions}

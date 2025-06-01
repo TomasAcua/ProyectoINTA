@@ -2,12 +2,14 @@ import { useState, useRef } from "react";
 import { FIELDS_COSTO_SANITARIO } from "../consts/costoSanitario"
 import { calcularCostoSanitario } from "../utils/calcularCosto";
 import useChartData from "../hooks/useChartData";
-import Graphic from "../components/Graphic/Graphic";
+import Chart from "../components/Chart/Chart";
 import Dolar from "../components/Dolar/Dolar";
 import PlanListB from "../components/PlansList/PlanListB";
 import ProductForm from "../components/FormularioPlan/ProductForm";
 import useProductForm from "../hooks/useProductForm";
 import usePlanList from "../hooks/usePlanList";
+import QuickNavigate from "../components/QuickNavigate/QuickNavigate";
+
 import "../App.css";
 
 function CostoSanitario() {
@@ -26,11 +28,17 @@ function CostoSanitario() {
 
   const { chartData, chartOptions, isFormValid } = useChartData(plans)
 
+  const [showChart, setShowChart] = useState(false)
+
+  const toggleChart = () => {
+    setShowChart(prev => !prev)
+  }
+
   const columnasPDF = [
     { label: "Producto", key: "producto", required: true },
     { label: "Dosis", key: "dosis", required: true },
     { label: "Volumen", key: "volumen", required: true },
-    { label: "Cantidad", key: "cantidad", required: true },
+    { label: "Cantidad de tratamientos", key: "tratamientos", required: true },
     { label: "Precio Unitario", key: "precioUnitario", required: true },
   ]
 
@@ -58,6 +66,7 @@ function CostoSanitario() {
 
   return (
     <div className="min-h-screen flex flex-col w-full bg-gray-50">
+      <QuickNavigate/>
       <h1 className="text-3xl font-bold text-center text-green-800 mb-6">
         Visualizador de Costos Sanitarios
       </h1>
@@ -77,7 +86,6 @@ function CostoSanitario() {
           handleCargarProductos={handleCargarProductos}
         />
       )}
-
       <PlanListB
         plans={plans}
         columnasPDF={columnasPDF}
@@ -86,15 +94,17 @@ function CostoSanitario() {
         onAddPlan={showAddPlanForm}
         onCleanPlans={cleanPlans}
       />
-
-      <Graphic
+      <Chart
         isFormValid={isFormValid}
         chartData={chartData}
         chartOptions={chartOptions}
         chartRef={chartRef}
         plans={plans}
         columnasPDF={columnasPDF}
+        showChart={showChart}
+        toggleChart={toggleChart}
       />
+
     </div>
   )
 }

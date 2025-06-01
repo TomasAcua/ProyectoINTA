@@ -38,12 +38,14 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms") => {
         const field = fields.find(f => f.key === key)
         const error = validate(field, value)
         const updatedProductForms = productForms.map(form => {
+                
             if (form.id === id) {
                 const updatedForm = {
                     ...form,
                     [key]: value,
                     errors: { ...form.errors, [key]: error }
                 };
+               
                 updatedForm.costo = calcularCosto(updatedForm)
                 return updatedForm
             }

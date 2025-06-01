@@ -12,11 +12,20 @@ const usePlanList = (storageKey = "plans") => {
     const [plans, setPlans] = useState(JSON.parse(localStorage.getItem(storageKey)) || []);
     const [showForm, setShowForm] = useState(true);
 
+    //     {Object.keys(subjects).map((keyName, i) => (
+    //     <li className="travelcompany-input" key={i}>
+    //         <span className="input-label">key: {i} Name: {subjects[keyName]}</span>
+    //     </li>
+    // ))}
+
     const addPlan = (productForms) => {
+        
+        const productsArray = Array.isArray(productForms) ? productForms : Object.values(productForms)
+  
         const newPlan = {
             name: `Plan ${String.fromCharCode(65 + plans.length)}`,
-            productos: productForms.map(({ id, ...content }) => content),
-            costoTotal: productForms.reduce((acc, prod) => acc + parseFloat(prod.costo), 0)
+            productos: productsArray.map(({ id, ...content }) => content),
+            costoTotal: productsArray.reduce((acc, prod) => acc + parseFloat(prod.costo), 0)
         };
 
         setPlans([...plans, newPlan]);
