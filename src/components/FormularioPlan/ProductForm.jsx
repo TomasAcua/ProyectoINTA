@@ -1,9 +1,11 @@
-import { Plus, CircleX } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import Button from "../Button/Button";
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
+import Input from "../Input/Input"
 
 const ProductForm = ({
   fields,
+  //productos,
   productForms,
   handleInputChange,
   addProductForm,
@@ -12,41 +14,29 @@ const ProductForm = ({
   handleCargarProductos,
 }) => {
 
-  
-  
-
   return (
-    <div className="border p-4 rounded mb-6 bg-white shadow">
+    <div className="p-4 rounded mb-6 w-[70%]">
       <h2 className="font-semibold text-lg mb-4">
         CARGA DE PRODUCTOS Y COSTOS
       </h2>
       
       {productForms.map((product) => (
         <div key={product.id} className="mb-4 p-2 border rounded">
-          <div className="grid grid-cols-3 gap-4 mb-2">
+             {productForms.length > 0 && (
+              <div className="flex justify-end">
+              <Button
+                onClick={() => deleteProductForm(product.id)}
+                className="text-red-500 hover:text-red-700 hover:bg-red-100 px-3 py-2 transition-color rounded-md border border-gray-200 hover:border-red-100"
+              >
+                <Trash2 size={20} />
+              </Button>
+              </div>
+            )}
+          <div className="grid lg:grid-cols-3 gap-4 mb-2 sm:grid-cols-1 px-4">
             {fields.map((field) => (
               <div key={field.key}>
-                <label className="block text-sm">{field.label}</label>
+                {/* <label className="block text-sm">{field.label}</label> */}
                 {
-                  /*field.type === "select" ? (
-                                    <ListaDesplegable
-                                        text={field.label}
-                                        name={field.key}
-                                        id={field.key}
-                                        array={field.options}
-                                        value={product[field.key]}
-                                        onChange={e => handleInputChange(product.id, field.key, e.target.value)}
-                                    />
-                                ) : (
-                                    <input
-                                        type={field.type || "text"}
-                                        className={`w-full border p-2 rounded ${product.errors[field.key] ? 'border-red-500' : 'border-gray-300'}`}
-                                        placeholder={field.label}
-                                        value={product[field.key]}
-                                        onChange={e => handleInputChange(product.id, field.key, e.target.value)}
-                                        readOnly={field.readOnly}
-                                    />
-                                )*/
                   field.type === "select" ? (
                     <ListaDesplegable
                       text={field.label}
@@ -63,7 +53,8 @@ const ProductForm = ({
                       }
                     />
                   ) : (
-                    <input
+                    <Input
+                    text={field.label}
                       type={field.type || "text"}
                       className={`w-full border p-2 rounded ${
                         product.errors[field.key]
@@ -87,29 +78,23 @@ const ProductForm = ({
                 )}
               </div>
             ))}
+           
           </div>
 
           <div className="flex justify-between items-center">
-            {product.costo !== undefined && (
+            
               <div>
                 <label className="block text-sm">Costo por ha</label>
-                <input
+                <Input
                   type="text"
                   className="w-full border p-2 rounded bg-gray-100"
                   value={product.costo ? `$${product.costo}` : ""}
                   readOnly
                 />
               </div>
-            )}
+            
 
-            {productForms.length > 1 && (
-              <Button
-                onClick={() => deleteProductForm(product.id)}
-                className="text-red-500 bg-red-100 hover:text-red-700"
-              >
-                <CircleX size={18} />
-              </Button>
-            )}
+         
           </div>
         </div>
       ))}
@@ -117,7 +102,7 @@ const ProductForm = ({
       <div className="flex gap-2 mt-4">
         <Button
           onClick={addProductForm}
-          className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+          className="flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded cursor-pointer"
         >
           <Plus size={16} />
           <span>Añadir producto</span>
@@ -125,14 +110,14 @@ const ProductForm = ({
 
        <Button
           onClick={handleCargarProductos}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded"
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded cursor-pointer"
         >
           Cargar Plan
         </Button>
 
         <Button
           onClick={cleanProducts}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded"
+          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
         >
           Limpiar
         </Button>

@@ -24,7 +24,7 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms") => {
     )
 
     const validate = (field, value) => {
-        // if (!field) return ""
+        console.log("field: ", field)
         let error = ""
         if (field.required && !value) {
             error = `El campo ${field.label} es obligatorio`
@@ -45,14 +45,22 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms") => {
                     [key]: value,
                     errors: { ...form.errors, [key]: error }
                 };
-               
+               if (key === "tractor") {
+                updatedForm.implemento = "";
+                updatedForm.errors.implemento = ""; 
+            }
                 updatedForm.costo = calcularCosto(updatedForm)
                 return updatedForm
             }
             return form
         })
+       
+  ;
         setProductForms(updatedProductForms)
     }
+  
+
+  
 
     const addProductForm = () => {
         setProductForms(prev => [

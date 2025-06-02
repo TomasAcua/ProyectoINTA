@@ -31,7 +31,7 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
     ), [plans])
 
     return (
-        <div className="border p-4 rounded-r bg-white shadow-md mb-6 ">
+        <div className="border w-full p-4 rounded-r bg-white shadow-md mb-6 ">
             <div className="flex items-center gap-2">
                 <ChartColumn className="w-5 h-5 text-gray-700" />
                 <h2 className="font-semibold text-lg">VISUALIZACIÓN GRÁFICA</h2>
@@ -62,7 +62,7 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
                                         columnasPDF={columnasPDF}
                                     />
                                 }
-                                fileName="planes.pdf"
+                                fileName={`planes${''}.pdf`}
                             >
                                 {({ loading }) => (
                                     <Button

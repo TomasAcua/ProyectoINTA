@@ -29,7 +29,7 @@ const usePlanList = (storageKey = "plans") => {
         };
 
         setPlans([...plans, newPlan]);
-        setShowForm(false);
+        setShowForm(true);
     }
 
     const cleanPlans = () => {
@@ -45,12 +45,21 @@ const usePlanList = (storageKey = "plans") => {
         localStorage.setItem(storageKey, JSON.stringify(plans));
     }, [plans, storageKey])
 
+    const updatePlanAtIndex = (index, updatedPlan) => {
+  const updatedPlans = [...plans];
+  updatedPlans[index] = updatedPlan;
+  setPlans(updatedPlans);
+  localStorage.setItem("plansMaquinarias", JSON.stringify(updatedPlans));
+};
+
+
     return {
         plans,
         showForm,
         addPlan,
         cleanPlans,
-        showAddPlanForm
+        showAddPlanForm,
+        updatePlanAtIndex
     }
 }
 

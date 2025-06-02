@@ -1,38 +1,11 @@
-import { useState, useRef } from "react";
+import ModuleLayout from "../components/ModuleLayout/ModuleLayout";
 import { FIELDS_COSTO_SANITARIO } from "../consts/costoSanitario"
 import { calcularCostoSanitario } from "../utils/calcularCosto";
-import useChartData from "../hooks/useChartData";
-import Chart from "../components/Chart/Chart";
-import Dolar from "../components/Dolar/Dolar";
-import PlanListB from "../components/PlansList/PlanListB";
-import ProductForm from "../components/FormularioPlan/ProductForm";
-import useProductForm from "../hooks/useProductForm";
-import usePlanList from "../hooks/usePlanList";
-import QuickNavigate from "../components/QuickNavigate/QuickNavigate";
-
 import "../App.css";
+import useSheets from "../hooks/useSheets";
 
 function CostoSanitario() {
-
-  const {
-    productForms,
-    addProductForm,
-    handleInputChange,
-    deleteProductForm,
-    cleanProducts,
-    isCurrentPlanValid,
-    resetProductForms,
-  } = useProductForm(FIELDS_COSTO_SANITARIO, calcularCostoSanitario, "productFormsSanitario")
-
-  const { plans, showForm, addPlan, cleanPlans, showAddPlanForm } = usePlanList("plansCostoSanitario")
-
-  const { chartData, chartOptions, isFormValid } = useChartData(plans)
-
-  const [showChart, setShowChart] = useState(false)
-
-  const toggleChart = () => {
-    setShowChart(prev => !prev)
-  }
+  const url = "https://docs.google.com/spreadsheets/d/1sYafPrjzV5WdhpW1JOZw3FoiZbHiDqDHz_F7ayCL_Sw/edit?gid=1418408786#gid=1418408786";
 
   const columnasPDF = [
     { label: "Producto", key: "producto", required: true },
@@ -40,71 +13,21 @@ function CostoSanitario() {
     { label: "Volumen", key: "volumen", required: true },
     { label: "Cantidad de tratamientos", key: "tratamientos", required: true },
     { label: "Precio Unitario", key: "precioUnitario", required: true },
-  ]
+  ];
 
-  const chartRef = useRef(null)
-
-  // Estado para manejar el valor del dólar
-  const [currentDolarValue, setCurrentDolarValue] = useState(
-    localStorage.getItem("dolarOficial") || 0
-  );
-
-  // Actualiza el valor del dólar en el estado
-  const updateDolarValue = (newValue) => {
-    setCurrentDolarValue(newValue);
-  }
-
-  const handleCargarProductos = () => {
-    if (!isCurrentPlanValid()) {
-      alert("Por favor, complete todos los datos requeridos.");
-      return;
-    }
-
-    addPlan(productForms);
-    resetProductForms();
-  }
+  
+  const lista = useSheets(url, 'sanitarias');
 
   return (
-    <div className="min-h-screen flex flex-col w-full bg-gray-50">
-      <QuickNavigate/>
-      <h1 className="text-3xl font-bold text-center text-green-800 mb-6">
-        Visualizador de Costos Sanitarios
-      </h1>
-      <Dolar
-        className="flex justify-center items-center w-full"
-        onDolarChange={updateDolarValue}
-      />
-
-      {showForm && (
-        <ProductForm
-          fields={FIELDS_COSTO_SANITARIO}
-          productForms={productForms}
-          handleInputChange={handleInputChange}
-          addProductForm={addProductForm}
-          deleteProductForm={deleteProductForm}
-          cleanProducts={cleanProducts}
-          handleCargarProductos={handleCargarProductos}
-        />
-      )}
-      <PlanListB
-        plans={plans}
+    <div className="flex justify-center w-full">
+      <ModuleLayout
+        titulo="Visualizador de Costos Sanitarios"
+        fields={FIELDS_COSTO_SANITARIO}
+        calcularCosto={calcularCostoSanitario}
+        storageKey="Sanitario"
         columnasPDF={columnasPDF}
-        planNameKey="nombre"
-        currentDolarValue={currentDolarValue}
-        onAddPlan={showAddPlanForm}
-        onCleanPlans={cleanPlans}
+        tituloModal="Editar Costo Sanitario"
       />
-      <Chart
-        isFormValid={isFormValid}
-        chartData={chartData}
-        chartOptions={chartOptions}
-        chartRef={chartRef}
-        plans={plans}
-        columnasPDF={columnasPDF}
-        showChart={showChart}
-        toggleChart={toggleChart}
-      />
-
     </div>
   )
 }
