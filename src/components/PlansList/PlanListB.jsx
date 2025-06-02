@@ -154,7 +154,7 @@ const PlanListB = ({
                                         <div className="bg-sky-100 border border-sky-300 rounded-lg p-4">
                                             <p className="text-sm text-gray-600">Total estimado:</p>
                                             <p className="text-xl font-semibold text-gray-800">
-                                                USD ${plan.costoTotal} / ARS ${(plan.costoTotal * currentDolarValue).toFixed(2)}
+                                                USD ${(plan.costoTotal).toFixed(2)} / ARS ${(plan.costoTotal * currentDolarValue).toFixed(2)}
                                             </p>
                                         </div>
                                         {enEdicion ? (
