@@ -22,7 +22,7 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
                 } catch (e) {
                     console.error("Error generando imagen del gráfico:", e);
                 }
-            }, 1000); // esperar a que el canvas esté renderizado
+            }, 1000); 
             return () => clearTimeout(timer);
         }
     }, [chartData, chartRef.current, showChart]);

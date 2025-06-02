@@ -96,16 +96,7 @@ const ModuleLayout = ({
                     />
                 )}
                 <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
-                <Chart
-                    isFormValid={isFormValid}
-                    chartData={chartData}
-                    chartOptions={chartOptions}
-                    chartRef={chartRef}
-                    plans={plans}
-                    columnasPDF={columnasPDF}
-                    showChart={showChart}
-                    toggleChart={toggleChart}
-                />
+
                 <PlanListB
                     plans={plans}
                     columnasPDF={columnasPDF}
@@ -129,7 +120,16 @@ const ModuleLayout = ({
                         updatePlanAtIndex(index, recalculatedPlan);
                     }}
                 />
-
+                <Chart
+                    isFormValid={isFormValid}
+                    chartData={chartData}
+                    chartOptions={chartOptions}
+                    chartRef={chartRef}
+                    plans={plans}
+                    columnasPDF={columnasPDF}
+                    showChart={showChart}
+                    toggleChart={toggleChart}
+                />
                 <ModalFormulario
                     isOpen={isModalOpen}
                     title={tituloModal}
