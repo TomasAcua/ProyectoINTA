@@ -14,12 +14,19 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
     const [chartImage, setChartImage] = useState(null);
 
     useEffect(() => {
-        if (chartRef?.current) {
-            setTimeout(() => {
-                setChartImage(chartRef.current.toBase64Image('image/png', 6));
-            }, 300);
+        if (showChart && chartRef?.current && chartData?.labels?.length > 0) {
+            const timer = setTimeout(() => {
+                try {
+                    const image = chartRef.current.toBase64Image('image/png', 6);
+                    setChartImage(image);
+                } catch (e) {
+                    console.error("Error generando imagen del gráfico:", e);
+                }
+            }, 1000); // esperar a que el canvas esté renderizado
+            return () => clearTimeout(timer);
         }
-    }, [chartData, chartRef]);
+    }, [chartData, chartRef.current, showChart]);
+
 
     const plansToRender = useMemo(() => (
 
@@ -31,7 +38,7 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
     ), [plans])
 
     return (
-        <div className="border w-full p-4 rounded-r bg-white shadow-md mb-6 ">
+        <div className="w-full p-4 rounded-md bg-white shadow-lg ">
             <div className="flex items-center gap-2">
                 <ChartColumn className="w-5 h-5 text-gray-700" />
                 <h2 className="font-semibold text-lg">VISUALIZACIÓN GRÁFICA</h2>
@@ -46,34 +53,36 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
             {showChart && (
                 isFormValid ? (
                     <>
-                        <div id="grafico" className="bg-white p-2 mt-4">
+                        <div className="bg-white p-2 mt-4 w-full h-[400px]">
                             {chartData && chartData.labels && chartData.labels.length > 0 ? (
                                 <Bar ref={chartRef} data={chartData} options={chartOptions} />
                             ) : (
                                 <p className="text-gray-600">No hay datos para mostrar</p>
                             )}
                         </div>
-                        <div className="mt-6">
-                            <PDFDownloadLink
-                                document={
-                                    <PDFDocument
-                                        chartImage={chartImage}
-                                        plansToRender={plansToRender}
-                                        columnasPDF={columnasPDF}
-                                    />
-                                }
-                                fileName={`planes${''}.pdf`}
-                            >
-                                {({ loading }) => (
-                                    <Button
-                                        className="bg-sky-500 hover:bg-blue-500 text-white px-4 py-2 rounded"
-                                        disabled={loading}
-                                    >
-                                        {loading ? "Generando PDF..." : "Descargar PDF"}
-                                    </Button>
-                                )}
-                            </PDFDownloadLink>
-                        </div>
+                        {chartImage && (
+                            <div className="mt-6">
+                                <PDFDownloadLink
+                                    document={
+                                        <PDFDocument
+                                            chartImage={chartImage} // puede ser null
+                                            plansToRender={plansToRender}
+                                            columnasPDF={columnasPDF}
+                                        />
+                                    }
+                                    fileName={`planes.pdf`}
+                                >
+                                    {({ loading }) => (
+                                        <Button
+                                            className="bg-sky-500 hover:bg-blue-500 text-white px-4 py-2 rounded"
+                                            disabled={loading}
+                                        >
+                                            {loading ? "Generando PDF..." : "Descargar PDF"}
+                                        </Button>
+                                    )}
+                                </PDFDownloadLink>
+                            </div>
+                        )}
                     </>
                 ) : (
                     <p className="text-gray-600 mt-4">

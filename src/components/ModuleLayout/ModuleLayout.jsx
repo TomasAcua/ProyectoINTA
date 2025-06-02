@@ -36,49 +36,6 @@ const ModuleLayout = ({
         showAddPlanForm,
         updatePlanAtIndex
     } = usePlanList("plans" + storageKey)
-    /**
-     * const mergedFields = FIELDS_COSTO_SANITARIO.map((field) =>
-      field.key === "producto"
-        ? {
-            ...field,
-            options: productos?.length > 0 ? productos : field.options
-          }
-        : field
-    );
-    
-     */
-
-    /**
-    import { useMemo } from "react";
-import { useSheetData } from "../services/fetchSheets";
-import { FIELDS_COSTO_SANITARIO as BASE_FIELDS } from "../constants/fields";
-
-function MyFormComponent() {
-  const googleSheetUrl = "https://docs.google.com/spreadsheets/d/XXXXXXXXXX/edit#gid=0";
-  const { sheetData, error } = useSheetData(googleSheetUrl);
-
-  // Preparamos los fields con opciones dinámicas
-  const fields = useMemo(() => {
-    if (!sheetData) return BASE_FIELDS;
-
-    const dynamicOptions = sheetData.map((item) => ({
-      value: item.nombre, // ajusta según columna en tu Excel
-      label: item.nombre
-    }));
-
-    return BASE_FIELDS.map((field) => {
-      if (field.key === "producto") {
-        return {
-          ...field,
-          options: dynamicOptions
-        };
-      }
-      return field;
-    });
-  }, [sheetData]);
-
-     */
-
 
     const { chartData, chartOptions, isFormValid } = useChartData(plans)
 
@@ -120,12 +77,11 @@ function MyFormComponent() {
                 <Calculator />
                 <h2 className="text-xl font-bold">{titulo.toLocaleUpperCase()}</h2>
             </div>
+            <Dolar
+                className="flex justify-center items-center w-full"
+                onDolarChange={updateDolarValue}
+            />
             <div className="w-full px-4 flex flex-col items-center">
-                <Dolar
-                    className="flex justify-center items-center w-full"
-                    onDolarChange={updateDolarValue}
-                />
-
                 <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
 
                 {showForm && (
@@ -139,6 +95,17 @@ function MyFormComponent() {
                         handleCargarProductos={handleCargarProductos}
                     />
                 )}
+                <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
+                <Chart
+                    isFormValid={isFormValid}
+                    chartData={chartData}
+                    chartOptions={chartOptions}
+                    chartRef={chartRef}
+                    plans={plans}
+                    columnasPDF={columnasPDF}
+                    showChart={showChart}
+                    toggleChart={toggleChart}
+                />
                 <PlanListB
                     plans={plans}
                     columnasPDF={columnasPDF}
@@ -161,17 +128,6 @@ function MyFormComponent() {
                         };
                         updatePlanAtIndex(index, recalculatedPlan);
                     }}
-                />
-
-                <Chart
-                    isFormValid={isFormValid}
-                    chartData={chartData}
-                    chartOptions={chartOptions}
-                    chartRef={chartRef}
-                    plans={plans}
-                    columnasPDF={columnasPDF}
-                    showChart={showChart}
-                    toggleChart={toggleChart}
                 />
 
                 <ModalFormulario

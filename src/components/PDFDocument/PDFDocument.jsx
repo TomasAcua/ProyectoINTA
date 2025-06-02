@@ -3,67 +3,91 @@ import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/render
 const styles = StyleSheet.create({
   page: {
     padding: 40,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#ffffff',
     fontSize: 12,
     fontFamily: 'Helvetica',
   },
-  header: {
-    fontSize: 24,
-    backgroundColor: '#343a40',
-    color: '#ffffff',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    textAlign: 'center',
-    borderRadius: 6,
-    marginBottom: 20,
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 30,
+    paddingBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#ced4da',
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    marginRight: 15,
+  },
+  headerTextContainer: {
+    flexDirection: 'column',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#212529',
+  },
+  headerSubtitle: {
+    fontSize: 12,
+    color: '#495057',
   },
   sectionTitle: {
-    fontSize: 16,
-    marginBottom: 10,
-    marginTop: 20,
-    color: '#333',
-    borderBottom: '1 solid #dee2e6',
-    paddingBottom: 5,
+    fontSize: 14,
+    marginBottom: 12,
+    marginTop: 25,
+    color: '#495057',
+    borderBottomWidth: 1,
+    borderBottomColor: '#adb5bd',
+    paddingBottom: 4,
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
   },
   planTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 5,
-    color: '#212529',
+    marginTop: 12,
+    marginBottom: 8,
+    color: '#343a40',
   },
   imageContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 25,
   },
   image: {
     width: '100%',
     height: 250,
     objectFit: 'contain',
-    border: '1 solid #ccc',
-    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#dee2e6',
+    borderRadius: 6,
   },
   table: {
     display: 'table',
     width: 'auto',
-    marginTop: 5,
-    borderStyle: 'solid',
+    marginTop: 6,
     borderWidth: 1,
     borderColor: '#ced4da',
+    borderStyle: 'solid',
   },
   tableRow: {
     flexDirection: 'row',
   },
   tableHeader: {
-    backgroundColor: '#e9ecef',
+    backgroundColor: '#f1f3f5',
     fontWeight: 'bold',
+    color: '#212529',
   },
   tableCell: {
-    padding: 6,
-    borderRight: '1 solid #ced4da',
-    borderBottom: '1 solid #ced4da',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    borderRightWidth: 1,
+    borderRightColor: '#dee2e6',
+    borderBottomWidth: 1,
+    borderBottomColor: '#dee2e6',
     textAlign: 'center',
-    width: '20%'
+    width: '20%',
+    color: '#495057',
   },
 });
 
@@ -71,8 +95,16 @@ const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>Reporte de Productos</Text>
-
+        <View style={styles.headerContainer}>
+          <Image
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Logo_INTA.svg/2048px-Logo_INTA.svg.png"
+            style={styles.logo}
+          />
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.headerTitle}>Instituto Nacional de Tecnología Agropecuaria</Text>
+            <Text style={styles.headerSubtitle}>Reporte de planes y productos</Text>
+          </View>
+        </View>
         {chartImage && (
           <>
             <Text style={styles.sectionTitle}>Gráfico de Costos</Text>

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import fetchDolar from "../../services/fetchDolar";
-import Input from "../Input/Input"
+import Input from "../Input/Input";
 import Button from "../Button/Button";
+import { RefreshCcw, Check } from "lucide-react";
 
-const Dolar = ({ onDolarChange, title }) => {
+const Dolar = ({ onDolarChange }) => {
   const [dolarOficial, setDolarOficial] = useState(null);
   const [dolarActual, setDolarActual] = useState(null);
-  const [estado, setEstado] = useState("Cambiar");
-  const [value, setValue] = useState("");
+  const [modoPersonalizado, setModoPersonalizado] = useState(false);
+  const [valorInput, setValorInput] = useState("");
   const [cantDolar, setCantDolar] = useState(1);
 
   useEffect(() => {
@@ -18,98 +19,94 @@ const Dolar = ({ onDolarChange, title }) => {
         setDolarActual(data.venta);
         localStorage.setItem("dolar", data.venta);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error al obtener el dólar:", error);
       }
     };
     fetchData();
-    setEstado("Cambiar");
   }, []);
 
   useEffect(() => {
     if (onDolarChange) onDolarChange(dolarActual);
-  }, [dolarActual, onDolarChange]);
+  }, [dolarActual]);
 
-  const cambiarEstado = () => {
-    if (estado === "Cambiar" && value !== "") {
-      setEstado("Restaurar");
-      setDolarActual(Number(value));
-      localStorage.setItem("dolar", value);
-    } else if (estado === "Restaurar") {
-      setEstado("Cambiar");
+  const manejarCambio = () => {
+    if (!modoPersonalizado && valorInput) {
+      const nuevoValor = Number(valorInput);
+      setDolarActual(nuevoValor);
+      localStorage.setItem("dolar", nuevoValor);
+      setModoPersonalizado(true);
+    } else {
       setDolarActual(dolarOficial);
-      setValue("");
       localStorage.setItem("dolar", dolarOficial);
+      setValorInput("");
+      setModoPersonalizado(false);
     }
   };
 
   return (
-    <div className="text-slate-900 w-full rounded-t-xl overflow-hidden">
-      <div className="flex flex-row justify-start font-semibold">
-        <h2>Cotización Dólar Oficial HOY</h2>
-      </div>
-      <div className="flex flex-row justify-center items-center gap-10 w-full p-2 ">
+    <div className="p-6 w-full">
+      <h2 className="text-xl font-bold text-sky-800 mb-4 text-center">
+        Cotización del Dólar Oficial
+      </h2>
 
-        <div className="w-1/3">
-          {dolarOficial ? (
-            <div className={'flex flex-col justify-center items-center w-[80%]'}>
-              
-              <div className="">
-                <h3>
-                USD $ {cantDolar} = ARS{" "}
-                {dolarActual
-                  ? Math.round(dolarActual * cantDolar).toLocaleString("es-AR")
-                  : "-"}{" "}
-                <span className="text-xs">
-                  {estado === "Restaurar"
-                    ? "según el valor dado por el usuario"
-                    : "según el valor oficial del dólar"}
-                </span>
-              </h3>
-              </div>
-              <div className="">
-                <p className="text-xs text-slate-900 mt-1">
-                  Dólar oficial actual:{" "}
-                  <b>${dolarOficial.toLocaleString("es-AR")}</b>
-                </p>
-              </div>
-              
-            </div>
-          ) : (
-            <h3 className="text-slate-400">Cargando...</h3>
-          )}
+      {dolarOficial === null ? (
+        <p className="text-center text-gray-400">Cargando datos...</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-slate-800">
+          {/* Conversión */}
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-1">Conversión</p>
+            <p className="text-lg font-semibold">
+              USD ${cantDolar} = ARS ${Math.round(dolarActual * cantDolar).toLocaleString("es-AR")}
+            </p>
+            <p className="text-xs mt-1 text-gray-500">
+              {modoPersonalizado
+                ? "Valor personalizado por el usuario"
+                : "Valor oficial actual"}
+            </p>
+          </div>
 
+          {/* Input personalizado */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Valor personalizado (opcional)
+            </label>
+            <Input
+              type="number"
+              min="1"
+              value={valorInput}
+              onChange={(e) => setValorInput(e.target.value)}
+              placeholder={`Ej: ${dolarOficial}`}
+              disabled={modoPersonalizado}
+            />
+          </div>
 
+          {/* Botón de cambio */}
+          <div className="text-center">
+            <Button
+              className={`w-full py-3 rounded-xl font-bold text-white transition ${
+                modoPersonalizado
+                  ? "bg-yellow-600 hover:bg-yellow-700"
+                  : "bg-green-600 hover:bg-green-700"
+              }`}
+              onClick={manejarCambio}
+              disabled={!modoPersonalizado && valorInput === ""}
+            >
+              {modoPersonalizado ? (
+                <div className="flex items-center justify-center gap-2">
+                  <RefreshCcw size={18} />
+                  Restaurar oficial
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-2">
+                  <Check size={18} />
+                  Usar personalizado
+                </div>
+              )}
+            </Button>
+          </div>
         </div>
-
-        {/* Cambio de estado */}
-        <div className="p-2 rounded-xl w-1/3">
-          <label className="block text-black text-sm mb-1">
-            Valor de dólar a usar (personalizado):
-          </label>
-          <Input
-            type="number"
-            min="1"
-           
-            placeholder={dolarOficial ? dolarOficial : "Valor dólar"}
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            disabled={estado === "Restaurar"}
-          />
-          
-        </div>
-
-
-        <div className="w-1/3">
-          <Button
-            className="flex-1 w-full rounded-xl bg-green-600 text-white font-bold transition duration-200 py-3"
-            onClick={cambiarEstado}
-            disabled={estado === "Cambiar" && value === ""}
-          >
-            {estado}
-          </Button>
-        </div>
-      </div>
-      <br />
+      )}
     </div>
   );
 };

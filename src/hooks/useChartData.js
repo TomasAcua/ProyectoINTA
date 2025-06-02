@@ -9,35 +9,22 @@ import { useMemo } from 'react';
 
 const useChartData = (plans) => {
 
-    const hasProducts = plans.some(plan => plan.productos && plan.productos.length > 0)
-
-    const datasets = [
-        {
-            label: "Costo",
-            data: plans.map((plan) => plan.costoTotal ?? plan.total),
-            backgroundColor: 'rgba(234, 144, 95, 0.59)',
-            borderColor: 'rgb(228,109,48)', 
-            borderWidth: 1,
-        }
-    ]
-
     const chartData = useMemo(() => ({
         labels: plans.map((plan) => plan.name || plan.nombre),
-        datasets: datasets
-    }), [plans])
-
-    if (hasProducts) {
-        datasets.push({
-            label: "Cantidad de Principios Activos",
-            data: plans.map(plan => plan.productos.reduce((acc, producto) => acc + (producto.cantidad || 0), 0)),
-            backgroundColor: 'rgba(108, 172, 140, 0.57)',
-            borderColor: 'rgb(20,107,59)',
-            borderWidth: 1,
-        })
-    }
+        datasets: [
+            {
+                label: "Costo",
+                data: plans.map((plan) => plan.costoTotal ?? plan.total),
+                backgroundColor: 'rgba(234, 144, 95, 0.59)',
+                borderColor: 'rgb(228,109,48)',
+                borderWidth: 1,
+            }
+        ]
+    }), [plans]);
 
     const chartOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 position: 'top',
@@ -80,6 +67,7 @@ const useChartData = (plans) => {
             }
         }
     };
+
 
     const isFormValid = plans.length >= 2
 

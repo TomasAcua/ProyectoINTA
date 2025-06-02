@@ -56,3 +56,18 @@ input[type=number]::-webkit-outer-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+@layer utilities {
+  .animate-highlight {
+    animation: highlightFade 2s ease-out;
+  }
+
+  @keyframes highlightFade {
+    0% {
+      border: 3px solid #78a38d;
+    }
+    100% {
+      background-color: white;
+    }
+  }
+}
