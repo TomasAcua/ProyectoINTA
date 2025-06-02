@@ -1,47 +1,58 @@
 @import 'tailwindcss';
 
 :root {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Geist', sans-serif;
+  background-color: #f2f7fe;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('./assets/fonts/Oswald/Oswald-ExtraLight.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-ExtraLight.ttf') format('woff2');
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('./assets/fonts/Oswald/Oswald-Light.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Light.ttf') format('woff2');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('./assets/fonts/Oswald/Oswald-Regular.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Regular.ttf') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('./assets/fonts/Oswald/Oswald-Medium.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Medium.ttf') format('woff2');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('./assets/fonts/Oswald/Oswald-SemiBold.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-SemiBold.ttf') format('woff2');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Oswald';
-  src: url('./assets/fonts/Oswald/Oswald-Bold.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Bold.ttf') format('woff2');
   font-weight: 700;
   font-style: normal;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }

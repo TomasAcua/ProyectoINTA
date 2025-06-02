@@ -7,7 +7,7 @@ const Header = () => {
       <div className="flex items-center justify-between px-4 md:px-8 py-2">
         {/* Logo */}
         <div className="flex items-center space-x-4">
-          <img src={LogoHeader} alt="Logo SIPAN" className="h-[60px] w-auto" />
+          <img src={LogoHeader} alt="Logo SIPAN" className="h-[45px] w-auto" />
         </div>
 
         {/* Menú de navegación */}
@@ -17,18 +17,6 @@ const Header = () => {
             className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
           >
             HOME
-          </Link>
-          <Link
-            to="/costo-sanitario"
-            className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
-          >
-            COSTO SANITARIO
-          </Link>
-          <Link
-            to="/fertilizacion"
-            className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
-          >
-            FERTILIZACIÓN
           </Link>
           <a
             href="#"
