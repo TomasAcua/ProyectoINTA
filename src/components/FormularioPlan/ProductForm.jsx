@@ -5,7 +5,6 @@ import Input from "../Input/Input"
 
 const ProductForm = ({
   fields,
-  //productos,
   productForms,
   handleInputChange,
   addProductForm,
@@ -13,9 +12,8 @@ const ProductForm = ({
   cleanProducts,
   handleCargarProductos,
 }) => {
-
   return (
-    <div className="p-4 rounded mb-6 w-[70%]">
+    <div className="rounded mb-6 w-[90%]">
       <h2 className="font-semibold text-lg mb-4">
         CARGA DE PRODUCTOS Y COSTOS
       </h2>
@@ -33,9 +31,9 @@ const ProductForm = ({
               </div>
             )}
           <div className="grid lg:grid-cols-3 gap-4 mb-2 sm:grid-cols-1 px-4">
+            {console.log("Fields en ProductForm: ", fields)}
             {fields.map((field) => (
               <div key={field.key}>
-                {/* <label className="block text-sm">{field.label}</label> */}
                 {
                   field.type === "select" ? (
                     <ListaDesplegable

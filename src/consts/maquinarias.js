@@ -8,17 +8,6 @@ export const FIELDS_COSTO_MAQUINARIAS = [
     options: maquinas.map(m => m.nombre),
   },
   {
-    key: "implemento",
-    label: "Implemento",
-    type: "select",
-    required: true,
-    options: (form) => {
-    
-      const tractorObj = maquinas.find(m => m.nombre === form.tractor);
-      return tractorObj ? tractorObj.implementos.map(i => i.nombre) : [];
-    }
-  },
-  {
     key: "precioCombustible",
     label: "Precio del Combustible (USD/L)",
     type: "number",

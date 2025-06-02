@@ -1,7 +1,8 @@
-import { FIELDS_FERTILIZATION } from "../consts/fertilization";
+import { FIELDS_FERTILIZATION as BASE_FIELDS} from "../consts/fertilization";
 import { calcularCostoFertilizacion } from "../utils/calcularCosto";
 import ModuleLayout from "../components/ModuleLayout/ModuleLayout";
 import useSheets from "../hooks/useSheets";
+import { useMemo } from "react";
 
 const columnasPDF = [
   { label: "Producto", key: "producto" },
@@ -16,15 +17,29 @@ const columnasPDF = [
 
 export default function Fertilizacion() {
   
-const url = "https://docs.google.com/spreadsheets/d/1hVKkRCa5wYUK0JVyEUqU0y0zcAdjZtwVAJ2MqrK1tQw/edit?gid=1018747124#gid=1018747124";
-const lista = useSheets(url, 'fertilizantes');
-console.log("Lista de fertilizantes:", lista);
+const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1hVKkRCa5wYUK0JVyEUqU0y0zcAdjZtwVAJ2MqrK1tQw/edit?gid=1018747124#gid=1018747124";
+const productos = useSheets(googleSheetUrl, "fertilizantes");
+
+  const fields = useMemo(() => {
+    if (!productos || productos.length === 0) return BASE_FIELDS;
+    return BASE_FIELDS.map((field) => {
+      if (field.key === "producto") {
+        return {
+          ...field,
+          options: productos
+        };
+      }
+      return field;
+    });
+  }, [productos]);
+
+  if (!productos) return <div>Cargando datos de productos...</div>;
 
   return (
     <div className="flex justify-center w-full">
       <ModuleLayout
         titulo="Visualizador de Costos Fertilización"
-        fields={FIELDS_FERTILIZATION}
+        fields={fields}
         calcularCosto={calcularCostoFertilizacion}
         storageKey="productFormsFertilization"
         columnasPDF={columnasPDF}

@@ -17,21 +17,19 @@ export function calcularCostoSanitario(form) {
 }
 
 export const calcularCostoTotalMaquinaria = (form) => {
+  console.log("Form en CalcularCostoMaquinaria:", form )
     const tractor = form.tractor;
     const implemento = form.implemento;
     const precioCombustible = form.precioCombustible
   // const { tractor, implemento, precioCombustible } = form;
 
 
-  const tractorSeleccionado = maquinas.find(m => m.nombre === tractor);
-  const implementoSeleccionado = tractorSeleccionado?.implementos.find(i => i.nombre ===implemento);
-
-
- if (!tractorSeleccionado || !implementoSeleccionado) return 0;
+  console.log("tractor:", tractor);
+ if (!tractor || !implemento) return 0;
 
   const gastoCombustible =
-    tractorSeleccionado.potenciaHP *
-    implementoSeleccionado.consumoCombustible *
+    tractor.potenciaHP *
+    implemento.consumoCombustible *
     parseFloat(precioCombustible);
     
    
@@ -43,10 +41,10 @@ export const calcularCostoTotalMaquinaria = (form) => {
   const mantenimiento = (precio, coef) => precio * coef;
   const costoTotal =
     gastoCombustible +
-    mantenimiento(tractorSeleccionado.precioUSD, tractorSeleccionado.coeficienteMantenimiento) +
-    mantenimiento(implementoSeleccionado.precioUSD, implementoSeleccionado.coeficienteMantenimiento) +
-    amortizacion(tractorSeleccionado.precioUSD, tractorSeleccionado.residuoPorcentaje, tractorSeleccionado.horasUtiles) +
-    amortizacion(implementoSeleccionado.precioUSD, implementoSeleccionado.valorResidualPorcentaje, implementoSeleccionado.horasUtiles);
+    mantenimiento(tractor.precioUSD, tractor.coeficienteMantenimiento) +
+    mantenimiento(implemento.precioUSD, implemento.coeficienteMantenimiento) +
+    amortizacion(tractor.precioUSD, tractor.residuoPorcentaje, tractor.horasUtiles) +
+    amortizacion(implemento.precioUSD, implemento.valorResidualPorcentaje, implemento.horasUtiles);
    
   return costoTotal;
 };

@@ -27,7 +27,7 @@ const ModuleLayout = ({
         isCurrentPlanValid,
         resetProductForms,
     } = useProductForm(fields, calcularCosto, storageKey)
-    
+
     const {
         plans,
         showForm,
@@ -36,12 +36,54 @@ const ModuleLayout = ({
         showAddPlanForm,
         updatePlanAtIndex
     } = usePlanList("plans" + storageKey)
+    /**
+     * const mergedFields = FIELDS_COSTO_SANITARIO.map((field) =>
+      field.key === "producto"
+        ? {
+            ...field,
+            options: productos?.length > 0 ? productos : field.options
+          }
+        : field
+    );
+    
+     */
+
+    /**
+    import { useMemo } from "react";
+import { useSheetData } from "../services/fetchSheets";
+import { FIELDS_COSTO_SANITARIO as BASE_FIELDS } from "../constants/fields";
+
+function MyFormComponent() {
+  const googleSheetUrl = "https://docs.google.com/spreadsheets/d/XXXXXXXXXX/edit#gid=0";
+  const { sheetData, error } = useSheetData(googleSheetUrl);
+
+  // Preparamos los fields con opciones dinámicas
+  const fields = useMemo(() => {
+    if (!sheetData) return BASE_FIELDS;
+
+    const dynamicOptions = sheetData.map((item) => ({
+      value: item.nombre, // ajusta según columna en tu Excel
+      label: item.nombre
+    }));
+
+    return BASE_FIELDS.map((field) => {
+      if (field.key === "producto") {
+        return {
+          ...field,
+          options: dynamicOptions
+        };
+      }
+      return field;
+    });
+  }, [sheetData]);
+
+     */
+
 
     const { chartData, chartOptions, isFormValid } = useChartData(plans)
 
     const [showChart, setShowChart] = useState(false)
     const chartRef = useRef(null)
-
     const toggleChart = () => setShowChart(prev => !prev)
 
     const [currentDolarValue, setCurrentDolarValue] = useState(
@@ -70,13 +112,13 @@ const ModuleLayout = ({
         setPlanToEdit(plans[index]);
         setIsModalOpen(true);
     };
-    
+
     return (
-        <div className="rounded-xl shadow-md min-h-screen w-[90%] bg-white mt-5">
+        <div className="rounded-xl shadow-md min-h-screen w-[90%] bg-[#fafefd] mt-5">
             <QuickNavigate />
             <div className="flex flex-row justify-start gap-5 space-y-1.5 p-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full p-6 mb-2 rounded-t-xl">
                 <Calculator />
-                <h2 className="text-lg">{titulo.toLocaleUpperCase()}</h2>
+                <h2 className="text-xl font-bold">{titulo.toLocaleUpperCase()}</h2>
             </div>
             <div className="w-full px-4 flex flex-col items-center">
                 <Dolar
@@ -89,7 +131,6 @@ const ModuleLayout = ({
                 {showForm && (
                     <ProductForm
                         fields={fields}
-                        //productos={productos}
                         productForms={productForms}
                         handleInputChange={handleInputChange}
                         addProductForm={addProductForm}
@@ -121,7 +162,7 @@ const ModuleLayout = ({
                         updatePlanAtIndex(index, recalculatedPlan);
                     }}
                 />
-                
+
                 <Chart
                     isFormValid={isFormValid}
                     chartData={chartData}
