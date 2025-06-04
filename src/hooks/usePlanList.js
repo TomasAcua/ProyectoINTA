@@ -5,22 +5,31 @@ import { useState, useEffect } from 'react'
  * @returns estados, handles, funciones necesarias
  */
 
-const usePlanList = () => {
+const usePlanList = (storageKey = "plans") => {
 
     // Estado para almacenar todos los planes con detalles de productos
     // Controla mostrar u ocultar el formulario de carga
-    const [plans, setPlans] = useState(JSON.parse(localStorage.getItem("plans")) || []);
+    const [plans, setPlans] = useState(JSON.parse(localStorage.getItem(storageKey)) || []);
     const [showForm, setShowForm] = useState(true);
 
+    //     {Object.keys(subjects).map((keyName, i) => (
+    //     <li className="travelcompany-input" key={i}>
+    //         <span className="input-label">key: {i} Name: {subjects[keyName]}</span>
+    //     </li>
+    // ))}
+
     const addPlan = (productForms) => {
+        
+        const productsArray = Array.isArray(productForms) ? productForms : Object.values(productForms)
+  
         const newPlan = {
             name: `Plan ${String.fromCharCode(65 + plans.length)}`,
-            productos: productForms.map(({ id, ...content }) => content),
-            costoTotal: productForms.reduce((acc, prod) => acc + parseFloat(prod.costo), 0)
+            productos: productsArray.map(({ id, ...content }) => content),
+            costoTotal: productsArray.reduce((acc, prod) => acc + parseFloat(prod.costo), 0)
         };
 
         setPlans([...plans, newPlan]);
-        setShowForm(false);
+        setShowForm(true);
     }
 
     const cleanPlans = () => {
@@ -33,15 +42,24 @@ const usePlanList = () => {
     };
 
     useEffect(() => {
-        localStorage.setItem("plans", JSON.stringify(plans));
-    }, [plans]);
+        localStorage.setItem(storageKey, JSON.stringify(plans));
+    }, [plans, storageKey])
+
+    const updatePlanAtIndex = (index, updatedPlan) => {
+  const updatedPlans = [...plans];
+  updatedPlans[index] = updatedPlan;
+  setPlans(updatedPlans);
+  localStorage.setItem("plansMaquinarias", JSON.stringify(updatedPlans));
+};
+
 
     return {
         plans,
         showForm,
         addPlan,
         cleanPlans,
-        showAddPlanForm
+        showAddPlanForm,
+        updatePlanAtIndex
     }
 }
 

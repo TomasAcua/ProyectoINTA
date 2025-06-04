@@ -1,12 +1,13 @@
-const Button = ({ className, onClick, children }) => {
+const Button = ({ className, disabled, onClick, children }) => {
     return (
         <button
-        className={className}
-        onClick={onClick}
+            className={`${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:brightness-110"} ${className}`}
+            onClick={onClick}
+            disabled={disabled}
         >
             {children}
         </button>
     );
-}
+};
 
-export default Button;
+export default Button
