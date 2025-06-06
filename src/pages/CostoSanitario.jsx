@@ -5,6 +5,8 @@ import { calcularCostoSanitario } from "../utils/calcularCosto";
 import { useSheetData } from "../hooks/useSheetData";
 import useSheets from "../hooks/useSheets";
 import "../App.css";
+import QuickNavigate from '../components/QuickNavigate/QuickNavigate';
+
 
 function CostoSanitario() {
   const columnasPDF = [

@@ -3,9 +3,13 @@
 :root {
   font-family: 'Geist', sans-serif;
   background-color: #f2f7fe;
+  font-family: 'Geist', sans-serif;
+  background-color: #f2f7fe;
 }
 
 @font-face {
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-ExtraLight.ttf') format('woff2');
   font-family: 'Geist';
   src: url('./assets/fonts/Geist/Geist-ExtraLight.ttf') format('woff2');
   font-weight: 200;
@@ -15,11 +19,15 @@
 @font-face {
   font-family: 'Geist';
   src: url('./assets/fonts/Geist/Geist-Light.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Light.ttf') format('woff2');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Regular.ttf') format('woff2');
   font-family: 'Geist';
   src: url('./assets/fonts/Geist/Geist-Regular.ttf') format('woff2');
   font-weight: 400;
@@ -29,11 +37,15 @@
 @font-face {
   font-family: 'Geist';
   src: url('./assets/fonts/Geist/Geist-Medium.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Medium.ttf') format('woff2');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-SemiBold.ttf') format('woff2');
   font-family: 'Geist';
   src: url('./assets/fonts/Geist/Geist-SemiBold.ttf') format('woff2');
   font-weight: 600;
@@ -43,8 +55,11 @@
 @font-face {
   font-family: 'Geist';
   src: url('./assets/fonts/Geist/Geist-Bold.ttf') format('woff2');
+  font-family: 'Geist';
+  src: url('./assets/fonts/Geist/Geist-Bold.ttf') format('woff2');
   font-weight: 700;
   font-style: normal;
+
 }
 
 input[type=number]::-webkit-inner-spin-button,

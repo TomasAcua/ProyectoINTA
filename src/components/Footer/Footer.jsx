@@ -53,6 +53,7 @@ const Footer = () => {
                     <p>SIPAN © 2021. Todos los derechos reservados</p>
                     <p>Unidad: Sin unidad detectada</p>
                     <p>IP Cliente:</p>
+                    <p>IP Cliente:</p>
                 </div>
             </div>
         </footer>
@@ -60,3 +61,4 @@ const Footer = () => {
 }
 
 export default Footer;
+
