@@ -71,9 +71,9 @@ const ModuleLayout = ({
     };
 
     return (
-        <div className="rounded-xl shadow-md min-h-screen w-[90%] bg-[#fafefd] mt-5">
+        <div className="h-full rounded-none md:rounded-xl shadow-md min-h-screen w-full md:w-[90%] mt-0 bg-[#fafefd] md:mt-5 overflow-hidden">
             <QuickNavigate />
-            <div className="flex flex-row justify-start gap-5 space-y-1.5 p-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full p-6 mb-2 rounded-t-xl">
+            <div className="flex flex-row justify-start gap-5 space-y-1.5 p-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full p-6 mb-2">
                 <Calculator />
                 <h2 className="text-xl font-bold">{titulo.toLocaleUpperCase()}</h2>
             </div>

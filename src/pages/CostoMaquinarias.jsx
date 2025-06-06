@@ -3,6 +3,7 @@ import { calcularCostoTotalMaquinaria } from "../utils/calcularCosto";
 import ModuleLayout from "../components/ModuleLayout/ModuleLayout";
 import useSheets from "../hooks/useSheets";
 import { useState } from "react";
+import { LoaderCircle } from 'lucide-react'
 
 import { useMemo } from "react";
 
@@ -46,27 +47,34 @@ export default function CostoMaquinaria() {
     ];
   }, [productos]);
 
-  if (!productos) return <div>Cargando datos de maquinarias...</div>;
+
 
   return (
-    <div className="flex justify-center w-full">
-      <ModuleLayout
-        titulo="Visualizador de Costos Maquinarias"
-        fields={fields}
-        calcularCosto={(form) => {
-          const tractorObj = productos.find(p => p.nombre === form.tractor);
-          const implementoObj = tractorObj?.implementos.find(i => i.nombre === form.implemento);
+    ( productos ? (
+      <div className="flex justify-center w-full">
+            <ModuleLayout
+              titulo="Visualizador de Costos Maquinarias"
+              fields={fields}
+              calcularCosto={(form) => {
+                const tractorObj = productos.find(p => p.nombre === form.tractor);
+                const implementoObj = tractorObj?.implementos.find(i => i.nombre === form.implemento);
 
-          return calcularCostoTotalMaquinaria({
-            ...form,
-            tractor: tractorObj,
-            implemento: implementoObj,
-          });
-        }}
-        storageKey="maquinariasForm"
-        columnasPDF={columnasPDF}
-        tituloModal="Editar Maquinarias"
-      />
-    </div>
+                return calcularCostoTotalMaquinaria({
+                  ...form,
+                  tractor: tractorObj,
+                  implemento: implementoObj,
+                });
+              }}
+              storageKey="maquinariasForm"
+              columnasPDF={columnasPDF}
+              tituloModal="Editar Maquinarias"
+            />
+          </div>
+    ) : (
+    <div className="h-[80vh] flex items-center justify-center">
+      <LoaderCircle/>
+      Cargando datos de maquinarias...</div>
+    )
+  )
   );
 }
