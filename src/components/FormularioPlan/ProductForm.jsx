@@ -13,6 +13,7 @@ const ProductForm = ({
   deleteProductForm,
   cleanProducts,
   handleCargarProductos,
+  type
 }) => {
   const productRefs = useRef({});
   const [highlightedId, setHighlightedId] = useState(null);
@@ -36,7 +37,14 @@ const ProductForm = ({
   return (
     <div className="rounded mb-6 w-[98%]">
       <div className="flex justify-between items-center my-4">
+        {type == "Costo Maquinarias" ? 
+        (<>  
         <h2 className="font-semibold text-lg text-slate-800">
+          CARGA DE MAQUINARIAS
+        </h2>
+     
+</>
+) : (<>  <h2 className="font-semibold text-lg text-slate-800">
           CARGA DE PRODUCTOS Y COSTOS
         </h2>
         <Button
@@ -46,8 +54,9 @@ const ProductForm = ({
           <Plus size={16} />
           <span>Ingresar nuevo producto</span>
         </Button>
-      </div>
-
+     
+</>)}
+       </div>
       {productForms.map((product, index) => (
         <div
           key={product.id}
@@ -61,7 +70,7 @@ const ProductForm = ({
               </h2>
             </div>
           )}
-          <div className="flex gap-4">
+          <div className="flex md:flex-row flex-col gap-4">
             {fields.map((field) => {
               const value = product[field.key];
               const inputValue =
@@ -116,21 +125,22 @@ const ProductForm = ({
           <div className="flex justify-between items-center">
             <div className="mt-4 px-4">
               <label className="block text-sm text-gray-700 font-medium mb-1">
-                Costo por ha
+                Costo
               </label>
               <Input
                 type="text"
-                value={product.costo ? `$${product.costo}` : ""}
+                value={product.costo ? `$${product.costo.toFixed(2)}` : ""}
                 readOnly
               />
             </div>
-            <Button
+            {type !== "Costo Maquinarias" && (<> <Button
               onClick={() => deleteProductForm(product.id)}
               className="text-white bg-red-700 px-3 py-2 transition-colors rounded-md flex items-center gap-2"
             >
               <Trash2 size={20} />
               <span>Eliminar Producto</span>
-            </Button>
+            </Button></>)}
+           
           </div>
         </div>
       ))}

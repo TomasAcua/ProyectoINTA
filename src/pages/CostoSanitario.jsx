@@ -1,22 +1,14 @@
 import ModuleLayout from "../components/ModuleLayout/ModuleLayout";
 import { FIELDS_COSTO_SANITARIO as BASE_FIELDS} from "../consts/costoSanitario"
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { calcularCostoSanitario } from "../utils/calcularCosto";
-import { useSheetData } from "../hooks/useSheetData";
+
 import useSheets from "../hooks/useSheets";
 import "../App.css";
-import QuickNavigate from '../components/QuickNavigate/QuickNavigate';
+import { LoaderCircle } from "lucide-react"
 
 
 function CostoSanitario() {
-  const [chartImage, setChartImage] = useState(null);
-  const [mostrarPDF, setMostrarPDF] = useState(false);
-  const [plans, setPlans] = useState(() => {
-    const storedPlans = localStorage.getItem("productosPorFormulario");
-    return storedPlans
-      ? JSON.parse(storedPlans)
-      : [];
-  });
 const columnasPDF = [
   { label: "Producto", key: "producto", required: true },
   { label: "Unidad", key: "unidad", required: true },
@@ -39,21 +31,28 @@ const columnasPDF = [
     });
   }, [productos]);
 
-  if (!productos) return <div>Cargando datos de productos...</div>;
+  // if (!productos) return <div>Cargando datos de productos...</div>;
 
 
   return (
-    <div className="flex justify-center w-full">
-      <ModuleLayout
-        titulo="Visualizador de Costos Sanitarios"
-        fields={fields}
-        calcularCosto={calcularCostoSanitario}
-        storageKey="Sanitario"
-        columnasPDF={columnasPDF}
-        tituloModal="Editar Costo Sanitario"
-        type= "Costo Sanitario"
-      />
-    </div>
+    (productos ? (
+        <div className="flex justify-center w-full">
+          <ModuleLayout
+            titulo="Visualizador de Costos Sanitarios"
+            fields={fields}
+            calcularCosto={calcularCostoSanitario}
+            storageKey="Sanitario"
+            columnasPDF={columnasPDF}
+            tituloModal="Editar Costo Sanitario"
+            type= "Costo Sanitario"
+          />
+      </div>
+    ) : (
+      <div className="h-[80vh] flex items-center justify-center">
+        <LoaderCircle className="scale-200 animate-spin"/>
+      </div>
+    ))
+    
   )
 }
 

@@ -22,7 +22,7 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
                 } catch (e) {
                     console.error("Error generando imagen del gráfico:", e);
                 }
-            }, 1000); 
+            }, 1000);
             return () => clearTimeout(timer);
         }
     }, [chartData, chartRef.current, showChart]);
@@ -60,8 +60,9 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
                                 <p className="text-gray-600">No hay datos para mostrar</p>
                             )}
                         </div>
-                        {chartImage && (
-                            <div className="mt-6">
+                        <div className="mt-6">
+                            {chartImage && (
+
                                 <PDFDownloadLink
                                     document={
                                         <PDFDocument
@@ -81,8 +82,9 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
                                         </Button>
                                     )}
                                 </PDFDownloadLink>
-                            </div>
-                        )}
+
+                            )}
+                        </div>
                     </>
                 ) : (
                     <p className="text-gray-600 mt-4">

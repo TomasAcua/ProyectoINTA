@@ -1,10 +1,9 @@
-import { FIELDS_COSTO_MAQUINARIAS as BASE_FIELDS } from "../consts/maquinarias";
 import { calcularCostoTotalMaquinaria } from "../utils/calcularCosto";
 import ModuleLayout from "../components/ModuleLayout/ModuleLayout";
 import useSheets from "../hooks/useSheets";
 import { useEffect, useState } from "react";
 import { useMemo } from "react";
-import PrecioCombustibleInput from "../components/PrecioCombustibleInput/PrecioCombustibleInput";
+import { LoaderCircle } from "lucide-react"
 
 export default function CostoMaquinaria() {
   const [precioCombustible, setPrecioCombustible] = useState(
@@ -19,13 +18,12 @@ export default function CostoMaquinaria() {
     { label: "Implemento", key: "implemento", required: true },
   ];
 
-  const googleSheetUrl =
-    "https://docs.google.com/spreadsheets/d/1O1Qa4zcJ-c1mxIaRq5wDf08a6ptuvyiRzraOoxzrqQk/edit?gid=1514857302#gid=1514857302";
+  const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1O1Qa4zcJ-c1mxIaRq5wDf08a6ptuvyiRzraOoxzrqQk/edit?gid=1514857302#gid=1514857302";
   const productos = useSheets(googleSheetUrl, "maquinarias");
 
   const fields = useMemo(() => {
     if (!productos || productos.length === 0) return [];
-    console.log(productos);
+
     return [
       {
         key: "tractor",
@@ -76,6 +74,7 @@ export default function CostoMaquinaria() {
 
 
   return (
+    (productos ? (
     <div className="flex justify-center w-full">
       <ModuleLayout
         titulo="Visualizador de Costos Maquinarias"
@@ -103,5 +102,11 @@ export default function CostoMaquinaria() {
         type= "Costo Maquinarias"
       />
     </div>
+    ) : (
+      <div className="h-[80vh] flex items-center justify-center">
+        <LoaderCircle className="scale-200 animate-spin"/>
+      </div>
+    ))
+    
   );
 }

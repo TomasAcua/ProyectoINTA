@@ -30,7 +30,7 @@ const ModuleLayout = ({
         cleanProducts,
         isCurrentPlanValid,
         resetProductForms,
-    } = useProductForm(fields, calcularCosto, storageKey,precioCombustible)
+    } = useProductForm(fields, calcularCosto, storageKey, precioCombustible)
 
     const {
         plans,
@@ -38,7 +38,8 @@ const ModuleLayout = ({
         addPlan,
         cleanPlans,
         showAddPlanForm,
-        updatePlanAtIndex
+        updatePlanAtIndex, 
+        handleDeletePlan
     } = usePlanList("plans" + storageKey)
 
     const { chartData, chartOptions, isFormValid } = useChartData(plans)
@@ -73,17 +74,18 @@ const ModuleLayout = ({
         setPlanToEdit(plans[index]);
         setIsModalOpen(true);
     };
-useEffect(() => {
-  // Recalcula todos los productos actuales con el nuevo precio
-  const updatedForms = productForms.map((producto) => ({
-    ...producto,
-    costo: calcularCosto(producto),
-  }));
-  resetProductForms(updatedForms);
-}, [precioCombustible]);
+    useEffect(() => {
+        // Recalcula todos los productos actuales con el nuevo precio
+        const updatedForms = productForms.map((producto) => ({
+            ...producto,
+            costo: calcularCosto(producto),
+        }));
+        resetProductForms(updatedForms);
+    }, [precioCombustible]);
 
     return (
-        <div className="h-full rounded-none md:rounded-xl shadow-md min-h-screen w-full md:w-[90%] mt-0 bg-[#fafefd] md:mt-5 overflow-hidden">
+        
+        <div className="h-full rounded-none md:rounded-xl shadow-md min-h-screen w-full md:w-[80%] mt-0 bg-[#fafefd] md:mt-5 overflow-hidden">
             <QuickNavigate />
             <div className="flex flex-row justify-start gap-5 space-y-1.5 p-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full p-6 mb-2">
                 <Calculator />
@@ -94,19 +96,21 @@ useEffect(() => {
                 onDolarChange={updateDolarValue}
             />
             {type === "Costo Maquinarias" && (
-                 <PrecioCombustibleInput
-    value={precioCombustible}
-    onChange={(e) => setPrecioCombustible(e.target.value)}
-    className="flex flex-row w-96 "
-  />
+        
+                    <PrecioCombustibleInput
+                        value={precioCombustible}
+                        onChange={(e) => setPrecioCombustible(e.target.value)}
+                        className={'flex justify-center'}
+                    />
+
             )}
-                
+
             <div className="w-full px-4 flex flex-col items-center">
 
                 <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
-  
+
                 {showForm && (
-               
+
                     <ProductForm
                         fields={fields}
                         productForms={productForms}
@@ -115,6 +119,7 @@ useEffect(() => {
                         deleteProductForm={deleteProductForm}
                         cleanProducts={cleanProducts}
                         handleCargarProductos={handleCargarProductos}
+                        type={type}
                     />
                 )}
                 <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
@@ -126,6 +131,7 @@ useEffect(() => {
                     currentDolarValue={currentDolarValue}
                     onAddPlan={showAddPlanForm}
                     onCleanPlans={cleanPlans}
+                    handleDeletePlan={handleDeletePlan}
                     onEditPlan={handleEditPlan}
                     fields={fields}
                     onSavePlan={(index, editedPlan) => {
@@ -142,6 +148,7 @@ useEffect(() => {
                         updatePlanAtIndex(index, recalculatedPlan);
                     }}
                 />
+
                 <Chart
                     isFormValid={isFormValid}
                     chartData={chartData}

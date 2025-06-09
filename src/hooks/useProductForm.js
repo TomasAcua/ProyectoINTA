@@ -74,9 +74,6 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms", prec
   setProductForms(updatedProductForms);
 };
 
-  
-
-  
 
     const addProductForm = () => {
         setProductForms(prev => [

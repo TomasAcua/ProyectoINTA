@@ -24,6 +24,7 @@ const fetchSheets = (originalUrl) => {
     const fetchAndParse = async () => {
       try {
         const file = await (await fetch(sheetUrl)).arrayBuffer();
+       
       
         //Se lee el archivo con la libreria de sheetsJs
         const workbook = XLSX.read(file, { type: "array" });
@@ -31,9 +32,8 @@ const fetchSheets = (originalUrl) => {
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
 
-
-        let json = XLSX.utils.sheet_to_json(worksheet);
-
+        let json = XLSX.utils.sheet_to_json(worksheet);    
+        
         // Normaliza las claves a minúsculas
         json = json.map((obj) =>
           Object.fromEntries(

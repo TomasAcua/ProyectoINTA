@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import LogoHeader from "../../assets/Logos_Header.png";
-import { ROUTES } from "../../const/routes"
 
 const Header = () => {
   return (
@@ -14,28 +13,10 @@ const Header = () => {
         {/* Menú de navegación */}
         <nav className="hidden md:flex space-x-6 text-sm font-semibold text-gray-700">
           <Link
-            to={ROUTES.home}
+            to="/"
             className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
           >
             HOME
-          </Link>
-          <Link
-            to={ROUTES.costoSanitario}
-            className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
-          >
-            COSTO SANITARIO
-          </Link>
-            <Link
-            to={ROUTES.costoMaquinaria}
-            className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
-          >
-            COSTO MAQUINARIA
-          </Link>
-          <Link
-            to={ROUTES.fertilizacion}
-            className="hover:text-cyan-600 border-b-2 border-transparent hover:border-cyan-500 px-2 py-1"
-          >
-            FERTILIZACIÓN
           </Link>
           <a
             href="#"

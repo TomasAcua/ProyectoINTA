@@ -10,21 +10,18 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
   return (
-  
-       <>
-          <Header />
-          <Routes>
-          
-          <Route path="/" element={<Navigate to={ROUTES.home} />} />
-            <Route element={ <Home/> } path={ROUTES.home} />
-             <Route element={ <CostoSanitario/> } path={ROUTES.costoSanitario} />
-            <Route element={ <CostoMaquinarias />} path={ROUTES.costoMaquinaria} />
-            <Route element={ <Fertilizacion />} path={ROUTES.fertilizacion} /> 
-            <Route element={ <Error/>} path="*" />
-          </Routes>
 
-           <Footer />
-        </>
+    <>
+    <Header />
+      <Routes>
+        <Route path={ROUTES.home} element={<Home />} />
+        <Route path={ROUTES.costoSanitario} element={<CostoSanitario />} />
+        <Route path={ROUTES.costoMaquinaria} element={ <CostoMaquinarias />} />
+        <Route path={ROUTES.fertilizacion} element={<Fertilizacion />}/>
+        {/*<Route element={<Error />} path="*" />*/}
+      </Routes>
+      <Footer />
+    </>
 
   );
 }
