@@ -44,6 +44,7 @@ const productos = useSheets(googleSheetUrl, "fertilizantes");
         storageKey="productFormsFertilization"
         columnasPDF={columnasPDF}
         tituloModal="Editar Fertilización"
+        type = "Costo Fertilización"
       />
     </div>
   );

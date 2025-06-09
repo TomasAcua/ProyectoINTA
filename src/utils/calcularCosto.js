@@ -11,16 +11,15 @@ export function calcularCostoSanitario(form) {
   const dosis = parseFloat(form.dosis) || 0;
   const volumen = parseFloat(form.volumen) || 0;
   const precio = parseFloat(form.precioUnitario) || 0;
-  const tratamientos = parseFloat(form.tratamientos) || 0
   const cantidad = dosis * volumen;
-  return cantidad * precio * tratamientos;
+  return cantidad * precio ;
 }
 
-export const calcularCostoTotalMaquinaria = (form) => {
+export const calcularCostoTotalMaquinaria = (form, precioCombustibleGlobal) => {
   console.log("Form en CalcularCostoMaquinaria:", form )
     const tractor = form.tractor;
     const implemento = form.implemento;
-    const precioCombustible = form.precioCombustible
+    const precioCombustible = parseFloat(precioCombustibleGlobal)
   // const { tractor, implemento, precioCombustible } = form;
 
 
@@ -34,17 +33,18 @@ export const calcularCostoTotalMaquinaria = (form) => {
     
    
 
-
+const tractorPrecio = parseFloat(form.tractorPrecio);
+const implementoPrecio = parseFloat(form.implementoPrecio)
   const amortizacion = (precio, porcentajeResidual, horas) =>
     (precio - precio * porcentajeResidual) / horas;
 
   const mantenimiento = (precio, coef) => precio * coef;
   const costoTotal =
     gastoCombustible +
-    mantenimiento(tractor.precioUSD, tractor.coeficienteMantenimiento) +
-    mantenimiento(implemento.precioUSD, implemento.coeficienteMantenimiento) +
-    amortizacion(tractor.precioUSD, tractor.residuoPorcentaje, tractor.horasUtiles) +
-    amortizacion(implemento.precioUSD, implemento.valorResidualPorcentaje, implemento.horasUtiles);
+    mantenimiento(tractorPrecio, tractor.coeficienteMantenimiento) +
+    mantenimiento(implementoPrecio, implemento.coeficienteMantenimiento) +
+    amortizacion(tractorPrecio, tractor.residuoPorcentaje, tractor.horasUtiles) +
+    amortizacion(implementoPrecio, implemento.valorResidualPorcentaje, implemento.horasUtiles);
    
   return costoTotal;
 };

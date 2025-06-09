@@ -44,12 +44,6 @@ export const FIELDS_COSTO_SANITARIO = [
         required: true
     },
     {
-        key: "tratamientos",
-        label: "Cantidad Repeticiones",
-        type: "number",
-        required: true
-    },
-    {
         key: "precioUnitario",
         label: "Precio Unitario",
         type: "number",

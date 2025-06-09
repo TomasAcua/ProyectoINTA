@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 /**
  * Hook flexible para formularios de productos
  */
-const useProductForm = (fields, calcularCosto, storageKey = "productForms") => {
+const useProductForm = (fields, calcularCosto, storageKey = "productForms", precioCombustibleGlobal=0) => {
     const defaultValues = fields.reduce((acc, field) => ({ ...acc, [field.key]: "" }), {});
     const defaultErrors = fields.reduce((acc, field) => ({ ...acc, [field.key]: "" }), {});
 
@@ -35,29 +35,45 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms") => {
     }
 
     const handleInputChange = (id, key, value) => {
-        const field = fields.find(f => f.key === key)
-        const error = validate(field, value)
-        const updatedProductForms = productForms.map(form => {
-                
-            if (form.id === id) {
-                const updatedForm = {
-                    ...form,
-                    [key]: value,
-                    errors: { ...form.errors, [key]: error }
-                };
-               if (key === "tractor") {
-                updatedForm.implemento = "";
-                updatedForm.errors.implemento = ""; 
-            }
-                updatedForm.costo = calcularCosto(updatedForm)
-                return updatedForm
-            }
-            return form
-        })
-       
-  ;
-        setProductForms(updatedProductForms)
+  const field = fields.find(f => f.key === key);
+  const error = validate(field, value);
+
+  const updatedProductForms = productForms.map(form => {
+    if (form.id !== id) return form;
+
+    const updatedForm = {
+      ...form,
+      [key]: value,
+      errors: {
+        ...form.errors,
+        [key]: error
+      }
+    };
+
+    // Recalcular solo los campos que dependan del campo modificado
+    fields.forEach(f => {
+      if (
+        typeof f.value === "function" &&
+        Array.isArray(f.dependsOn) &&
+        f.dependsOn.includes(key) &&
+        f.key !== key
+      ) {
+        updatedForm[f.key] = f.value(updatedForm);
+      }
+    });
+
+    if (key === "tractor") {
+      updatedForm.implemento = "";
+      updatedForm.errors.implemento = "";
     }
+
+    updatedForm.costo = calcularCosto(updatedForm, precioCombustibleGlobal);
+    return updatedForm;
+  });
+
+  setProductForms(updatedProductForms);
+};
+
   
 
   
@@ -113,15 +129,19 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms") => {
 
         return valid
     }
+ const resetProductForms = (newForms = null) => {
+  if (Array.isArray(newForms)) {
+    setProductForms(newForms);
+  } else {
+    setProductForms([{
+      id: lastProductId + 1,
+      ...defaultValues,
+      errors: { ...defaultErrors }
+    }]);
+    setLastProductId(id => id + 1);
+  }
+};
 
-    const resetProductForms = () => {
-        setProductForms([{
-            id: lastProductId + 1,
-            ...defaultValues,
-            errors: { ...defaultErrors }
-        }])
-        setLastProductId(id => id + 1)
-    }
 
     useEffect(() => {
         const storedProductForms = productForms.map((form) => {

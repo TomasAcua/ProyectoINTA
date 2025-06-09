@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useChartData from "../../hooks/useChartData";
 import Chart from "../Chart/Chart";
 import Dolar from "../Dolar/Dolar";
@@ -9,6 +9,7 @@ import usePlanList from "../../hooks/usePlanList";
 import QuickNavigate from "../QuickNavigate/QuickNavigate";
 import ModalFormulario from "../Modal/ModalFormulario"
 import { Calculator } from "lucide-react"
+import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput";
 
 const ModuleLayout = ({
     titulo,
@@ -16,7 +17,10 @@ const ModuleLayout = ({
     calcularCosto,
     storageKey,
     columnasPDF,
-    tituloModal
+    tituloModal,
+    precioCombustible,
+    setPrecioCombustible,
+    type
 }) => {
     const {
         productForms,
@@ -26,7 +30,7 @@ const ModuleLayout = ({
         cleanProducts,
         isCurrentPlanValid,
         resetProductForms,
-    } = useProductForm(fields, calcularCosto, storageKey)
+    } = useProductForm(fields, calcularCosto, storageKey,precioCombustible)
 
     const {
         plans,
@@ -69,6 +73,14 @@ const ModuleLayout = ({
         setPlanToEdit(plans[index]);
         setIsModalOpen(true);
     };
+useEffect(() => {
+  // Recalcula todos los productos actuales con el nuevo precio
+  const updatedForms = productForms.map((producto) => ({
+    ...producto,
+    costo: calcularCosto(producto),
+  }));
+  resetProductForms(updatedForms);
+}, [precioCombustible]);
 
     return (
         <div className="h-full rounded-none md:rounded-xl shadow-md min-h-screen w-full md:w-[90%] mt-0 bg-[#fafefd] md:mt-5 overflow-hidden">
@@ -81,10 +93,20 @@ const ModuleLayout = ({
                 className="flex justify-center items-center w-full"
                 onDolarChange={updateDolarValue}
             />
+            {type === "Costo Maquinarias" && (
+                 <PrecioCombustibleInput
+    value={precioCombustible}
+    onChange={(e) => setPrecioCombustible(e.target.value)}
+    className="flex flex-row w-96 "
+  />
+            )}
+                
             <div className="w-full px-4 flex flex-col items-center">
-                <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
 
+                <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
+  
                 {showForm && (
+               
                     <ProductForm
                         fields={fields}
                         productForms={productForms}
