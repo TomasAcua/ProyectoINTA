@@ -3,8 +3,9 @@ import fetchSheets from "../services/fetchSheets";
 
 const useSheets = (url, type) => {
   const data = fetchSheets(url);
+  
   if (!data) return null;
-
+ 
   let nuevoArray = []
 
   switch (type) {
@@ -55,7 +56,6 @@ const useSheets = (url, type) => {
     case 'maquinarias': {
 
       const hoja = data;
-  
       const tractores = hoja.filter(row =>
         typeof row["implemento"] === "string" &&
         row["implemento"].toLowerCase().includes("tractor")

@@ -1,7 +1,7 @@
-import CostoSanitario from "./pages/CostoSanitario";
+import CostoSanitario from "./pages/CostoSanitario.jsx";
 import Home from "./pages/Home.jsx";
-import Fertilizacion from "./pages/Fertilizacion";
-import CostoMaquinarias from "./pages/CostoMaquinarias";
+import Fertilizacion from "./pages/Fertilizacion.jsx";
+import CostoMaquinarias from "./pages/CostoMaquinarias.jsx";
 import "./App.css";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -10,9 +10,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
   return (
-  
+
     <>
-      <Header />
+    <Header />
       <Routes>
         <Route path={ROUTES.home} element={<Home />} />
         <Route path={ROUTES.costoSanitario} element={<CostoSanitario />} />
@@ -22,7 +22,6 @@ function App() {
       </Routes>
       <Footer />
     </>
-
 
   );
 }

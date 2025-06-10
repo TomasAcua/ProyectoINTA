@@ -40,7 +40,7 @@ const informationArray = [
 const Footer = () => {
     return (
         <footer className="bg-gradient-to-br from-slate-900 via-gray-900 to-black py-2 px-3 flex flex-col items-center text-[#6f8497]">
-            <div className="flex justify-around flex-wrap py-5 md:w-320">
+            <div className="flex justify-around md:justify-start flex-wrap py-5 gap-3 ">
                 {informationArray.map((info, index) => (
                     <CardFooter key={index} info={info} />
                 ))}
@@ -53,6 +53,7 @@ const Footer = () => {
                     <p>SIPAN © 2021. Todos los derechos reservados</p>
                     <p>Unidad: Sin unidad detectada</p>
                     <p>IP Cliente:</p>
+                    <p>IP Cliente:</p>
                 </div>
             </div>
         </footer>
@@ -60,3 +61,4 @@ const Footer = () => {
 }
 
 export default Footer;
+

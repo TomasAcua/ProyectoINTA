@@ -53,20 +53,6 @@ const Dolar = ({ onDolarChange }) => {
         <p className="text-center text-gray-400">Cargando datos...</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-slate-800">
-          {/* Conversión */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600 mb-1">Conversión</p>
-            <p className="text-lg font-semibold">
-              USD ${cantDolar} = ARS ${Math.round(dolarActual * cantDolar).toLocaleString("es-AR")}
-            </p>
-            <p className="text-xs mt-1 text-gray-500">
-              {modoPersonalizado
-                ? "Valor personalizado por el usuario"
-                : "Valor oficial actual"}
-            </p>
-          </div>
-
-          {/* Input personalizado */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Valor personalizado (opcional)
@@ -81,7 +67,6 @@ const Dolar = ({ onDolarChange }) => {
             />
           </div>
 
-          {/* Botón de cambio */}
           <div className="text-center">
             <Button
               className={`w-full py-3 rounded-xl font-bold text-white transition ${

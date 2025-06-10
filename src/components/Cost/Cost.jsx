@@ -1,22 +1,30 @@
 import { useEffect, useState } from "react";
 import calcCost from "../../assets/functions/calcCost";
 
-const Cost = ({ products, setCostoTotal, dolar }) => {
-  let value = calcCost(products);
-  const [total, setTotal] = useState(0);
+const Cost = ({ products, costoMaquinaria, setCostoTotal, dolar }) => {
+  const [totalUSD, setTotalUSD] = useState(0);
   const [argValue, setArgValue] = useState(0);
+useEffect(() => {
+  console.log("Cost debug => costoMaquinaria:", costoMaquinaria, "dolar:", dolar);
+}, [costoMaquinaria, dolar]);
 
-  // Obtiene el costo total de los productos en USD
   useEffect(() => {
-    const totalUSD = value.reduce((acc, item) => acc + item.total, 0);
-    setTotal(totalUSD);
-    setCostoTotal(totalUSD);
-  }, [value, setCostoTotal]);
+    let total = 0;
 
-  // Obtiene el valor en pesos argentinos usando el prop dolar
+    if (products && products.length > 0) {
+      const result = calcCost(products); // suponiendo que retorna un array con objetos que tienen { total }
+      total = result.reduce((acc, item) => acc + (item.total || 0), 0);
+    } else if (costoMaquinaria ) {
+      total = costoMaquinaria;
+    }
+
+    setTotalUSD(total);
+    if (setCostoTotal) setCostoTotal(total);
+  }, [products, costoMaquinaria, setCostoTotal]);
+
   useEffect(() => {
-    setArgValue(total * dolar);
-  }, [total, dolar]);
+    setArgValue(totalUSD * dolar);
+  }, [totalUSD, dolar]);
 
   return (
     <div className="bg-darkPrimary text-white py-2">
@@ -24,7 +32,7 @@ const Cost = ({ products, setCostoTotal, dolar }) => {
         {argValue ? (
           <h3 className="text-slate-900">
             USD $
-            {Math.round(total).toLocaleString("es-AR", {
+            {Math.round(totalUSD).toLocaleString("es-AR", {
               maximumFractionDigits: 2,
             })}{" "}
             / ARS $

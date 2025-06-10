@@ -1,5 +1,3 @@
-import { ROUTES } from '../../const/routes.js'
-import { Routes, Route, Navigate } from 'react-router-dom'
 import Button from '../Button/Button.jsx'
 import { Pill, Leaf, Tractor, Menu, X } from 'lucide-react'
 import { cardData } from '../../data/cardHomeData.js'

@@ -30,7 +30,6 @@ const ProductsList = ({ products, onEdit, onEliminar}) => {
                 <span>Unidad</span>
                 <span>Cantidad</span>
                 <span>Costo</span>
-               
             </div>
             <div className="divide-y">
                 {products.map((prod, idx) => (

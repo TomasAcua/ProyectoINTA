@@ -43,4 +43,5 @@ const ListaDesplegable = ({ text, name, id, array = [], value, onChange }) => {
     </div>
   );
 };
+
 export default ListaDesplegable;

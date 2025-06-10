@@ -23,6 +23,7 @@ const usePlanList = (storageKey = "plans") => {
         const productsArray = Array.isArray(productForms) ? productForms : Object.values(productForms)
   
         const newPlan = {
+            id: crypto.randomUUID(),
             name: `Plan ${String.fromCharCode(65 + plans.length)}`,
             productos: productsArray.map(({ id, ...content }) => content),
             costoTotal: productsArray.reduce((acc, prod) => acc + parseFloat(prod.costo), 0)
@@ -49,9 +50,12 @@ const usePlanList = (storageKey = "plans") => {
   const updatedPlans = [...plans];
   updatedPlans[index] = updatedPlan;
   setPlans(updatedPlans);
-  localStorage.setItem("plansMaquinarias", JSON.stringify(updatedPlans));
 };
 
+const handleDeletePlan = (id) => {
+    const updatedPlans = plans.filter(plan => plan.id !== id);
+    setPlans(updatedPlans);
+};
 
     return {
         plans,
@@ -59,7 +63,8 @@ const usePlanList = (storageKey = "plans") => {
         addPlan,
         cleanPlans,
         showAddPlanForm,
-        updatePlanAtIndex
+        updatePlanAtIndex,
+        handleDeletePlan
     }
 }
 

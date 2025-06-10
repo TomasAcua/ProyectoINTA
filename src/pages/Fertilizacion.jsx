@@ -3,6 +3,8 @@ import { calcularCostoFertilizacion } from "../utils/calcularCosto";
 import ModuleLayout from "../components/ModuleLayout/ModuleLayout";
 import useSheets from "../hooks/useSheets";
 import { useMemo } from "react";
+import { LoaderCircle } from "lucide-react"
+
 
 const columnasPDF = [
   { label: "Producto", key: "producto" },
@@ -13,7 +15,6 @@ const columnasPDF = [
   { label: "Tratamientos", key: "tratamientos" },
   { label: "Costo", key: "costo" }
 ];
-
 
 export default function Fertilizacion() {
   
@@ -33,10 +34,11 @@ const productos = useSheets(googleSheetUrl, "fertilizantes");
     });
   }, [productos]);
 
-  if (!productos) return <div>Cargando datos de productos...</div>;
+  // if (!productos) return <div>Cargando datos de productos...</div>;
 
   return (
-    <div className="flex justify-center w-full">
+    (productos ? (
+      <div className="flex justify-center w-full">
       <ModuleLayout
         titulo="Visualizador de Costos Fertilización"
         fields={fields}
@@ -46,5 +48,11 @@ const productos = useSheets(googleSheetUrl, "fertilizantes");
         tituloModal="Editar Fertilización"
       />
     </div>
+    ) : (
+      <div className="h-[80vh] flex items-center justify-center">
+        <LoaderCircle className="scale-200 animate-spin"/>
+      </div>
+    ))
+    
   );
 }

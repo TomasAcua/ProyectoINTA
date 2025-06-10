@@ -12,10 +12,10 @@ const CardGrid = () => {
     }
 
     return (
-        <div className='w-full bg-[#f2f7fe] grid lg:grid-cols-3 sm:grid-cols-1 gap-8 justify-center content-center  h-fit px-5'>
+        <div className='w-full max-w-full bg-[#f2f7fe] grid lg:grid-cols-3 sm:grid-cols-1 gap-8 justify-center content-center  h-fit '>
             {cardData.map((card) => {
                 return (
-                    <div key={card.id} className="flex justify-center items-center col-span-1 sm:mb-5 mb-8">
+                    <div key={card.id} className="flex justify-center items-center col-span-1 sm:mb-5 mb-8m">
                         <CardCalculator
                             title={card.title}
                             subtitle={card.subtitle}
