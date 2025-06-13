@@ -1,8 +1,19 @@
 @import 'tailwindcss';
 
+
+
 :root {
   font-family: 'Geist', sans-serif;
   background-color: #f2f7fe;
+}
+
+@theme{
+  --color-sipan-green: #00843D;
+  --color-sipan-orange: #F26522;
+  --color-sipan-yellow: #FDB913;
+  --color-sipan-red: #ED1C24;
+  --color-sipan-lightgreen: #E6F2EC;
+  --color-sipan-lightorange: #FEF0E8;
 }
 
 @font-face {

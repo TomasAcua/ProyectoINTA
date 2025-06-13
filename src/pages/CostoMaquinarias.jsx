@@ -6,6 +6,9 @@ import { useMemo } from "react";
 import { LoaderCircle } from "lucide-react"
 
 export default function CostoMaquinaria() {
+
+
+
   const [precioCombustible, setPrecioCombustible] = useState(
     localStorage.getItem("precioCombustible") || ""
   );
@@ -77,7 +80,7 @@ export default function CostoMaquinaria() {
     (productos ? (
     <div className="flex justify-center w-full">
       <ModuleLayout
-        titulo="Visualizador de Costos Maquinarias"
+        titulo="Calculadora de Costos de Maquinaria"
         fields={fields}
         precioCombustible={precioCombustible}
         setPrecioCombustible={setPrecioCombustible}

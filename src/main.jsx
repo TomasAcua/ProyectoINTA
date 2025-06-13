@@ -7,9 +7,8 @@ import App from './App.jsx'
 window.Buffer = Buffer;
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </StrictMode>,
 )

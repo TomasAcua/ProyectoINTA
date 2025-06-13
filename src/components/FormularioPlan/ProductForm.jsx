@@ -35,18 +35,10 @@ const ProductForm = ({
   }, [productForms]);
 
   return (
-    <div className="rounded mb-6 w-[98%]">
+    <div className="rounded mb-6 w-full">
       <div className="flex justify-between items-center my-4">
-        {type == "Costo Maquinarias" ? 
-        (<>  
-        <h2 className="font-semibold text-lg text-slate-800">
-          CARGA DE MAQUINARIAS
-        </h2>
-     
-</>
-) : (<>  <h2 className="font-semibold text-lg text-slate-800">
-          CARGA DE PRODUCTOS Y COSTOS
-        </h2>
+        <h2 className="text-xl font-bold text-gray-700">Carga de datos</h2>
+        {type !== "Costo Maquinarias"  && (<>  
         <Button
           onClick={addProductForm}
           className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md"
@@ -66,7 +58,9 @@ const ProductForm = ({
           {productForms.length > 0 && (
             <div className="px-2 flex justify-between items-center mb-4">
               <h2 className="font-bold text-xl text-slate-800">
-                Producto {index + 1}
+                {type !== "Costo Maquinarias" ?(
+                  `Producto ${index + 1}`
+                ):("Maquinaria")} 
               </h2>
             </div>
           )}
@@ -129,7 +123,7 @@ const ProductForm = ({
               </label>
               <Input
                 type="text"
-                value={product.costo ? `$${product.costo.toFixed(2)}` : ""}
+                value={product.costo ? `$USD ${product.costo.toFixed(2)} / AR$ ${localStorage.get()}` : ""}
                 readOnly
               />
             </div>

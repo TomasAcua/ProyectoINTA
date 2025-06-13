@@ -40,7 +40,7 @@ const productos = useSheets(googleSheetUrl, "fertilizantes");
     (productos ? (
       <div className="flex justify-center w-full">
       <ModuleLayout
-        titulo="Visualizador de Costos Fertilización"
+        titulo="Calculadora de costos de Planes de Fertilización"
         fields={fields}
         calcularCosto={calcularCostoFertilizacion}
         storageKey="productFormsFertilization"

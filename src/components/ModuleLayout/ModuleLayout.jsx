@@ -8,8 +8,10 @@ import useProductForm from "../../hooks/useProductForm";
 import usePlanList from "../../hooks/usePlanList";
 import QuickNavigate from "../QuickNavigate/QuickNavigate";
 import ModalFormulario from "../Modal/ModalFormulario"
-import { Calculator } from "lucide-react"
+import CalculatorTitle from "../CalculatorTitle/CalculatorTitle"
 import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput";
+import { useLocation } from "react-router-dom";
+
 
 const ModuleLayout = ({
     titulo,
@@ -22,6 +24,10 @@ const ModuleLayout = ({
     setPrecioCombustible,
     type
 }) => {
+
+    const location = useLocation().pathname
+    console.log("searchParams", location.split("/")[1])
+
     const {
         productForms,
         addProductForm,
@@ -38,7 +44,7 @@ const ModuleLayout = ({
         addPlan,
         cleanPlans,
         showAddPlanForm,
-        updatePlanAtIndex, 
+        updatePlanAtIndex,
         handleDeletePlan
     } = usePlanList("plans" + storageKey)
 
@@ -84,44 +90,51 @@ const ModuleLayout = ({
     }, [precioCombustible]);
 
     return (
-        
-        <div className="h-full rounded-none md:rounded-xl shadow-md min-h-screen w-full md:w-[80%] mt-0 bg-[#fafefd] md:mt-5 overflow-hidden">
+        <div className="flex flex-col justify-center items-center">
+        <CalculatorTitle 
+            title={titulo} />
+        <div className="h-full rounded-none md:rounded-xl min-h-screen w-[90%] md:w-[80%] mt-0 md:mt-5 overflow-hidden">
             <QuickNavigate />
-            <div className="flex flex-row justify-start gap-5 space-y-1.5 p-6 bg-gradient-to-r from-green-600 to-emerald-600 text-white w-full p-6 mb-2">
-                <Calculator />
-                <h2 className="text-xl font-bold">{titulo.toLocaleUpperCase()}</h2>
-            </div>
-            <Dolar
-                className="flex justify-center items-center w-full"
-                onDolarChange={updateDolarValue}
-            />
-            {type === "Costo Maquinarias" && (
-        
-                    <PrecioCombustibleInput
-                        value={precioCombustible}
-                        onChange={(e) => setPrecioCombustible(e.target.value)}
-                        className={'flex justify-center'}
-                    />
+            
+            <div className="grid lg:grid-cols-6 grid-cols-1 gap-4 items-center">
+                <div className="lg:col-span-4 order-2 md:order-1 lg:order-1">
+                    {showForm && (
 
-            )}
+                        <ProductForm
+                            fields={fields}
+                            productForms={productForms}
+                            handleInputChange={handleInputChange}
+                            addProductForm={addProductForm}
+                            deleteProductForm={deleteProductForm}
+                            cleanProducts={cleanProducts}
+                            handleCargarProductos={handleCargarProductos}
+                            type={type}
+                        />
+                    )}
+                </div>
+                <div className="flex flex-col col-span-2 order-1 md:order-2 lg:order-2">
+                    <Dolar
+                        className="flex justify-center items-center "
+                        onDolarChange={updateDolarValue}
+                    />
+                    {type === "Costo Maquinarias" && (
+
+                        <PrecioCombustibleInput
+                            value={precioCombustible}
+                            onChange={(e) => setPrecioCombustible(e.target.value)}
+                            className={'flex justify-center'}
+                        />
+
+                    )}
+                </div>
+
+
+            </div>
+
 
             <div className="w-full px-4 flex flex-col items-center">
 
-                <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
 
-                {showForm && (
-
-                    <ProductForm
-                        fields={fields}
-                        productForms={productForms}
-                        handleInputChange={handleInputChange}
-                        addProductForm={addProductForm}
-                        deleteProductForm={deleteProductForm}
-                        cleanProducts={cleanProducts}
-                        handleCargarProductos={handleCargarProductos}
-                        type={type}
-                    />
-                )}
                 <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
 
                 <PlanListB
@@ -159,7 +172,7 @@ const ModuleLayout = ({
                     showChart={showChart}
                     toggleChart={toggleChart}
                 />
-                <ModalFormulario
+                {/* <ModalFormulario
                     isOpen={isModalOpen}
                     title={tituloModal}
                     fields={fields}
@@ -183,9 +196,10 @@ const ModuleLayout = ({
                         setIsModalOpen(false);
                     }}
                     onClose={() => setIsModalOpen(false)}
-                />
+                /> */}
             </div>
 
+        </div>
         </div>
     );
 }

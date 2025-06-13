@@ -6,7 +6,7 @@ import { useState } from 'react'
 const QuickNavigate = () => {
 
     const [showMenu, setShowMenu] = useState(false);
-    const [translate, setTranslate] = useState('translate-x-50');
+    const [translate, setTranslate] = useState('translate-x-55');
     const iconMap = {
         Leaf: <Leaf />,
         Pill: <Pill />,
@@ -19,15 +19,15 @@ const QuickNavigate = () => {
             setTranslate('translate-x-0')
         } else {
             setShowMenu(false);
-            setTranslate('translate-x-50')
+            setTranslate('translate-x-55')
         }
     }
     return (
         <div className="z-99 fixed top-20 right-0">
             <div className="flex flex-row">
-                <div className={`z-89 rounded-2xl rounded-tl-none bg-white w-fit flex flex-col items-center justify-center py-4 px-5 shadow-xl space-y-3 ${translate} transition-transform duration-300 ease-in-out`}>
+                <div className={`z-89 rounded-bl-xl bg-sky-100 w-fit flex flex-col items-center justify-center py-4 px-5 shadow-xl space-y-3 ${translate} transition-transform duration-300 ease-in-out`}>
                     <Button
-                        className={`cursor-pointer p-4 absolute top-0 -left-14 bg-white rounded-l-xl transition-all duration-300`}
+                        className={`cursor-pointer p-4 absolute top-0 -left-14 bg-indigo-400 text-white rounded-l-xl transition-all duration-300`}
                         onClick={() => show()}
                     >
                         <div className="relative w-6 h-6">
@@ -43,7 +43,7 @@ const QuickNavigate = () => {
                     {cardData.map((card) => (
                         <Button
                             key={card.id}
-                            className={`${card.color} text-white hover:brightness-120 hover:scale-105 transition-all duration-300 ease-in-out py-2 px-4 rounded-lg shadow-lg grid grid-cols-4 w-40 cursor-pointer`}
+                            className={`${card.color} text-white hover:brightness-120 hover:scale-105 transition-all duration-300 ease-in-out py-2 px-4 rounded-lg shadow-lg grid grid-cols-4 w-45 cursor-pointer`}
                             onClick={() => {
                                 window.location.href = card.href;
                             }}
