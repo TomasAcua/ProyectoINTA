@@ -16,10 +16,10 @@ const ListaDesplegable = ({ text, name, id, array = [], value, onChange }) => {
           className="text-sm w-full bg-white border border-gray-300 rounded-md px-3 py-2.5 pr-10 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 appearance-none cursor-pointer"
         >
           <option value="" disabled>Seleccione una opción</option>
-          {array.map((item) => {
+          {array.map((item, idx) => {
             const valor =
               typeof item === "object" ? item.producto || item.value || item.label : item;
-            const key = typeof item === "object" ? item.id || valor : valor;
+            const key = (typeof item === "object" ? item.id || valor : valor) + "_" + idx;
             const label = capitalizar(valor);
 
             return (

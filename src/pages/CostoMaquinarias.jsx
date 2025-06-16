@@ -80,7 +80,7 @@ export default function CostoMaquinaria() {
     (productos ? (
     <div className="flex justify-center w-full">
       <ModuleLayout
-        titulo="Calculadora de Costos de Maquinaria"
+        titulo="Costos de Maquinaria"
         fields={fields}
         precioCombustible={precioCombustible}
         setPrecioCombustible={setPrecioCombustible}

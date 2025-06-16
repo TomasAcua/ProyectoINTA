@@ -38,7 +38,7 @@ function CostoSanitario() {
     (productos ? (
       <div className="flex justify-center w-full">
         <ModuleLayout
-          titulo="Calculadora de costos de Planes Sanitarios"
+          titulo="Planes Sanitarios"
           fields={fields}
           calcularCosto={calcularCostoSanitario}
           storageKey="Sanitario"

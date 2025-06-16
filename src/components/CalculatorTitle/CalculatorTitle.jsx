@@ -1,14 +1,18 @@
 import { Calculator } from "lucide-react"
-
+import Badge from '../Badge/Badge'
 
 const CalculatorTitle = ({ title }) => {
-
     return (
-        <div className="flex flex-col justify-center p-6 bg-gradient-to-r from-sipan-orange via-sipan-yellow to-sipan-green text-white h-40 w-full p-6 mb-2">
-            <h2 className="text-xl font-bold">{title.toLocaleUpperCase()}</h2>
+        <div className="flex flex-col items-center text-center justify-center bg-gradient-to-r from-sipan-orange via-sipan-yellow to-sipan-green text-white w-full py-12 mb-2 rounded-xl">
+            <Badge variant="title">Herramienta Profesional</Badge>
+            <h1 className="text-3xl md:text-4xl font-bold mt-4">
+                CALCULADORA DE COSTOS DE <br />
+                <span className="text-white/80">
+                    {title.toUpperCase()}
+                </span>
+            </h1>
         </div>
     )
-
 }
 
-export default CalculatorTitle
+export default CalculatorTitle;

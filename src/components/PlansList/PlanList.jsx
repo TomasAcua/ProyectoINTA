@@ -4,7 +4,7 @@ import Input from "../Input/Input";
 import {Trash2} from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 
-const PlanListB = ({
+const PlanList = ({
     plans,
     columnasPDF,
     planNameKey = "nombre",
@@ -91,9 +91,8 @@ const PlanListB = ({
     }
 
     return (
-        <div className="p-6 w-full rounded-2xl mb-8">
+        <div className="p-0 md:p-6 lg:p-6 w-full rounded-2xl mb-8">
             <h2 className="font-bold text-2xl mb-6 text-center text-sky-800">Planes Generados</h2>
-
             {plans.length === 0 ? (
                 <p className="text-center text-gray-600">No hay planes cargados aún.</p>
             ) : (
@@ -101,15 +100,13 @@ const PlanListB = ({
                     <div className="flex flex-col items-center gap-8">
                         {plans.map((plan, planIdx) => {
                             const enEdicion = indexPlan === planIdx;
-                           
-                            
                             const productos = enEdicion ? planAEditar.productos : plan.productos;
-                          
+
                             return (
                                 <div
                                     key={plan.id}
                                    ref={(el) => (planRefs.current[plan.id] = el)}
-                                    className="w-full rounded-2xl shadow-lg p-6 bg-green-50 relative"
+                                    className="border w-full rounded-2xl shadow-lg p-6 bg-green-50 relative"
                                 > 
                                 <div className="flex items-start justify-between mb-4">
                                     <h3 className="text-xl font-semibold text-sky-700 mb-4 text-start">
@@ -124,10 +121,6 @@ const PlanListB = ({
                                                 key={idx}
                                                 className="px-3 bg-white py-3 overflow-scroll"
                                             >
-                                                {/* <div className=" px-2 flex justify-between items-center mb-4">
-                                                    {/* <h2 className="font-bold text-xl text-slate-800">Producto {idx + 1}</h2>
-                                                </div> */}
-
                                                 <div className="flex pb-3 border-b border-gray-400">
                                                     <div className="text-gray-600 font-semibold text-lg py-3 mx-3">
                                                         {idx + 1}
@@ -245,4 +238,4 @@ onClick={() => eliminarPlan(plan.id)}
     );
 };
 
-export default PlanListB;
+export default PlanList;
