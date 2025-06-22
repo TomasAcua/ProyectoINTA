@@ -3,7 +3,7 @@ import fetchSheets from "../services/fetchSheets";
 
 const useSheets = (url, type) => {
   const data = fetchSheets(url);
-  
+  console.log("Data fetched from sheets:", data);
   if (!data) return null;
  
   let nuevoArray = []
@@ -30,27 +30,34 @@ const useSheets = (url, type) => {
         }
       }
 
-        const mapProduct = (arr) =>
-          Array.isArray(arr)
+      const mapProduct = (arr) =>
+        Array.isArray(arr)
           ? arr
-              .filter(item => item["plagas (plaguicidas)"])
+              .filter(item =>
+                item["plagas (plaguicidas)"] &&
+                item["precio envase (dólar sin iva)"] &&
+                item["unidad"] &&
+                item["volumen envase (kg/lt)"]
+              )
               .map(item => ({
-
-                
-
-                value: item["plagas (plaguicidas)"],
-                label: item["plagas (plaguicidas)"]
+                indicador: item["plagas (plaguicidas)"],
+                precio: parseFloat(item["precio envase (dólar sin iva)"]),
+                moneda: "Dolar Estadounidense",
+                unidad: item["unidad"],
+                unidadsigla: item["unidadsigla"] || "",
+                rubro: "Sanitarias",
+                fecha: item["fecha"] || new Date().toISOString().slice(0, 10),
+                volumen: item["volumen envase (kg/lt)"]
               }))
           : [];
 
-        nuevoArray = [
-          ...mapProduct(productosAntes),
-          ...mapProduct(productosDespues)
-        ];
+      const productos = [
+        ...mapProduct(productosAntes),
+        ...mapProduct(productosDespues)
+      ];
 
-     
-
-        break;
+      nuevoArray = productos;
+      break;
     }
 
     case 'maquinarias': {
@@ -92,27 +99,36 @@ const useSheets = (url, type) => {
 
 
     case 'fertilizantes': {
-      
-      
       const mapProduct = (arr) =>
-          Array.isArray(arr)
-            ? arr
-                .filter(item => item["principio activo"])
-                .map(item => ({
-                  producto: item["principio activo"]
-                }))
-            : [];
+        Array.isArray(arr)
+          ? arr
+              .filter(item =>
+                item["principio activo"] &&
+                item["precio envase (dólar, sin iva)"] &&
+                item["unidad"] &&
+                item["volumen envase (kg/lt)"]
+              )
+              .map(item => ({
+                indicador: item["principio activo"],
+                precio: parseFloat(item["precio envase (dólar, sin iva)"]),
+                moneda: "Dolar Estadounidense",
+                unidad: item["unidad"],
+                unidadsigla: item["unidadsigla"] || "",
+                rubro: "Fertilizantes",
+                fecha: item["fecha"] || new Date().toISOString().slice(0, 10),
+                volumen: item["volumen envase (kg/lt)"]
+              }))
+          : [];
 
-        
-        nuevoArray = [
-          ...mapProduct(data)
-        ];
+      const productos = mapProduct(data);
 
+      nuevoArray = productos;
+      break;
     }
 
     default:
-  
   }
+
   return nuevoArray
 };
 

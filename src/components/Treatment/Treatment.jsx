@@ -50,7 +50,6 @@ const TreatmentList = ({
         setIndexTreatment(treatmentIndex);
         setOriginalTreatment(JSON.parse(JSON.stringify(plans[planIx].tratamientos[treatmentIndex])));
     };
-    console.log("INDEXT TREATMENT", indexTreatment)
     const saveTreatment = () => {
         if (indexTreatment !== null && editTreatment) {
             onSaveTreatment(editPlan, indexTreatment, editTreatment);

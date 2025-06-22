@@ -17,19 +17,22 @@ function CostoSanitario() {
   ];
   const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1sYafPrjzV5WdhpW1JOZw3FoiZbHiDqDHz_F7ayCL_Sw/edit?gid=1418408786#gid=1418408786";
   const productos = useSheets(googleSheetUrl, "sanitarias");
-
+  console.log("productos", productos);
   const fields = useMemo(() => {
-    if (!productos || productos.length === 0) return BASE_FIELDS;
-    return BASE_FIELDS.map((field) => {
-      if (field.key === "producto") {
-        return {
-          ...field,
-          options: productos
-        };
-      }
-      return field;
-    });
-  }, [productos]);
+  if (!productos || productos.length === 0) return BASE_FIELDS;
+  return BASE_FIELDS.map((field) => {
+    if (field.key === "producto") {
+      return {
+        ...field,
+        options: productos.map(p => ({
+          value: p.indicador,
+          label: p.indicador
+        }))
+      };
+    }
+    return field;
+  });
+}, [productos]);
 
   // if (!productos) return <div>Cargando datos de productos...</div>;
 

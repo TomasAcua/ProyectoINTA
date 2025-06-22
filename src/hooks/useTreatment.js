@@ -46,7 +46,7 @@ const useTreatment = (storageKey = "treatments") => {
         updatedtreatments[index] = updatedTreatment;
         setTreatments(updatedtreatments);
     };
-    console.log("TREATMENTS", treatments)
+    // console.log("TREATMENTS", treatments)
     const handleDeleteTreatment = (planId, id) => {
         const updatedtreatments = treatments.filter(Treatment => Treatment.id !== id);
         setTreatments(updatedtreatments);

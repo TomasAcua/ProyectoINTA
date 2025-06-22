@@ -1,6 +1,8 @@
 const ListaDesplegable = ({ text, name, id, array = [], value, onChange }) => {
   const capitalizar = (texto) =>
-    texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+  typeof texto === "string" && texto.length > 0
+    ? texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase()
+    : "";
 
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -18,7 +20,9 @@ const ListaDesplegable = ({ text, name, id, array = [], value, onChange }) => {
           <option value="" disabled>Seleccione una opción</option>
           {array.map((item, idx) => {
             const valor =
-              typeof item === "object" ? item.producto || item.value || item.label : item;
+              typeof item === "object"
+                ? item.producto || item.indicador || item.value || item.label
+                : item;
             const key = (typeof item === "object" ? item.id || valor : valor) + "_" + idx;
             const label = capitalizar(valor);
 

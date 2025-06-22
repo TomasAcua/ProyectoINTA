@@ -13,6 +13,7 @@ import CalculatorTitle from "../CalculatorTitle/CalculatorTitle"
 import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput";
 import XLSXDocument from "../XLSXDocument/XLSXDocument";
 import { useLocation } from "react-router-dom";
+import { fetchMaquinaria } from "../../services/fetchMaquinaria";
 
 
 const ModuleLayout = ({
@@ -28,8 +29,14 @@ const ModuleLayout = ({
 }) => {
 
     const location = useLocation().pathname
-    console.log("searchParams", location.split("/")[1])
-
+    // console.log("searchParams", location.split("/")[1])
+    useEffect(() => {
+        const obtenerDatos = async () => {
+            const { data, error } = await fetchMaquinaria("534950414e2e4d617175696e6172696140316e643163346430723373")
+            console.log("Resultado: ", {data, error})
+        }
+        obtenerDatos()
+    }, [])
     const {
         productForms,
         addProductForm,
@@ -104,13 +111,12 @@ const ModuleLayout = ({
         <div className="flex flex-col justify-center items-center">
             <CalculatorTitle
                 title={titulo} />
-            <div className="h-full rounded-none md:rounded-xl min-h-screen w-[90%] md:w-[80%] mt-0 md:mt-5 overflow-hidden">
+            <div className="h-full rounded-none md:rounded-xl min-h-screen w-[90%] md:w-[85%] mt-0 md:mt-5 overflow-hidden">
                 <QuickNavigate />
 
                 <div className="grid lg:grid-cols-6 grid-cols-1 gap-4 items-center">
                     <div className="lg:col-span-4 order-2 md:order-1 lg:order-1">
                         {showForm && (
-
                             <ProductForm
                                 plans={plans}
                                 treatments={treatments}
@@ -144,7 +150,7 @@ const ModuleLayout = ({
                             />
                         )}
                     </div>
-                    <div className="flex flex-col col-span-2 order-1 md:order-2 lg:order-2">
+                    <div className="flex flex-col col-span-2 order-1 md:order-2 lg:order-2 justify-between gap-6">
                         <Dolar
                             className="flex justify-center items-center "
                             onDolarChange={updateDolarValue}

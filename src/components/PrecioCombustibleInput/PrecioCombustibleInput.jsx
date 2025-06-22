@@ -6,11 +6,11 @@ import {Fuel} from "lucide-react"
 const PrecioCombustibleInput = ({ value, onChange, error }) => {
 
   return (
-    <div className='w-full p-4'>
+    <div className='w-full p-4 bg-white rounded-lg'>
       <Input
         text="Precio del Combustible (USD/L)"
         icon = {<Fuel color="white"/>}
-        bgColor = {"sipan-orange"}
+        bgColor = "sipan-orange"
     
         type="number"
         className={`border p-2 rounded  border-black ${error ? "border-red-500" : "border-gray-300"}`}
