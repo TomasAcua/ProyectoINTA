@@ -1,6 +1,6 @@
-export const fetchMaquinaria = async (token) => {
+export const fetchImplementos = async (token) => {
   try {
-    const response = await fetch("https://6855d5991789e182b37c700e.mockapi.io/ws/indicadores_maquinaria", {
+    const response = await fetch("https://6858859a138a18086dfb2642.mockapi.io/ws/implementos_maquinaria", {
       // method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

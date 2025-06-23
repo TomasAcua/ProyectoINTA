@@ -15,18 +15,8 @@ export const FIELDS_FERTILIZATION = [
         type: "select",
         required: true,
         options: [
-            { value: "kg", label: "Kg" },
-            { value: "lts", label: "Lts" }
-        ]
-    },
-    {
-        key: "presentacion",
-        label: "Presentación",
-        type: "select",
-        required: true,
-        options: [
-            { value: "bolsa", label: "Bolsa 50kg" },
-            { value: "bidon", label: "Bidón 20lts" }
+            { value: "Litros", label: "Litros" },
+            { value: "Kilogramos", label: "Kilogramos" }
         ]
     },
     {

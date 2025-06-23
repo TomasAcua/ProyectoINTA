@@ -18,18 +18,30 @@ const usePlanList = (storageKey = "plans") => {
     //     </li>
     // ))}
 
-    const addPlan = (treatments) => {
-
+    const addPlan = (data, type = "tratamientos") => {
+        const isTratamientos = type === "tratamientos"
         // const productsArray = Array.isArray(treatments) ? treatments : Object.values(treatments)
-
-        const newPlan = {
+        console.log("DATA",data)
+        if(type === "tratamientos"){
+            const newPlan = {
             id: crypto.randomUUID(),
             name: `Plan ${String.fromCharCode(65 + plans.length)}`,
-            tratamientos: treatments,
-            costoTotal: treatments.reduce((acc, treat) => acc + parseFloat(treat.costoTotal), 0)
+           [type]: data, 
+            costoTotal: data.reduce((acc, item) => acc + parseFloat(item.costoTotal), 0)
+            
         };
-
         setPlans([...plans, newPlan]);
+        }else{
+            const newPlan = {
+            id: crypto.randomUUID(),
+            name: `Plan ${String.fromCharCode(65 + plans.length)}`,
+           [type]: data, 
+            costoTotal: data.reduce((acc, item) => acc + parseFloat(item.costo), 0)
+            
+        };
+        setPlans([...plans, newPlan]);
+        }
+        
         setShowForm(true);
     }
 
@@ -64,6 +76,22 @@ const usePlanList = (storageKey = "plans") => {
 
         setPlans(updatedPlans);
     };
+    const deleteTreatmentFromPlan = (planIndex, treatmentIndex) => {
+  setPlans((prevPlans) => {
+    const updatedPlans = [...prevPlans];
+    const selectedPlan = updatedPlans[planIndex];
+    if (!selectedPlan) return prevPlans;
+    if (selectedPlan.tratamientos.length === 1) {
+      const plansWithoutThisOne = updatedPlans.filter((_, i) => i !== planIndex);
+      return plansWithoutThisOne;
+    }
+    updatedPlans[planIndex] = {
+      ...selectedPlan,
+      tratamientos: selectedPlan.tratamientos.filter((_, i) => i !== treatmentIndex),
+    };
+    return updatedPlans;
+  });
+};
     return {
         plans,
         showForm,
@@ -72,7 +100,8 @@ const usePlanList = (storageKey = "plans") => {
         showAddPlanForm,
         updatePlanAtIndex,
         handleDeletePlan,
-        updateTreatmentAtIndex
+        updateTreatmentAtIndex,
+        deleteTreatmentFromPlan
     }
 }
 

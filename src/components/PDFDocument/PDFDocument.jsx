@@ -11,9 +11,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 30,
-    paddingBottom: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: '#ced4da',
+    paddingBottom: 12,
+    borderBottomWidth: 3,
+    borderBottomColor: '#007a33',
   },
   logo: {
     width: 60,
@@ -26,19 +26,19 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#212529',
+    color: '#007a33',
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#495057',
+    color: '#f26a22',
   },
   sectionTitle: {
     fontSize: 14,
     marginBottom: 12,
     marginTop: 25,
-    color: '#495057',
+    color: '#f26a22',
     borderBottomWidth: 1,
-    borderBottomColor: '#adb5bd',
+    borderBottomColor: '#007a33',
     paddingBottom: 4,
     textTransform: 'uppercase',
     fontWeight: 'bold',
@@ -48,8 +48,34 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 12,
     marginBottom: 8,
-    color: '#343a40',
+    color: '#212529',
   },
+  planContainer: {
+    backgroundColor: '#f8f9fa',
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#ced4da',
+  },
+
+  treatmentContainer: {
+    backgroundColor: '#ffffff',
+    padding: 8,
+    marginTop: 10,
+    marginBottom: 12,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#dee2e6',
+  },
+
+  treatmentTitle: {
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: '#007a33',
+    fontSize: 12,
+  },
+
   imageContainer: {
     alignItems: 'center',
     marginBottom: 25,
@@ -69,14 +95,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ced4da',
     borderStyle: 'solid',
+    borderRadius: 4,
+    overflow: 'hidden',
   },
   tableRow: {
     flexDirection: 'row',
   },
   tableHeader: {
-    backgroundColor: '#f1f3f5',
+    backgroundColor: '#007a33',
     fontWeight: 'bold',
-    color: '#212529',
+    color: '#ffffff',
   },
   tableCell: {
     paddingVertical: 6,
@@ -87,7 +115,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#dee2e6',
     textAlign: 'center',
     width: '20%',
-    color: '#495057',
+    color: '#343a40',
+  },
+  italicText: {
+    fontStyle: 'italic',
+    color: '#6c757d',
+    marginVertical: 4,
   },
 });
 
@@ -95,16 +128,19 @@ const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
+        {/* Encabezado con logo SIPAN */}
         <View style={styles.headerContainer}>
           <Image
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Logo_INTA.svg/2048px-Logo_INTA.svg.png"
             style={styles.logo}
           />
           <View style={styles.headerTextContainer}>
-            <Text style={styles.headerTitle}>Instituto Nacional de Tecnología Agropecuaria</Text>
+            <Text style={styles.headerTitle}>SIPAN</Text>
             <Text style={styles.headerSubtitle}>Reporte de planes y productos</Text>
           </View>
         </View>
+
+        {/* Gráfico */}
         {chartImage && (
           <>
             <Text style={styles.sectionTitle}>Gráfico de Costos</Text>
@@ -114,41 +150,50 @@ const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
           </>
         )}
 
+        {/* Sección Planes */}
         <Text style={styles.sectionTitle}>Planes y Productos</Text>
 
-        {plansToRender.length > 0 ? (
-          plansToRender.map((plan, idx) => (
-            <View key={idx} wrap={false}>
-              <Text style={styles.planTitle}>
-                {plan.name} - Total: ${plan.costoTotal?.toLocaleString()}
-              </Text>
-              {plan.productos.length > 0 ? (
-                <View style={styles.table}>
-                  <View style={[styles.tableRow, styles.tableHeader]}>
-                    {columnasPDF.map(col => (
-                      <Text style={styles.tableCell} key={col.key}>{col.label}</Text>
-                    ))}
-                  </View>
-                  {plan.productos.map((prod, i) => (
-                    <View style={styles.tableRow} key={i}>
-                      {columnasPDF.map(col => (
-                        <Text style={styles.tableCell} key={col.key}>
-                          {prod[col.key] !== undefined ? prod[col.key] : ""}
-                        </Text>
+        {plansToRender.map((plan, idx) => (
+          <View key={idx} wrap={false} style={styles.planContainer}>
+            <Text style={styles.planTitle}>
+              {plan.name} — Total: ${plan.costoTotal?.toLocaleString()}
+            </Text>
+
+            {plan.tratamientos?.length > 0 ? (
+              plan.tratamientos.map((tratamiento, i) => (
+                <View key={i} wrap={false} style={styles.treatmentContainer}>
+                  <Text style={styles.treatmentTitle}>
+                    {tratamiento.name} — Total: ${tratamiento.costoTotal?.toLocaleString()}
+                  </Text>
+
+                  {tratamiento.productos?.length > 0 ? (
+                    <View style={styles.table}>
+                      <View style={[styles.tableRow, styles.tableHeader]}>
+                        {columnasPDF.map(col => (
+                          <Text style={styles.tableCell} key={col.key}>{col.label}</Text>
+                        ))}
+                      </View>
+                      {tratamiento.productos.map((prod, j) => (
+                        <View style={styles.tableRow} key={j}>
+                          {columnasPDF.map(col => (
+                            <Text style={styles.tableCell} key={col.key}>
+                              {prod[col.key] !== undefined ? prod[col.key] : ""}
+                            </Text>
+                          ))}
+                        </View>
                       ))}
                     </View>
-                  ))}
+                  ) : (
+                    <Text style={styles.italicText}>No hay productos en este tratamiento.</Text>
+                  )}
                 </View>
-              ) : (
-                <Text style={{ fontStyle: 'italic', color: '#6c757d' }}>
-                  No hay productos en este plan.
-                </Text>
-              )}
-            </View>
-          ))
-        ) : (
-          <Text>No hay planes para mostrar.</Text>
-        )}
+              ))
+            ) : (
+              <Text style={styles.italicText}>No hay tratamientos en este plan.</Text>
+            )}
+          </View>
+        ))}
+
       </Page>
     </Document>
   );

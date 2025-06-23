@@ -1,9 +1,8 @@
 import Input from "../Input/Input";
 import {Fuel} from "lucide-react"
 
-
-
-const PrecioCombustibleInput = ({ value, onChange, error }) => {
+const PrecioCombustibleInput = ({ value, onChange }) => {
+  const error = !value || Number(value) <= 0;
 
   return (
     <div className='w-full p-4 bg-white rounded-lg'>
@@ -18,7 +17,7 @@ const PrecioCombustibleInput = ({ value, onChange, error }) => {
         value={value}
         onChange={onChange}
       />
-      {error && <p className="text-red-500 text-xs">{error}</p>}
+      {error && <p className="text-red-500 text-xs">El precio del combustible es obligatorio</p>}
     </div>
   );
 };

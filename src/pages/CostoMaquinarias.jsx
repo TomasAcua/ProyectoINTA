@@ -1,13 +1,48 @@
 import { calcularCostoTotalMaquinaria } from "../utils/calcularCosto";
 import ModuleLayout from "../components/ModuleLayout/ModuleLayout";
 import useSheets from "../hooks/useSheets";
-import { useEffect, useState } from "react";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { LoaderCircle } from "lucide-react"
+import { fetchMaquinaria } from "../services/fetchMaquinaria";
+import { fetchImplementos } from "../services/fetchImplementos";
+
+
 
 export default function CostoMaquinaria() {
 
+  const [tractoresMockApi, setTractoresMockApi] = useState([]);
+  const [implementosMockApi, setImplementosMockApi] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        //Tractores
+        const { data: dataTractores, error: errorTractores } = await fetchMaquinaria("");
+        if (!errorTractores && Array.isArray(dataTractores)) {
+          const tractoresFiltrados = dataTractores.filter(p =>
+            p.indicador?.toLowerCase().includes("tractor")
+          );
+          setTractoresMockApi(tractoresFiltrados);
+        }
 
+        //Implementos
+        const { data: dataImplementos, error: errorImplementos } = await fetchImplementos("");
+        if (!errorImplementos && Array.isArray(dataImplementos)) {
+          setImplementosMockApi(dataImplementos);
+        }
+
+      } catch (error) {
+        console.error("Error fetching productos:", error);
+      }
+    };
+    fetchData();
+    
+  }, []);
+
+
+  useEffect(()=> {
+    console.log("Tractores Mock API:", tractoresMockApi);
+    console.log("Implementos Mock API:", implementosMockApi);
+  },[tractoresMockApi, implementosMockApi])
 
   const [precioCombustible, setPrecioCombustible] = useState(
     localStorage.getItem("precioCombustible") || ""
@@ -21,11 +56,11 @@ export default function CostoMaquinaria() {
     { label: "Implemento", key: "implemento", required: true },
   ];
 
-  const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1O1Qa4zcJ-c1mxIaRq5wDf08a6ptuvyiRzraOoxzrqQk/edit?gid=1514857302#gid=1514857302";
-  const productos = useSheets(googleSheetUrl, "maquinarias");
+  // const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1O1Qa4zcJ-c1mxIaRq5wDf08a6ptuvyiRzraOoxzrqQk/edit?gid=1514857302#gid=1514857302";
+  // const productos = useSheets(googleSheetUrl, "maquinarias");
 
   const fields = useMemo(() => {
-    if (!productos || productos.length === 0) return [];
+    if (!tractoresMockApi.length || !implementosMockApi.length) return [];
 
     return [
       {
@@ -33,7 +68,10 @@ export default function CostoMaquinaria() {
         label: "Tractor",
         type: "select",
         required: true,
-        options: productos.map((p) => p.nombre),
+        options: tractoresMockApi.map((p) => ({
+          value: p.indicador,
+          label: p.indicador,
+        })),
       },
       {
         key: "tractorPrecio",
@@ -41,8 +79,8 @@ export default function CostoMaquinaria() {
         type: "number",
         required: true,
         value: (form) => {
-          const tractor = productos.find((p) => p.nombre === form.tractor);
-          return tractor?.precioUSD ?? "";
+          const tractor = tractoresMockApi.find((p) => p.indicador === form.tractor);
+          return tractor?.precio ?? "";
         },
         dependsOn: ["tractor"],
       },
@@ -51,10 +89,10 @@ export default function CostoMaquinaria() {
         label: "Implemento",
         type: "select",
         required: true,
-        options: (form) => {
-          const tractor = productos.find((p) => p.nombre === form.tractor);
-          return tractor ? tractor.implementos.map((i) => i.nombre) : [];
-        },
+        options: implementosMockApi.map((p) => ({
+          value: p.implemento,
+          label: p.implemento,
+        })),
       },
       {
         key: "implementoPrecio",
@@ -62,22 +100,19 @@ export default function CostoMaquinaria() {
         type: "number",
         required: true,
         value: (form) => {
-          const tractor = productos.find((p) => p.nombre === form.tractor);
-          const implemento = tractor?.implementos?.find(
-            (i) => i.nombre === form.implemento
-          );
-          return implemento?.precioUSD ?? "";
+          const implemento = implementosMockApi.find((p) => p.implemento === form.implemento);
+          return implemento?.precio_dolar ?? "";
         },
         dependsOn: ["tractor", "implemento"],
       },
       ,
     ];
-  }, [productos]);
+  }, [tractoresMockApi, implementosMockApi]);
 
 
 
   return (
-    (productos ? (
+    (tractoresMockApi && implementosMockApi ? (
     <div className="flex justify-center w-full">
       <ModuleLayout
         titulo="Maquinaria"
@@ -85,10 +120,8 @@ export default function CostoMaquinaria() {
         precioCombustible={precioCombustible}
         setPrecioCombustible={setPrecioCombustible}
         calcularCosto={(form) => {
-          const tractorObj = productos.find((p) => p.nombre === form.tractor);
-          const implementoObj = tractorObj?.implementos.find(
-            (i) => i.nombre === form.implemento
-          );
+          const tractorObj = tractoresMockApi.find((p) => p.indicador === form.tractor);
+          const implementoObj = implementosMockApi.find((p) => p.implemento === form.implemento);
 
           return calcularCostoTotalMaquinaria(
             {
@@ -102,7 +135,7 @@ export default function CostoMaquinaria() {
         storageKey="maquinariasForm"
         columnasPDF={columnasPDF}
         tituloModal="Editar Maquinarias"
-        type= "Costo Maquinarias"
+        type="Costo Maquinarias"
       />
     </div>
     ) : (

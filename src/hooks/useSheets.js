@@ -3,7 +3,7 @@ import fetchSheets from "../services/fetchSheets";
 
 const useSheets = (url, type) => {
   const data = fetchSheets(url);
-  console.log("Data fetched from sheets:", data);
+
   if (!data) return null;
  
   let nuevoArray = []

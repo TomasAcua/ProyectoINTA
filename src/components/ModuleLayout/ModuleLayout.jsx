@@ -3,18 +3,18 @@ import useChartData from "../../hooks/useChartData";
 import useTreatment from "../../hooks/useTreatment";
 import Chart from "../Chart/Chart";
 import Dolar from "../Dolar/Dolar";
-import TreatmentList from "../Treatment/Treatment"
+import TreatmentList from "../Treatment/Treatment";
+import PlanList from "../PlansList/PlanList";
 import ProductForm from "../ProductForm/ProductForm";
 import useProductForm from "../../hooks/useProductForm";
 import usePlanList from "../../hooks/usePlanList";
 import QuickNavigate from "../QuickNavigate/QuickNavigate";
-import ModalFormulario from "../Modal/ModalFormulario"
-import CalculatorTitle from "../CalculatorTitle/CalculatorTitle"
+import ModalFormulario from "../Modal/ModalFormulario";
+import CalculatorTitle from "../CalculatorTitle/CalculatorTitle";
 import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput";
 import XLSXDocument from "../XLSXDocument/XLSXDocument";
 import { useLocation } from "react-router-dom";
 import { fetchMaquinaria } from "../../services/fetchMaquinaria";
-
 
 const ModuleLayout = ({
     titulo,
@@ -25,18 +25,18 @@ const ModuleLayout = ({
     tituloModal,
     precioCombustible,
     setPrecioCombustible,
-    type
+    type,
 }) => {
-
-    const location = useLocation().pathname
-    // console.log("searchParams", location.split("/")[1])
+    const location = useLocation().pathname.split("/")[1];
     useEffect(() => {
         const obtenerDatos = async () => {
-            const { data, error } = await fetchMaquinaria("534950414e2e4d617175696e6172696140316e643163346430723373")
-            console.log("Resultado: ", {data, error})
-        }
-        obtenerDatos()
-    }, [])
+            const { data, error } = await fetchMaquinaria(
+                "534950414e2e4d617175696e6172696140316e643163346430723373"
+            );
+            console.log("Resultado: ", { data, error });
+        };
+        obtenerDatos();
+    }, []);
     const {
         productForms,
         addProductForm,
@@ -45,16 +45,15 @@ const ModuleLayout = ({
         cleanProducts,
         isCurrentPlanValid,
         resetProductForms,
-
-    } = useProductForm(fields, calcularCosto, storageKey, precioCombustible)
+        handleDeleteTreatment,
+    } = useProductForm(fields, calcularCosto, storageKey, precioCombustible);
     const {
         treatments,
         addTreatment,
         cleanTreatments,
         showaddTreatmentForm,
         updateTreatmentAtIndexTreatment,
-        handleDeleteTreatment
-    } = useTreatment("Treatment" + storageKey)
+    } = useTreatment("Treatment" + storageKey);
     const {
         plans,
         showForm,
@@ -63,14 +62,15 @@ const ModuleLayout = ({
         showAddPlanForm,
         updatePlanAtIndex,
         handleDeletePlan,
-        updateTreatmentAtIndex
-    } = usePlanList("plans" + storageKey)
+        updateTreatmentAtIndex,
+        deleteTreatmentFromPlan,
+    } = usePlanList("plans" + storageKey);
 
-    const { chartData, chartOptions, isFormValid } = useChartData(plans)
+    const { chartData, chartOptions, isFormValid } = useChartData(plans, location);
 
-    const [showChart, setShowChart] = useState(false)
-    const chartRef = useRef(null)
-    const toggleChart = () => setShowChart(prev => !prev)
+    const [showChart, setShowChart] = useState(false);
+    const chartRef = useRef(null);
+    const toggleChart = () => setShowChart((prev) => !prev);
 
     const [currentDolarValue, setCurrentDolarValue] = useState(
         localStorage.getItem("dolarOficial") || 0
@@ -78,7 +78,7 @@ const ModuleLayout = ({
 
     const updateDolarValue = (newValue) => {
         setCurrentDolarValue(newValue);
-    }
+    };
 
     const handleCargarProductos = () => {
         if (!isCurrentPlanValid()) {
@@ -88,7 +88,7 @@ const ModuleLayout = ({
 
         addTreatment(productForms);
         resetProductForms();
-    }
+    };
 
     useEffect(() => {
         // Recalcula todos los productos actuales con el nuevo precio
@@ -99,18 +99,26 @@ const ModuleLayout = ({
         resetProductForms(updatedForms);
     }, [precioCombustible]);
     const handleAddPlan = () => {
-        if (treatments.length === 0) {
-            alert("Debes cargar al menos un tratamiento antes de guardar el plan.");
-            return;
-        }
+        if (type === "Costo Maquinarias") {
+            if (productForms.length === 0) {
+                alert("Debes cargar al menos una maquinaria antes de guardar el plan.");
 
-        addPlan(treatments);
-        cleanTreatments();
-    };
+            }
+            addPlan(productForms, "maquinarias");
+            cleanProducts();
+        } else {
+            if (treatments.length === 0) {
+                alert("Debes cargar al menos un tratamiento antes de guardar el plan.");
+
+            }
+
+            addPlan(treatments, "tratamientos");
+            cleanTreatments();
+        }
+    }
     return (
         <div className="flex flex-col justify-center items-center">
-            <CalculatorTitle
-                title={titulo} />
+            <CalculatorTitle title={titulo} />
             <div className="h-full rounded-none md:rounded-xl min-h-screen w-[90%] md:w-[85%] mt-0 md:mt-5 overflow-hidden">
                 <QuickNavigate />
 
@@ -118,8 +126,8 @@ const ModuleLayout = ({
                     <div className="lg:col-span-4 order-2 md:order-1 lg:order-1">
                         {showForm && (
                             <ProductForm
-                                plans={plans}
-                                treatments={treatments}
+                                plans={plans || []}
+                                treatments={treatments || []}
                                 fields={fields}
                                 productForms={productForms}
                                 handleInputChange={handleInputChange}
@@ -137,11 +145,14 @@ const ModuleLayout = ({
                                             ...producto,
                                             costo: calcularCosto(producto),
                                         })),
-                                        costoTotal: editedTreatment.productos.reduce((acc, producto) => {
-                                            return acc + calcularCosto(producto);
-                                        }, 0),
+                                        costoTotal: editedTreatment.productos.reduce(
+                                            (acc, producto) => {
+                                                return acc + calcularCosto(producto);
+                                            },
+                                            0
+                                        ),
                                     };
-                                    console.log("NUEVO PLAN EDITADO", recalculatedPlan)
+                                    console.log("NUEVO PLAN EDITADO", recalculatedPlan);
 
                                     updateTreatmentAtIndexTreatment(index, recalculatedPlan);
                                 }}
@@ -156,34 +167,68 @@ const ModuleLayout = ({
                             onDolarChange={updateDolarValue}
                         />
                         {type === "Costo Maquinarias" && (
-
                             <PrecioCombustibleInput
                                 value={precioCombustible}
                                 onChange={(e) => setPrecioCombustible(e.target.value)}
-                                className={'flex justify-center'}
+                                className={"flex justify-center"}
                             />
-
                         )}
                     </div>
-
-
                 </div>
 
-
                 <div className="w-full px-4 flex flex-col items-center">
-
-
                     <div className="my-4 h-0.5 border-t-0 bg-black/10 w-full"></div>
+                    {/* Plan List */}
+                    <PlanList
+                        plans={plans}
+                        columnasPDF={columnasPDF}
+                        currentDolarValue={currentDolarValue}
+                        onCleanPlans={cleanPlans}
+                        onSavePlan={(index, editedPlan) => {
+                            let recalculatedPlan
+                            if (location === "costo-maquinaria") {
+                                recalculatedPlan = {
+                                    ...editedPlan,
+                                    maquinarias: editedPlan.productos.map((item) => ({
+                                        ...item,
+                                        costo: calcularCosto(item),
+                                    })),
+                                    costoTotal: editedPlan.maquinarias.reduce((acc, item) => {
+                                        return acc + calcularCosto(item);
+                                    }, 0),
+                                };
+                            } else {
+                                 recalculatedPlan = {
+                                    ...editedPlan,
+                                    items: editedPlan.tratamientos.map((tratamiento) => ({
+                                        ...tratamiento,
+                                        costo: calcularCosto(tratamiento),
+                                    })),
+                                    costoTotal: editedPlan.productos.reduce(
+                                    (acc, treatment) => {
+                                        return acc + calcularCosto(treatment)
+                                    },
+                                    0
+                                )
+                                };
+                            }
 
-                    <TreatmentList
+                            updatePlanAtIndex(index, recalculatedPlan);
+                        }}
+                        fields={fields}
+                        handleDeletePlan={handleDeletePlan}
+                    />
+                    {/* aca va la etiqueta TreatmentManager */}
+                    {/*<TreatmentList
                         plans={plans}
                         treatments={treatments}
                         columnasPDF={columnasPDF}
+                        handleDeleteTreatment={deleteTreatmentFromPlan}
                         planNameKey="nombre"
                         currentDolarValue={currentDolarValue}
                         onCleanTreatments={cleanTreatments}
-                        handleDeleteTreatment={handleDeleteTreatment}
                         fields={fields}
+                        type={type}
                         onSaveTreatment={(editPlan, index, editedTreatment) => {
                             const recalculatedPlan = {
                                 ...editedTreatment,
@@ -191,15 +236,18 @@ const ModuleLayout = ({
                                     ...producto,
                                     costo: calcularCosto(producto),
                                 })),
-                                costoTotal: editedTreatment.productos.reduce((acc, producto) => {
-                                    return acc + calcularCosto(producto);
-                                }, 0),
+                                costoTotal: editedTreatment.productos.reduce(
+                                    (acc, producto) => {
+                                        return acc + calcularCosto(producto);
+                                    },
+                                    0
+                                ),
                             };
-                            console.log("NUEVO PLAN EDITADO", recalculatedPlan)
+                            console.log("NUEVO PLAN EDITADO", recalculatedPlan);
 
                             updateTreatmentAtIndex(editPlan, index, recalculatedPlan);
                         }}
-                    />
+                    />*/}
 
                     <Chart
                         isFormValid={isFormValid}
@@ -213,10 +261,8 @@ const ModuleLayout = ({
                     />
                     <XLSXDocument plans={plans} />
                 </div>
-
             </div>
         </div>
     );
-}
-
+};
 export default ModuleLayout;

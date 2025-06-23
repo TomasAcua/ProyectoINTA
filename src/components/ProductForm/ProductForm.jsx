@@ -3,6 +3,7 @@ import Button from "../Button/Button";
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
 import Input from "../Input/Input";
 import MiniTreatments from "../miniTreatments/miniTreatments";
+import TreatmentList from "../Treatment/Treatment";
 import { useEffect, useRef, useState } from "react";
 const ProductForm = ({
   plans,
@@ -45,7 +46,7 @@ const ProductForm = ({
         {/* {console.log("plans",plans)}
         {console.log("plans length",plans[plans.length -1])} */}
 
-        <h2 className="text-xl font-bold text-gray-700">Carga de {(plans && plans.length > 0) ? String.fromCharCode(65 + plans.length) : "plan"}</h2>
+        <h2 className="text-xl font-bold text-gray-700">Carga de Plan {(plans && plans.length > 0) ? String.fromCharCode(65 + plans.length) : "plan"}</h2>
         {type !== "Costo Maquinarias" && (
           <>
             <h3> Tratamiento {(treatments && treatments.length > 0) ? treatments.length +1
@@ -143,7 +144,10 @@ const ProductForm = ({
             >
               <Trash2 size={20} />
               <span>Eliminar Producto</span>
-            </Button></>)}
+            </Button></>
+          
+          
+          )}
 
           </div>
         </div>
@@ -151,12 +155,34 @@ const ProductForm = ({
       ))}
 
       <div className="flex gap-2 mt-4">
-        <Button
+          {type !== "Costo Maquinarias" ? (<> 
+            <Button
           onClick={handleCargarProductos}
           className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded cursor-pointer"
         >
           Agregar Tratamiento
         </Button>
+         <Button
+          onClick={handleAddPlan}
+          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
+        >
+          Cargar Plan
+        </Button>
+            </>
+          
+          
+          ) :(
+            <> 
+             <Button
+          onClick={handleAddPlan}
+          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
+        >
+          Cargar Maquinarias
+        </Button>
+             </>
+          )
+          }
+       
 
         <Button
           onClick={cleanProducts}
@@ -164,15 +190,20 @@ const ProductForm = ({
         >
           Limpiar
         </Button>
-        <Button
-          onClick={handleAddPlan}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
-        >
-          Cargar Plan
-        </Button>
+       
 
       </div>
-      <MiniTreatments treatments={treatments} onCleanTreatments={onCleanTreatments} handleDeleteTreatment={handleDeleteTreatment} onSaveTreatment={onSaveTreatment} columnasPDF={columnasPDF} fields={fields}/>
+      {/* <MiniTreatments treatments={treatments} onCleanTreatments={onCleanTreatments} handleDeleteTreatment={handleDeleteTreatment} onSaveTreatment={onSaveTreatment} columnasPDF={columnasPDF} fields={fields}/> */}
+      
+      <TreatmentList
+        variante="mini"
+        treatments={treatments}
+        maxItems={3}
+        handleDeleteTreatment={handleDeleteTreatment}
+        onCleanTreatments={onCleanTreatments}
+        className="mt-4"
+      />
+        
     </div>
   );
 };

@@ -6,12 +6,11 @@ import { useMemo } from 'react';
  * En este caso lo usamos para que 'guarde' lo que se calcula en Chart.jsx y no vuelva a calcularse acá. Si usaramos un useEffect se generaría un gráfico todo el tiempo cuando se renderice la app, aunque no tngamos nada. Si no se detectan cambios en los 'plans' entonces se sigue calculando con los resultados de antes.
  * @returns estados, handles, funciones necesarias
  */
-
-const useChartData = (plans) => {
-
-    const chartData = useMemo(() => ({
-        labels: plans.map((plan) => plan.name || plan.nombre),
-        datasets: [
+const useChartData = (plans, ubicacion) => {
+    console.log("PLANS EN CHARTDATA", plans)
+    
+    const chartData = useMemo(() => {
+        const datasets = [
             {
                 label: "Costo",
                 data: plans.map((plan) => plan.costoTotal ?? plan.total),
@@ -19,8 +18,22 @@ const useChartData = (plans) => {
                 borderColor: 'rgb(228,109,48)',
                 borderWidth: 1,
             }
-        ]
-    }), [plans]);
+        ];
+        if (ubicacion !== "costo-maquinaria") {
+            datasets.push({
+                label: "Tratamientos",
+                data: plans.map((plan) => plan.tratamientos?.length ?? 0),
+                backgroundColor: 'rgba(66, 139, 56, 0.59)', 
+                borderColor: 'rgb(66, 139, 56)',
+                borderWidth: 1,
+            });
+        }
+
+        return {
+            labels: plans.map((plan) => plan.name || plan.nombre),
+            datasets
+        };
+    }, [plans, ubicacion]);
 
     const chartOptions = {
         responsive: true,
@@ -68,10 +81,9 @@ const useChartData = (plans) => {
         }
     };
 
+    const isFormValid = plans.length >= 2;
 
-    const isFormValid = plans.length >= 2
-
-    return { chartData, chartOptions, isFormValid }
+    return { chartData, chartOptions, isFormValid };
 };
 
-export default useChartData
+export default useChartData;

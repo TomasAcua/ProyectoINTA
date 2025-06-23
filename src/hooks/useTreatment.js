@@ -5,8 +5,7 @@ import { useState, useEffect } from 'react'
  * @returns estados, handles, funciones necesarias
  */
 
-const useTreatment = (storageKey = "treatments") => {
-
+const useTreatment = ( storageKey = "treatments") => {
     // Estado para almacenar todos los Treatmentes con detalles de productos
     // Controla mostrar u ocultar el formulario de carga
     const [treatments, setTreatments] = useState(JSON.parse(localStorage.getItem(storageKey)) || []);
@@ -46,11 +45,12 @@ const useTreatment = (storageKey = "treatments") => {
         updatedtreatments[index] = updatedTreatment;
         setTreatments(updatedtreatments);
     };
+
     // console.log("TREATMENTS", treatments)
-    const handleDeleteTreatment = (planId, id) => {
-        const updatedtreatments = treatments.filter(Treatment => Treatment.id !== id);
-        setTreatments(updatedtreatments);
-    };
+    const handleDeleteTreatment = ( treatmentIndex) => { 
+     return treatmentIndex
+    }
+    
 
     return {
         treatments,
