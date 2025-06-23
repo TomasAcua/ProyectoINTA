@@ -23,9 +23,9 @@ const QuickNavigate = () => {
         }
     }
     return (
-        <div className="z-99 fixed top-20 right-0">
+        <div className="z-30 fixed top-20 right-0 pointer-events-none">
             <div className="flex flex-row">
-                <div className={`z-89 rounded-bl-xl bg-sky-100 w-fit flex flex-col items-center justify-center py-4 px-5 shadow-xl space-y-3 ${translate} transition-transform duration-300 ease-in-out`}>
+                <div className={`z-30 rounded-bl-xl bg-sky-100 w-fit flex flex-col items-center justify-center py-4 px-5 shadow-xl space-y-3 ${translate} transition-transform duration-300 ease-in-out pointer-events-auto`}>
                     <Button
                         className={`cursor-pointer p-4 absolute top-0 -left-14 bg-indigo-400 text-white rounded-l-xl transition-all duration-300`}
                         onClick={() => show()}

@@ -117,9 +117,9 @@ const ModuleLayout = ({
         }
     }
     return (
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center min-h-screen w-full bg-gray-50">
             <CalculatorTitle title={titulo} />
-            <div className="h-full rounded-none md:rounded-xl min-h-screen w-[90%] md:w-[85%] mt-0 md:mt-5 overflow-hidden">
+            <div className="h-full rounded-none md:rounded-xl min-h-screen w-full md:w-[85%] mt-0 md:mt-5 overflow-hidden mx-auto px-2 sm:px-4">
                 <QuickNavigate />
 
                 <div className="grid lg:grid-cols-6 grid-cols-1 gap-4 items-center">

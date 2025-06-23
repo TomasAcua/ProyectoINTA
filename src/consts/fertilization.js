@@ -30,11 +30,5 @@ export const FIELDS_FERTILIZATION = [
         label: "Precio",
         type: "number",
         required: true
-    },
-    {
-        key: "tratamientos",
-        label: "Tratamientos",
-        type: "number",
-        required: true
     }
 ]
