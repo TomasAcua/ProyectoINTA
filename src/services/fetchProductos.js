@@ -1,16 +1,11 @@
-export const fetchProductos = async (token, rubro) => {
+export const fetchProductos = async (token) => {
   try {
-    let url = "https://68586502138a18086dfade90.mockapi.io/ws/indicadores_productos";
-
-    if (rubro) {
-      url += `?rubro=${encodeURIComponent(rubro)}`;
-    }
-    const response = await fetch(url, {
-      // method: "POST",
+    const response = await fetch("https://sipan.inta.gob.ar/ws/productos.json.php", {
+      method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      // body: new URLSearchParams({ token }),
+      body: `token=${encodeURIComponent(token)}`,
     });
 
     if (!response.ok) {

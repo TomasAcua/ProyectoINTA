@@ -1,11 +1,11 @@
 export const fetchMaquinaria = async (token) => {
   try {
-    const response = await fetch("https://6855d5991789e182b37c700e.mockapi.io/ws/indicadores_maquinaria", {
-      // method: "POST",
+    const response = await fetch("https://sipan.inta.gob.ar/ws/maquinaria.json.php", {
+      method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      // body: new URLSearchParams({ token }),
+      body: `token=${encodeURIComponent(token)}`,
     });
 
     if (!response.ok) {
