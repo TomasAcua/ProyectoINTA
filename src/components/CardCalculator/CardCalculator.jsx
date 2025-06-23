@@ -8,19 +8,19 @@ const CardCalculator = ({ title, subtitle, description, icon, color, href }) => 
   const navigateTo = useNavigate()
 
   return (
-    <div className="cursor-default h-135 md:h-105 flex flex-col space-y-1.5 w-70 md:w-100 shadow-lg text-white items-center  bg-white hover:shadow-2x1 hover:scale-102 transition duration-400 rounded-xl group/card">
-      <div className={`h-55 ${color} group-hover/card:brightness-105 flex flex-col items-center justify-center w-full rounded-t-xl px-4`}>
+    <div className="cursor-default h-160 md:h-130 flex flex-col space-y-1.5 w-[] md:w-100 shadow-lg text-white items-center bg-white hover:shadow-2x1 hover:scale-102 transition duration-400 rounded-xl group/card">
+      <div className={`h-60 ${color} group-hover/card:brightness-105 flex flex-col items-center justify-center w-full rounded-t-xl px-4`}>
         {icon ? (
-          <div className={`${color} flex justify-center items-center w-15 h-15 brightness-125 p-4 m-6 scale-160 rounded-xl group-hover/card:scale-170 transition duration-400 shadow-lg`}>
-            {icon}
+          <div className={`${color} flex justify-center items-center w-25 h-25 md:w-20 md:h-20 brightness-125 p-4 m-6 mb-5 rounded-xl group-hover/card:scale-110 transition duration-400 shadow-lg`}>
+            <div className="scale-200 md:scale-170 ">{icon}</div>
           </div>
         ) : (<></>)}
-        <h2 className={'font-extrabold text-xl text-nowrap'} >{title}</h2>
-        <h4 className='font-medium text-sm'>{subtitle}</h4>
+        <h1 className={'h-1/3 font-extrabold text-2xl md:text-xl flex items-center mb-5 md:mb-0'} >Calculadora de costos de <br />{title}</h1>
+        {/*<h4 className='font-medium text-sm'>{subtitle}</h4>*/}
       </div>
 
-      <div className="h-[140px] text-sm/5 text-start flex items-start mx-6 mt-2 text-slate-800">
-        {description}
+      <div className="h-[160px]  text-start flex items-start mx-6 mt-2 text-slate-800">
+        <h3>{description}</h3>
       </div>
 
       <div className="mt-auto pb-5 w-40 hover:scale-105 transition duration-400 group/button">

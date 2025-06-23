@@ -26,7 +26,7 @@ export const FIELDS_COSTO_SANITARIO = [
         required: true,
         options: [
             { value: "Litros", label: "Litros" },
-            { value: "Kg", label: "Kg" },
+            { value: "Kilogramos", label: "Kilogramos" },
             { value: "cc", label: "cc" },
             { value: "unidad", label: "Unidad" }
         ]

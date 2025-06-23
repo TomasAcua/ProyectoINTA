@@ -27,8 +27,10 @@ const FeaturesOverview = () => {
                             <Leaf/>
                         </div>
 
-                        <h2 className='font-bold my-3 text-gray-900 text-lg'>Sostenibilidad</h2>
-                        <p className='text-gray-600'>Optimización de recursos para una agricultura sustentable y económicamente viable.</p>
+                        <h2 className='font-bold my-3 text-gray-900 text-lg'>Soporte Económico para la Gestión</h2>
+                        <p className='text-gray-600'>Información económica clave para mejorar la planificación y gestión estratégica del 
+                            negocio agropecuario.
+                        </p>
                     </div>
                 </div>
 

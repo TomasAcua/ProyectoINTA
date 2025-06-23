@@ -62,7 +62,6 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
                         </div>
                         <div className="mt-6">
                             {chartImage && (
-
                                 <PDFDownloadLink
                                     document={
                                         <PDFDocument

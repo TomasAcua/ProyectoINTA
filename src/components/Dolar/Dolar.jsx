@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import fetchDolar from "../../services/fetchDolar";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
-import { RefreshCcw, Check } from "lucide-react";
+import { RefreshCcw, Check, Calculator } from "lucide-react";
+import Badge from "../Badge/Badge";
 
 const Dolar = ({ onDolarChange }) => {
   const [dolarOficial, setDolarOficial] = useState(null);
@@ -44,32 +45,48 @@ const Dolar = ({ onDolarChange }) => {
   };
 
   return (
-    <div className="p-6 w-full">
-      <h2 className="text-xl font-bold text-sky-800 mb-4 text-center">
-        Cotización del Dólar Oficial
-      </h2>
+    <div className="p-4 w-full bg-white rounded">
+      <div className="flex items-center justify-start gap-2 ">
+        <div className="flex justify-center items-center rounded-lg p-2 bg-sipan-green text-white">
+          <Calculator/>
+        </div>
+        <h2 className="text-lg font-bold ">
+          Cotización del Dólar Oficial
+        </h2>
 
+      </div>
+      
       {dolarOficial === null ? (
         <p className="text-center text-gray-400">Cargando datos...</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-slate-800">
+        <div className="flex flex-col gap-6  text-slate-800 w-full">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Valor personalizado (opcional)
-            </label>
-            <Input
-              type="number"
-              min="1"
-              value={valorInput}
-              onChange={(e) => setValorInput(e.target.value)}
-              placeholder={`Ej: ${dolarOficial}`}
-              disabled={modoPersonalizado}
-            />
+            <div className="flex flex-row items-center justify-between">
+               <label className="block text-sm font-medium text-gray-700">
+              Valor personalizado
+              </label>
+              <Badge
+                variant={modoPersonalizado ? "active" : "disabled"}
+              >{modoPersonalizado ? "Personalizado" : "Oficial" }</Badge>
+              
+            </div>
+            
+              <Input
+                type="number"
+                min={"1"}
+                value={valorInput}
+                onChange={(e) => setValorInput(e.target.value)}
+                placeholder={`Ej: ${dolarOficial}`}
+                disabled={modoPersonalizado}
+                
+              />
+            
+            
           </div>
 
           <div className="text-center">
             <Button
-              className={`w-full py-3 rounded-xl font-bold text-white transition ${
+              className={`w-full py-2 rounded-xl font-bold text-white transition ${
                 modoPersonalizado
                   ? "bg-yellow-600 hover:bg-yellow-700"
                   : "bg-green-600 hover:bg-green-700"

@@ -3,20 +3,20 @@ import { ROUTES } from '../const/routes'
 export const cardData = [
     {
       id: "sanitario",
-      title: "Cálculos de Plan Sanitario",
-      subtitle: "Optimización de costos en tratamientos sanitarios",
+      title: "Planes Sanitarios",
+      subtitle: "",
       description:
-        "Este módulo permite calcular el costo total de tratamientos sanitarios en función de los productos utilizados. Se pueden evaluar diferentes estrategias de control, comparar productos específicos y el gasto total por hectárea, ayudando a tomar decisiones más estratégicas de prevención y control.",
+        "Este módulo permite calcular los costos de los insumos de un plan fitosanitario y comparar planes alternativos. Se pueden evaluar diferentes estrategias de control, analizar productos específicos y estimar el gasto total por hectárea. La herramienta facilita la toma de decisiones más eficientes, adaptadas a las necesidades productivas y económicas del productor",
       icon: 'Pill',
       color: "bg-gradient-to-br from-blue-600 via-indigo-500 to-sky-500",
       href: ROUTES.costoSanitario,
     },
     {
-      id: "fertilizar",
-      title: "Cálculos de Insumos para Fertilizar",
-      subtitle: "Análisis de costos en fertilización y tratamiento de suelos",
+      id: "fertilizacion",
+      title: "Planes de Fertilizacion",
+      subtitle: "",
       description:
-        "Este módulo permite calcular el costo de fertilización por hectárea considerando diferentes productos, dosis y estrategias aplicadas. Integra la eficiencia económica de los planes de fertilización.",
+        "Este módulo permite estimar el costo de los insumos de un plan de fertilización. Ofrece la posibilidad de comparar distintas estrategias nutricionales y calcular el gasto total de fertilizantes por hectárea, brindando información clave para optimizar las decisiones agronómicas y económicas.",
       icon: 'Leaf',
       color: "bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500",
       
@@ -24,10 +24,9 @@ export const cardData = [
     },
     {
       id: "maquinaria",
-      title: "Cálculos de Maquinaria",
-      subtitle: "Evaluación de costos operativos y mantenimiento de equipos",
-      description:
-        "Aquí se pueden calcular los costos de operación de tractores y implementos, incluyendo gastos de combustible, mantenimiento y depreciación. También permite incluir la planificación de maquinaria y la eficiencia del uso de la misma en las tareas productivas.",
+      title: "Maquinaria",
+      subtitle: "",
+      description:"Este módulo permite estimar los costos asociados al uso de distintos conjuntos de maquinaria agrícola. Facilita la comparación entre alternativas mecánicas según el tipo de labores y los equipos involucrados, brindando información para cuantificar los costos de maquinaria asociados a distintas tareas del campos.",
       icon: 'Tractor',
       color: "bg-gradient-to-br from-yellow-500 via-amber-500 to-red-500",
       href: ROUTES.costoMaquinaria,

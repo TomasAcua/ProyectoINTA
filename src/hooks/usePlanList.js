@@ -18,18 +18,30 @@ const usePlanList = (storageKey = "plans") => {
     //     </li>
     // ))}
 
-    const addPlan = (productForms) => {
-        
-        const productsArray = Array.isArray(productForms) ? productForms : Object.values(productForms)
-  
-        const newPlan = {
+    const addPlan = (data, type = "tratamientos") => {
+        const isTratamientos = type === "tratamientos"
+        // const productsArray = Array.isArray(treatments) ? treatments : Object.values(treatments)
+        console.log("DATA",data)
+        if(type === "tratamientos"){
+            const newPlan = {
             id: crypto.randomUUID(),
             name: `Plan ${String.fromCharCode(65 + plans.length)}`,
-            productos: productsArray.map(({ id, ...content }) => content),
-            costoTotal: productsArray.reduce((acc, prod) => acc + parseFloat(prod.costo), 0)
+           [type]: data, 
+            costoTotal: data.reduce((acc, item) => acc + parseFloat(item.costoTotal), 0)
+            
         };
-
         setPlans([...plans, newPlan]);
+        }else{
+            const newPlan = {
+            id: crypto.randomUUID(),
+            name: `Plan ${String.fromCharCode(65 + plans.length)}`,
+           [type]: data, 
+            costoTotal: data.reduce((acc, item) => acc + parseFloat(item.costo), 0)
+            
+        };
+        setPlans([...plans, newPlan]);
+        }
+        
         setShowForm(true);
     }
 
@@ -47,16 +59,39 @@ const usePlanList = (storageKey = "plans") => {
     }, [plans, storageKey])
 
     const updatePlanAtIndex = (index, updatedPlan) => {
-  const updatedPlans = [...plans];
-  updatedPlans[index] = updatedPlan;
-  setPlans(updatedPlans);
-};
+        const updatedPlans = [...plans];
+        updatedPlans[index] = updatedPlan;
+        setPlans(updatedPlans);
+    };
 
-const handleDeletePlan = (id) => {
-    const updatedPlans = plans.filter(plan => plan.id !== id);
-    setPlans(updatedPlans);
-};
+    const handleDeletePlan = (id) => {
+        const updatedPlans = plans.filter(plan => plan.id !== id);
+        setPlans(updatedPlans);
+    };
+    
+    const updateTreatmentAtIndex = (editPlan, index, updatedTreatment) => {
+        const updatedPlans = [...plans]
 
+        updatedPlans[editPlan].tratamientos[index] = updatedTreatment
+
+        setPlans(updatedPlans);
+    };
+    const deleteTreatmentFromPlan = (planIndex, treatmentIndex) => {
+  setPlans((prevPlans) => {
+    const updatedPlans = [...prevPlans];
+    const selectedPlan = updatedPlans[planIndex];
+    if (!selectedPlan) return prevPlans;
+    if (selectedPlan.tratamientos.length === 1) {
+      const plansWithoutThisOne = updatedPlans.filter((_, i) => i !== planIndex);
+      return plansWithoutThisOne;
+    }
+    updatedPlans[planIndex] = {
+      ...selectedPlan,
+      tratamientos: selectedPlan.tratamientos.filter((_, i) => i !== treatmentIndex),
+    };
+    return updatedPlans;
+  });
+};
     return {
         plans,
         showForm,
@@ -64,7 +99,9 @@ const handleDeletePlan = (id) => {
         cleanPlans,
         showAddPlanForm,
         updatePlanAtIndex,
-        handleDeletePlan
+        handleDeletePlan,
+        updateTreatmentAtIndex,
+        deleteTreatmentFromPlan
     }
 }
 

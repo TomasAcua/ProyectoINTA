@@ -17,8 +17,27 @@ export function calcularCostoSanitario(form) {
 
 export const calcularCostoTotalMaquinaria = (form, precioCombustibleGlobal) => {
   console.log("Form en CalcularCostoMaquinaria:", form )
-    const tractor = form.tractor;
-    const implemento = form.implemento;
+
+  const tractor = form.tractor && {
+    ...form.tractor,
+    potenciaHP: form.tractor.potenciaHP ?? form.tractor.potencia_hp ?? 0,
+    coeficienteMantenimiento: form.tractor.coeficienteMantenimiento ?? form.tractor.coeficiente ?? 0,
+    residuoPorcentaje: form.tractor.residuoPorcentaje ?? (form.tractor.valorresidual ? (form.tractor.valorresidual / form.tractor.precio) : 0),
+    horasUtiles: form.tractor.horasUtiles ?? form.tractor.vidautil ?? 1,
+  };
+    
+    const implemento = form.implemento && {
+    ...form.implemento,
+    consumoCombustible: form.implemento.consumoCombustible ?? 1, // Si no hay dato, pon 1 o el valor correcto
+    coeficienteMantenimiento: form.implemento.coeficienteMantenimiento ?? form.implemento.coeficiente_mantenimiento ?? 0,
+    valorResidualPorcentaje: form.implemento.valorResidualPorcentaje ?? (
+      typeof form.implemento.valor_residual === "string"
+        ? parseFloat(form.implemento.valor_residual) / 100
+        : 0
+    ),
+    horasUtiles: form.implemento.horasUtiles ?? form.implemento.vida_util_horas ?? 1,
+  };
+  
     const precioCombustible = parseFloat(precioCombustibleGlobal)
   // const { tractor, implemento, precioCombustible } = form;
 
