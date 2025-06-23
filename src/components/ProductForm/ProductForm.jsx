@@ -2,7 +2,7 @@ import { Plus, Trash2 } from "lucide-react";
 import Button from "../Button/Button";
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
 import Input from "../Input/Input";
-import MiniTreatments from "../miniTreatments/miniTreatments";
+// import MiniTreatments from "../miniTreatments/miniTreatments";
 import TreatmentList from "../Treatment/Treatment";
 import { useEffect, useRef, useState } from "react";
 const ProductForm = ({
