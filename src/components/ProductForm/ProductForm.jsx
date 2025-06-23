@@ -2,7 +2,6 @@ import { Plus, Trash2 } from "lucide-react";
 import Button from "../Button/Button";
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
 import Input from "../Input/Input";
-// import MiniTreatments from "../miniTreatments/miniTreatments";
 import TreatmentList from "../Treatment/Treatment";
 import { useEffect, useRef, useState } from "react";
 const ProductForm = ({
@@ -193,7 +192,7 @@ const ProductForm = ({
        
 
       </div>
-      {/* <MiniTreatments treatments={treatments} onCleanTreatments={onCleanTreatments} handleDeleteTreatment={handleDeleteTreatment} onSaveTreatment={onSaveTreatment} columnasPDF={columnasPDF} fields={fields}/> */}
+   
       
       <TreatmentList
         variante="mini"
