@@ -37,6 +37,7 @@ function CostoSanitario() {
     { label: "Producto", key: "producto", required: true },
     { label: "Unidad", key: "unidad", required: true },
     { label: "Dosis", key: "dosis", required: true },
+    { label: "Volumen", key: "volumen", required: true },
     { label: "Precio Unitario", key: "precioUnitario", required: true },
   ];
 

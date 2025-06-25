@@ -47,9 +47,9 @@ const useTreatment = ( storageKey = "treatments") => {
     };
 
     // console.log("TREATMENTS", treatments)
-    const handleDeleteTreatment = ( treatmentIndex) => { 
-     return treatmentIndex
-    }
+    const handleDeleteTreatment = (treatmentIndex) => {
+    setTreatments((prev) => prev.filter((_, idx) => idx !== treatmentIndex));
+    };
     
 
     return {

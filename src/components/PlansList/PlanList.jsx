@@ -1,3 +1,4 @@
+
 import Button from "../Button/Button";
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
 import Input from "../Input/Input";
@@ -12,18 +13,35 @@ const PlanList = ({
   onSavePlan,
   fields,
   handleDeletePlan,
+  location,
+   calcularCosto
 }) => {
   const [indexPlan, setIndexPlan] = useState(null);
   const [planOriginal, setPlanOriginal] = useState(null);
   const [planAEditar, setPlanAEditar] = useState(null);
   const [cambiosDetectados, setCambiosDetectados] = useState(false);
   const planRefs = useRef({});
+ 
+  const obtenerProductos = (plan, enEdicion, planAEditar) => {
+  const base = enEdicion ? planAEditar : plan;
+if (!base) {
+  return [];
+}
+  if (Array.isArray(base.tratamientos)) {
+     return base.tratamientos.flatMap(t => t.productos || []);
+  }
 
+  if (Array.isArray(base.maquinarias)) {
+    return base.maquinarias;
+  }
+
+  return [];
+};
   useEffect(() => {
     if (planAEditar && planOriginal) {
-      setCambiosDetectados(
-        JSON.stringify(planAEditar) !== JSON.stringify(planOriginal)
-      );
+      const productosEditados = JSON.stringify(obtenerProductos(planAEditar, true, planAEditar));
+    const productosOriginales = JSON.stringify(obtenerProductos(planOriginal, true, planOriginal));      
+  setCambiosDetectados(productosEditados !== productosOriginales);
     } else {
       setCambiosDetectados(false);
     }
@@ -48,7 +66,36 @@ const PlanList = ({
 
   const guardarPlan = () => {
     if (indexPlan !== null && planAEditar) {
-      onSavePlan(indexPlan, planAEditar);
+      let recalculatedPlan;
+      if (location === "costo-maquinaria") {
+        const maquinarias = planAEditar.maquinarias.map((item) => ({
+          ...item,
+          costo: calcularCosto(item),
+        }));
+        recalculatedPlan = {
+          ...planAEditar,
+          maquinarias,
+          costoTotal: maquinarias.reduce((acc, item) => acc + item.costo, 0),
+        };
+      } else {
+        const tratamientos = planAEditar.tratamientos.map((t) => ({
+          ...t,
+          productos: t.productos.map((p) => ({
+            ...p,
+            costo: calcularCosto(p),
+          })),
+        }));
+        const costoTotal = tratamientos.reduce((acc, t) => {
+          const subtotal = t.productos.reduce((s, p) => s + calcularCosto(p), 0);
+          return acc + subtotal;
+        }, 0);
+        recalculatedPlan = {
+          ...planAEditar,
+          tratamientos,
+          costoTotal,
+        };
+      }
+      onSavePlan(indexPlan, recalculatedPlan);
       cancelarEdicion();
     }
   };
@@ -65,37 +112,76 @@ const PlanList = ({
     tipo,
     tratamientoIndex = null
   ) => {
-    const copiaPlan = JSON.parse(JSON.stringify(plans[planIndex]));
-    if (tipo === "tratamientos") {
-      copiaPlan.tratamientos[tratamientoIndex].productos.splice(prodIndex, 1);
+    if (indexPlan === planIndex && planAEditar) {
+      const copiaPlan = JSON.parse(JSON.stringify(planAEditar));
+      if (tipo === "tratamientos") {
+        copiaPlan.tratamientos[tratamientoIndex].productos.splice(prodIndex, 1);
+      } else {
+        copiaPlan.maquinarias.splice(prodIndex, 1);
+      }
+      setPlanAEditar(copiaPlan);
     } else {
-      copiaPlan.maquinarias.splice(prodIndex, 1);
+      const copiaPlan = JSON.parse(JSON.stringify(plans[planIndex]));
+      if (tipo === "tratamientos") {
+        copiaPlan.tratamientos[tratamientoIndex].productos.splice(prodIndex, 1);
+      } else {
+        copiaPlan.maquinarias.splice(prodIndex, 1);
+      }
+      onSavePlan(planIndex, copiaPlan);
     }
-    onSavePlan(planIndex, copiaPlan);
   };
 
   const handleChange = (
-    fieldKey,
-    value,
-    planIndex,
-    tipo,
-    itemIndex,
-    tratamientoIndex = null
-  ) => {
-    const copiaPlan = JSON.parse(JSON.stringify(plans[planIndex]));
+  fieldKey,
+  value,
+  planIndex,
+  tipo,
+  itemIndex,
+  tratamientoIndex = null
+) => {
+  if (indexPlan === planIndex && planAEditar) {
+    const copiaPlan = JSON.parse(JSON.stringify(planAEditar));
     let item;
-
     if (tipo === "tratamientos") {
       item = copiaPlan.tratamientos[tratamientoIndex].productos[itemIndex];
-    } else {
+      item[fieldKey] = value;
+      // Recalcula el costo del producto
+      item.costo = calcularCosto(item);
+      // Recalcula el costoTotal del tratamiento
+      const tratamiento = copiaPlan.tratamientos[tratamientoIndex];
+      tratamiento.costoTotal = tratamiento.productos.reduce((acc, p) => acc + (p.costo || 0), 0);
+      // Recalcula el costoTotal del plan
+      copiaPlan.costoTotal = copiaPlan.tratamientos.reduce((acc, t) => acc + (t.costoTotal || 0), 0);
+    } else if (tipo === "maquinarias") {
       item = copiaPlan.maquinarias[itemIndex];
+      item[fieldKey] = value;
+
+      // Si cambias el tractor, limpia implemento y su precio
+      if (fieldKey === "tractor") {
+        item["implemento"] = "";
+        item["implementoPrecio"] = "";
+        // Actualiza el precio del tractor si existe en fields
+        const fieldPrecio = fields.find(f => f.key === "tractorPrecio" && typeof f.value === "function");
+        if (fieldPrecio) {
+          item["tractorPrecio"] = fieldPrecio.value(item);
+        }
+      }
+      // Si cambias el implemento, actualiza su precio
+      if (fieldKey === "implemento") {
+        const fieldPrecio = fields.find(f => f.key === "implementoPrecio" && typeof f.value === "function");
+        if (fieldPrecio) {
+          item["implementoPrecio"] = fieldPrecio.value(item);
+        }
+      }
+
+      // Recalcula el costo de la maquinaria
+      item.costo = calcularCosto(item);
+      // Recalcula el costoTotal del plan
+      copiaPlan.costoTotal = copiaPlan.maquinarias.reduce((acc, m) => acc + (m.costo || 0), 0);
     }
-
-    item[fieldKey] = value;
-    if (fieldKey === "tractor") item["implemento"] = "";
-
-    onSavePlan(planIndex, copiaPlan);
-  };
+    setPlanAEditar(copiaPlan);
+  }
+};
 
   return (
     <div className="p-0 md:p-6 lg:p-6 w-full rounded-2xl mb-8">
@@ -110,12 +196,12 @@ const PlanList = ({
             const enEdicion = indexPlan === planIdx;
             const isTratamientos = plan.hasOwnProperty("tratamientos");
             const isMaquinarias = plan.hasOwnProperty("maquinarias");
-
+            const currentPlan = enEdicion && planAEditar ? planAEditar : plan;
             return (
               <div
                 key={plan.id}
                 ref={(el) => (planRefs.current[plan.id] = el)}
-                className="border w-full rounded-2xl shadow-lg p-2 bg-green-50 relative"
+                className="w-full rounded-2xl shadow-lg shadow-slat p-2 bg-green-50 relative"
               >
                 <h3 className="text-xl font-semibold text-sky-700 mb-4">
                   {plan.name}
@@ -130,7 +216,7 @@ const PlanList = ({
                   <div className="min-w-[700px]">
                     <div className="flex flex-col gap-6">
                       {isTratamientos &&
-                        plan.tratamientos.map((tratamiento, tIdx) => (
+                        currentPlan.tratamientos.map((tratamiento, tIdx) => (
                           <div
                             key={tIdx}
                             className="bg-white p-4 rounded shadow"
@@ -138,8 +224,11 @@ const PlanList = ({
                             <h4 className="font-bold text-sky-700 mb-2">
                               Tratamiento {tIdx + 1}
                             </h4>
-                            {tratamiento.productos.map((prod, pIdx) => (
-                              <div
+                            
+                            {tratamiento.productos.map((prod, pIdx) => {
+                                  
+
+                              return(<div
                                 key={pIdx}
                                 className="flex pb-3 border-b border-gray-300 py-2"
                               >
@@ -151,7 +240,6 @@ const PlanList = ({
                                     (f) => f.key === col.key
                                   );
                                   const valor = prod[col.key] ?? "";
-
                                   return (
                                     <div key={col.key} className="flex-1 px-2">
                                       <p className="text-sm font-medium text-gray-700 mb-1">
@@ -201,8 +289,11 @@ const PlanList = ({
                                       )}
                                     </div>
                                   );
+                             
                                 })}
-                                {tratamiento.productos.length > 1 && (
+                                
+                                {Array.isArray(tratamiento.productos) &&  tratamiento.productos.length > 1 && (
+                                 
                                   <Button
                                     className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-lg shadow"
                                     onClick={() =>
@@ -217,14 +308,14 @@ const PlanList = ({
                                     <Trash2 />
                                   </Button>
                                 )}
-                              </div>
-                            ))}
+                              </div>)
+          })}
                           </div>
                         ))}
 
                       {isMaquinarias &&
-                        Array.isArray(plan.maquinarias) &&
-                        plan.maquinarias.map((maq, mIdx) => (
+                        Array.isArray(currentPlan.maquinarias) &&
+                        currentPlan.maquinarias.map((maq, mIdx) => (
                           <div
                             key={mIdx}
                             className="flex pb-3 border-b border-gray-300 py-2 bg-white px-4 rounded shadow"
@@ -237,7 +328,6 @@ const PlanList = ({
                                 (f) => f.key === col.key
                               );
                               const valor = maq[col.key] ?? "";
-
                               return (
                                 <div key={col.key} className="flex-1 px-2">
                                   <p className="text-sm font-medium text-gray-700 mb-1">
@@ -285,7 +375,7 @@ const PlanList = ({
                                 </div>
                               );
                             })}
-                            {plan.maquinarias.length > 1 && (
+                            {currentPlan.maquinarias && currentPlan.maquinarias.length > 1 && (
                               <Button
                                 className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-lg shadow"
                                 onClick={() =>
@@ -305,8 +395,8 @@ const PlanList = ({
                   <div className="bg-sky-100 border border-sky-300 rounded-lg p-4">
                     <p className="text-sm text-gray-600">Total estimado:</p>
                     <p className="text-xl font-semibold text-gray-800">
-                      USD ${plan.costoTotal.toFixed(2)} / ARS $
-                      {(plan.costoTotal * currentDolarValue).toFixed(2)}
+                      USD ${currentPlan.costoTotal.toFixed(2)} / ARS{" "}
+                      {(currentPlan.costoTotal * currentDolarValue).toFixed(2)}
                     </p>
                   </div>
                   {enEdicion ? (

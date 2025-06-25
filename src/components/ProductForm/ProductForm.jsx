@@ -24,21 +24,22 @@ const ProductForm = ({
   const productRefs = useRef({});
   const [highlightedId, setHighlightedId] = useState(null);
 
-  useEffect(() => {
-    if (productForms.length > 0) {
-      const lastProduct = productForms[productForms.length - 1];
-      const ref = productRefs.current[lastProduct.id];
-      if (ref) {
-        ref.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-      setHighlightedId(lastProduct.id);
-      const timeout = setTimeout(() => {
-        setHighlightedId(null);
-      }, 2500);
+  // useEffect(() => {
+  //   if (productForms.length > 0) {
+  //     const lastProduct = productForms[productForms.length - 1];
+  //     const ref = productRefs.current[lastProduct.id];
+  //     if (ref) {
+  //       ref.scrollIntoView({ behavior: "smooth", block: "center" });
+  //     }
+  //     setHighlightedId(lastProduct.id);
+  //     const timeout = setTimeout(() => {
+  //       setHighlightedId(null);
+  //     }, 2500);
 
-      return () => clearTimeout(timeout);
-    }
-  }, [productForms]);
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [productForms]);
+
   return (
     <div className="rounded mb-6 w-full">
       <div className="flex justify-between items-center my-4">
@@ -51,7 +52,21 @@ const ProductForm = ({
             <h3> Tratamiento {(treatments && treatments.length > 0) ? treatments.length +1
               : 5}</h3>
             <Button
-              onClick={addProductForm}
+              onClick={() => {
+                const lastIdBefore = productForms.at(-1)?.id
+
+                addProductForm()
+
+                setTimeout(() => {
+                  const lastProduct = productForms.at(1)
+                  const ref = productRefs.current[lastProduct?.id]
+                  if (ref) {
+                    ref.scrollIntoView({behavior: "smooth", block: "center" })
+                    setHighlightedId(lastProduct.id)
+                    setTimeout(() => setHighlightedId(null), 2500)
+                  } 
+                }, 0)
+              }}
               className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md"
             >
               <Plus size={16} />

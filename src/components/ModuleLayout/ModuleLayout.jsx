@@ -45,13 +45,13 @@ const ModuleLayout = ({
         cleanProducts,
         isCurrentPlanValid,
         resetProductForms,
-        handleDeleteTreatment,
     } = useProductForm(fields, calcularCosto, storageKey, precioCombustible);
     const {
         treatments,
         addTreatment,
         cleanTreatments,
         showaddTreatmentForm,
+        handleDeleteTreatment,
         updateTreatmentAtIndexTreatment,
     } = useTreatment("Treatment" + storageKey);
     const {
@@ -152,7 +152,6 @@ const ModuleLayout = ({
                                             0
                                         ),
                                     };
-                                    console.log("NUEVO PLAN EDITADO", recalculatedPlan);
 
                                     updateTreatmentAtIndexTreatment(index, recalculatedPlan);
                                 }}
@@ -184,6 +183,8 @@ const ModuleLayout = ({
                         columnasPDF={columnasPDF}
                         currentDolarValue={currentDolarValue}
                         onCleanPlans={cleanPlans}
+                        location={location}
+                        calcularCosto={calcularCosto}
                         onSavePlan={(index, editedPlan) => {
                             let recalculatedPlan
                             if (location === "costo-maquinaria") {
@@ -204,9 +205,10 @@ const ModuleLayout = ({
                                         ...tratamiento,
                                         costo: calcularCosto(tratamiento),
                                     })),
-                                    costoTotal: editedPlan.productos.reduce(
-                                    (acc, treatment) => {
-                                        return acc + calcularCosto(treatment)
+                                    costoTotal: editedPlan.tratamientos.reduce(
+                                    (acc, tratamiento) => {
+                                        const productos = tratamiento.productos || [];
+                                        return acc +  productos.reduce((subAcc, prod) => subAcc + calcularCosto(prod), 0)
                                     },
                                     0
                                 )

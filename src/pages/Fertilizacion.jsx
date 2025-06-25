@@ -6,13 +6,13 @@ import { LoaderCircle } from "lucide-react";
 import { fetchProductos } from "../services/fetchProductos";
 
 const columnasPDF = [
-  { label: "Producto", key: "producto" },
-  { label: "Unidad", key: "unidad" },
-  { label: "Dosis", key: "dosis" },
-  { label: "Presentación", key: "presentacion" },
-  { label: "Precio", key: "precio" },
-  { label: "Tratamientos", key: "tratamientos" },
-  { label: "Costo", key: "costo" },
+    {label: "Producto", key: "producto"},
+    {label: "Unidad", key: "unidad"},
+    {label: "Dosis", key: "dosis"},
+    {label: "Presentación", key: "presentacion"},
+    {label: "Precio", key: "precio"},
+    {label: "Costo", key: "costo"}
+
 ];
 
 export default function Fertilizacion() {
