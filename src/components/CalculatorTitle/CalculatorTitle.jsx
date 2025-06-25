@@ -7,7 +7,7 @@ const CalculatorTitle = ({ title }) => {
             <Badge variant="title">Herramienta Profesional</Badge>
             <h1 className="text-3xl md:text-4xl font-bold mt-4">
                 Calculadora de Costos de <br />
-                <span className="text-white/80">
+                <span className="text-white">
                     {title.toUpperCase()}
                 </span>
             </h1>
