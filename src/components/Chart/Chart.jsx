@@ -65,7 +65,7 @@ const Chart = ({ isFormValid, chartData, chartOptions, chartRef, plans, columnas
                                 <PDFDownloadLink
                                     document={
                                         <PDFDocument
-                                            chartImage={chartImage} // puede ser null
+                                            chartImage={chartImage} 
                                             plansToRender={plansToRender}
                                             columnasPDF={columnasPDF}
                                         />

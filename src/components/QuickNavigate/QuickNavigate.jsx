@@ -49,7 +49,7 @@ const QuickNavigate = () => {
                             }}
                         >
                             <span className='col-span-1'>{iconMap[card.icon]}</span>
-                            <span className='col-span-3'>{card.id.toLocaleUpperCase()}</span>
+                            <span className='col-span-3'>{card.name.toLocaleUpperCase()}</span>
                         </Button>
                     ))}
 

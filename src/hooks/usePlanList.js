@@ -12,16 +12,10 @@ const usePlanList = (storageKey = "plans") => {
     const [plans, setPlans] = useState(JSON.parse(localStorage.getItem(storageKey)) || []);
     const [showForm, setShowForm] = useState(true);
 
-    //     {Object.keys(subjects).map((keyName, i) => (
-    //     <li className="travelcompany-input" key={i}>
-    //         <span className="input-label">key: {i} Name: {subjects[keyName]}</span>
-    //     </li>
-    // ))}
+  
 
     const addPlan = (data, type = "tratamientos") => {
         const isTratamientos = type === "tratamientos"
-        // const productsArray = Array.isArray(treatments) ? treatments : Object.values(treatments)
-        console.log("DATA",data)
         if(type === "tratamientos"){
             const newPlan = {
             id: crypto.randomUUID(),
@@ -58,11 +52,14 @@ const usePlanList = (storageKey = "plans") => {
         localStorage.setItem(storageKey, JSON.stringify(plans));
     }, [plans, storageKey])
 
+    
     const updatePlanAtIndex = (index, updatedPlan) => {
-        const updatedPlans = [...plans];
-        updatedPlans[index] = updatedPlan;
-        setPlans(updatedPlans);
-    };
+  setPlans((prevPlans) => {
+    const updatedPlans = [...prevPlans];
+    updatedPlans[index] = updatedPlan;
+    return updatedPlans;
+  });
+};
 
     const handleDeletePlan = (id) => {
         const updatedPlans = plans.filter(plan => plan.id !== id);

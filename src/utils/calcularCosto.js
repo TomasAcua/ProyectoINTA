@@ -16,7 +16,7 @@ export function calcularCostoSanitario(form) {
 }
 
 export const calcularCostoTotalMaquinaria = (form, precioCombustibleGlobal) => {
-  console.log("Form en CalcularCostoMaquinaria:", form )
+
 
   const tractor = form.tractor && {
     ...form.tractor,
@@ -42,7 +42,6 @@ export const calcularCostoTotalMaquinaria = (form, precioCombustibleGlobal) => {
   // const { tractor, implemento, precioCombustible } = form;
 
 
-  console.log("tractor:", tractor);
  if (!tractor || !implemento) return 0;
 
   const gastoCombustible =

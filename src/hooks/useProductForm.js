@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 /**
  * Hook flexible para formularios de productos
  */
-const useProductForm = (fields, calcularCosto, storageKey = "productForms", precioCombustibleGlobal=0) => {
+const useProductForm = (fields, calcularCosto, storageKey = "productForms", precioCombustibleGlobal = 0) => {
     const defaultValues = fields.reduce((acc, field) => ({ ...acc, [field.key]: "" }), {});
     const defaultErrors = fields.reduce((acc, field) => ({ ...acc, [field.key]: "" }), {});
 
@@ -24,7 +24,7 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms", prec
     )
 
     const validate = (field, value) => {
-        console.log("field: ", field)
+       
         let error = ""
         if (field.required && !value) {
             error = `El campo ${field.label} es obligatorio`
@@ -35,53 +35,57 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms", prec
     }
 
     const handleInputChange = (id, key, value) => {
-  const field = fields.find(f => f.key === key);
-  const error = validate(field, value);
+        const field = fields.find(f => f.key === key);
+        const error = validate(field, value);
 
-  const updatedProductForms = productForms.map(form => {
-    if (form.id !== id) return form;
+        const updatedProductForms = productForms.map(form => {
+            if (form.id !== id) return form;
 
-    const updatedForm = {
-      ...form,
-      [key]: value,
-      errors: {
-        ...form.errors,
-        [key]: error
-      }
+            const updatedForm = {
+                ...form,
+                [key]: value,
+                errors: {
+                    ...form.errors,
+                    [key]: error
+                }
+            };
+
+            // Recalcular solo los campos que dependan del campo modificado
+            fields.forEach(f => {
+                if (
+                    typeof f.value === "function" &&
+                    Array.isArray(f.dependsOn) &&
+                    f.dependsOn.includes(key) &&
+                    f.key !== key
+                ) {
+                    updatedForm[f.key] = f.value(updatedForm);
+                }
+            });
+
+            if (key === "tractor") {
+                updatedForm.implemento = "";
+                updatedForm.errors.implemento = "";
+            }
+
+            updatedForm.costo = calcularCosto(updatedForm, precioCombustibleGlobal);
+            return updatedForm;
+        });
+
+        setProductForms(updatedProductForms);
     };
 
-    // Recalcular solo los campos que dependan del campo modificado
-    fields.forEach(f => {
-      if (
-        typeof f.value === "function" &&
-        Array.isArray(f.dependsOn) &&
-        f.dependsOn.includes(key) &&
-        f.key !== key
-      ) {
-        updatedForm[f.key] = f.value(updatedForm);
-      }
-    });
-
-    if (key === "tractor") {
-      updatedForm.implemento = "";
-      updatedForm.errors.implemento = "";
-    }
-
-    updatedForm.costo = calcularCosto(updatedForm, precioCombustibleGlobal);
-    return updatedForm;
-  });
-
-  setProductForms(updatedProductForms);
-};
-
-
     const addProductForm = () => {
-        setProductForms(prev => [
-            ...prev,
-            { id: lastProductId + 1, ...defaultValues, errors: { ...defaultErrors } }
-        ]);
-        setLastProductId(id => id + 1)
-    }
+        const newProduct = {
+            id: lastProductId + 1,
+            ...defaultValues,
+            errors: { ...defaultErrors }
+        };
+
+        setProductForms(prev => [...prev, newProduct]);
+        setLastProductId(id => id + 1);
+
+        return newProduct;
+    };
 
     const deleteProductForm = (id) => {
         if (productForms.length !== 1) {
@@ -126,18 +130,18 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms", prec
 
         return valid
     }
- const resetProductForms = (newForms = null) => {
-  if (Array.isArray(newForms)) {
-    setProductForms(newForms);
-  } else {
-    setProductForms([{
-      id: lastProductId + 1,
-      ...defaultValues,
-      errors: { ...defaultErrors }
-    }]);
-    setLastProductId(id => id + 1);
-  }
-};
+    const resetProductForms = (newForms = null) => {
+        if (Array.isArray(newForms)) {
+            setProductForms(newForms);
+        } else {
+            setProductForms([{
+                id: lastProductId + 1,
+                ...defaultValues,
+                errors: { ...defaultErrors }
+            }]);
+            setLastProductId(id => id + 1);
+        }
+    };
 
 
     useEffect(() => {

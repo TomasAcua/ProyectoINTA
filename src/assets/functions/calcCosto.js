@@ -22,4 +22,3 @@ export const calcCosto = (array) => {
     return total;
 }
 export default calcCosto;
-//Costo = cantidad producto formulado * precio = $/tratamiento ha

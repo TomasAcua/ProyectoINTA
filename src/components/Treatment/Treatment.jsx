@@ -327,7 +327,7 @@ const TreatmentList = ({
                       Eliminar tratamientos
                     </Button>
                   </div>
-                  //)
+                 
                 }
               </div>
             </div>

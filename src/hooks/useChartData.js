@@ -7,7 +7,7 @@ import { useMemo } from 'react';
  * @returns estados, handles, funciones necesarias
  */
 const useChartData = (plans, ubicacion) => {
-    console.log("PLANS EN CHARTDATA", plans)
+    
     
     const chartData = useMemo(() => {
         const datasets = [

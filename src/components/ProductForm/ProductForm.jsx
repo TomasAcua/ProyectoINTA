@@ -3,8 +3,12 @@ import Button from "../Button/Button";
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
 import Input from "../Input/Input";
 import TreatmentList from "../Treatment/Treatment";
+import { cardData } from "../../data/cardHomeData";
 import { useEffect, useRef, useState } from "react";
+import { Leaf, Pill, Truck } from "lucide-react";
+
 const ProductForm = ({
+  cardId,
   plans,
   fields,
   treatments,
@@ -23,48 +27,47 @@ const ProductForm = ({
 }) => {
   const productRefs = useRef({});
   const [highlightedId, setHighlightedId] = useState(null);
+  const iconMap = {
+    Leaf: <Leaf />,
+    Pill: <Pill />,
+    Tractor: <Truck />
+  }
 
-  // useEffect(() => {
-  //   if (productForms.length > 0) {
-  //     const lastProduct = productForms[productForms.length - 1];
-  //     const ref = productRefs.current[lastProduct.id];
-  //     if (ref) {
-  //       ref.scrollIntoView({ behavior: "smooth", block: "center" });
-  //     }
-  //     setHighlightedId(lastProduct.id);
-  //     const timeout = setTimeout(() => {
-  //       setHighlightedId(null);
-  //     }, 2500);
-
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [productForms]);
+  const bgMap = {
+    "costo-sanitario": "blue-500",
+    "costo-maquinaria": "orange-600",
+    "fertilizacion": "sipan-green"
+  }
+  const cardItem = cardData.find(card => card.id === cardId);
+  const icon = cardItem ? iconMap[cardItem.icon] : null;
+  const bgColor = bgMap[cardId]
 
   return (
-    <div className="rounded mb-6 w-full">
-      <div className="flex justify-between items-center my-4">
-        {/* {console.log("plans",plans)}
-        {console.log("plans length",plans[plans.length -1])} */}
-
-        <h2 className="text-xl font-bold text-gray-700">Carga de Plan {(plans && plans.length > 0) ? String.fromCharCode(65 + plans.length) : "plan"}</h2>
+    <div className="rounded mb-6 w-full bg-white shadow-lg px-5 py-1">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold text-gray-700">
+          <div className={`bg-${bgColor} flex items-center justify-center p-2 rounded-xl text-white`}>
+            {icon}
+          </div>
+          Carga de Plan {(plans && plans.length > 0) ? String.fromCharCode(65 + plans.length) : "A"}</h2>
         {type !== "Costo Maquinarias" && (
-          <>
-            <h3> Tratamiento {(treatments && treatments.length > 0) ? treatments.length +1
+          <div>
+            <h3> Tratamiento {(treatments && treatments.length > 0) ? treatments.length + 1
               : 5}</h3>
             <Button
               onClick={() => {
-                const lastIdBefore = productForms.at(-1)?.id
-
-                addProductForm()
+                const newProduct = addProductForm()
 
                 setTimeout(() => {
-                  const lastProduct = productForms.at(1)
-                  const ref = productRefs.current[lastProduct?.id]
+                  const ref = productRefs.current[newProduct.id]
                   if (ref) {
-                    ref.scrollIntoView({behavior: "smooth", block: "center" })
-                    setHighlightedId(lastProduct.id)
+                    ref.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center"
+                    })
+                    setHighlightedId(newProduct.id)
                     setTimeout(() => setHighlightedId(null), 2500)
-                  } 
+                  }
                 }, 0)
               }}
               className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md"
@@ -72,7 +75,7 @@ const ProductForm = ({
               <Plus size={16} />
               <span>Ingresar nuevo producto</span>
             </Button>
-          </>)}
+          </div>)}
       </div>
       {productForms.map((product, index) => (
         <div
@@ -89,7 +92,7 @@ const ProductForm = ({
               </h2>
             </div>
           )}
-          <div className="flex md:flex-row flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {fields.map((field) => {
               const value = product[field.key];
               const inputValue =
@@ -120,8 +123,8 @@ const ProductForm = ({
                       text={field.label}
                       type={field.type || "text"}
                       className={`border p-2 rounded w-full ${product.errors[field.key]
-                          ? "border-red-500"
-                          : "border-gray-300"
+                        ? "border-red-500"
+                        : "border-gray-300"
                         }`}
                       placeholder={field.label}
                       defaultValue={
@@ -159,9 +162,9 @@ const ProductForm = ({
               <Trash2 size={20} />
               <span>Eliminar Producto</span>
             </Button></>
-          
-          
-          )}
+
+
+            )}
 
           </div>
         </div>
@@ -169,34 +172,34 @@ const ProductForm = ({
       ))}
 
       <div className="flex gap-2 mt-4">
-          {type !== "Costo Maquinarias" ? (<> 
+        {type !== "Costo Maquinarias" ? (<>
+          <Button
+            onClick={handleCargarProductos}
+            className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded cursor-pointer"
+          >
+            Agregar Tratamiento
+          </Button>
+          <Button
+            onClick={handleAddPlan}
+            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
+          >
+            Cargar Plan
+          </Button>
+        </>
+
+
+        ) : (
+          <>
             <Button
-          onClick={handleCargarProductos}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded cursor-pointer"
-        >
-          Agregar Tratamiento
-        </Button>
-         <Button
-          onClick={handleAddPlan}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
-        >
-          Cargar Plan
-        </Button>
-            </>
-          
-          
-          ) :(
-            <> 
-             <Button
-          onClick={handleAddPlan}
-          className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
-        >
-          Cargar Maquinarias
-        </Button>
-             </>
-          )
-          }
-       
+              onClick={handleAddPlan}
+              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-1 rounded cursor-pointer"
+            >
+              Cargar Maquinarias
+            </Button>
+          </>
+        )
+        }
+
 
         <Button
           onClick={cleanProducts}
@@ -204,11 +207,11 @@ const ProductForm = ({
         >
           Limpiar
         </Button>
-       
+
 
       </div>
-   
-      
+
+
       <TreatmentList
         variante="mini"
         treatments={treatments}
@@ -217,7 +220,7 @@ const ProductForm = ({
         onCleanTreatments={onCleanTreatments}
         className="mt-4"
       />
-        
+
     </div>
   );
 };

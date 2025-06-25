@@ -62,7 +62,7 @@ Facundo Garcia
 
 Rodrigo Villablanca
 
-Rocio Ayelen
+Rocio Fernandez
 
 Brisa Celayes
 
@@ -83,6 +83,18 @@ git clone https://github.com/TomasAcua/proyectoINTA.git
 
 # Instalar dependencias
 npm install
+```
 
+Crear archivo `.env` en la raíz del proyecto y agregar los siguientes tokens:
+
+```env
+VITE_API_TOKEN_PRODUCTOS=
+VITE_API_TOKEN_MAQUINARIA=
+```
+
+**Nota:** El archivo `.env` está en el `.gitignore` y no se sube al repositorio.
+
+```bash
 # Ejecutar en modo desarrollo
 npm run dev
+```

@@ -6,22 +6,22 @@ import { LoaderCircle } from "lucide-react";
 import { fetchProductos } from "../services/fetchProductos";
 
 const columnasPDF = [
-    {label: "Producto", key: "producto"},
-    {label: "Unidad", key: "unidad"},
-    {label: "Dosis", key: "dosis"},
-    {label: "Presentación", key: "presentacion"},
-    {label: "Precio", key: "precio"},
-    {label: "Costo", key: "costo"}
-
+  { label: "Producto", key: "producto" },
+  { label: "Unidad", key: "unidad" },
+  { label: "Dosis", key: "dosis" },
+  { label: "Precio", key: "precio" },
+  { label: "Costo", key: "costo" },
 ];
 
 export default function Fertilizacion() {
+const tokenProductos = import.meta.env.VITE_API_TOKEN_PRODUCTOS;
+
   const [productosMockApi, setProductosMockApi] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data, error } = await fetchProductos(
-          "534950414e2e50726f647563746f7340316e643163346430723373"
+          tokenProductos
         );
         if (!error && data) {
           const productosFiltrados = Object.values(data).filter(
@@ -36,9 +36,7 @@ export default function Fertilizacion() {
     fetchData();
   }, []);
 
-//   useEffect(() => {
-//     console.log("productosMockapi", productosMockApi);
-//   }, [productosMockApi]);
+
 
   const fields = useMemo(() => {
     if (!productosMockApi || productosMockApi.length === 0) return BASE_FIELDS;

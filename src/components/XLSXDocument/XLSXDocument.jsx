@@ -101,8 +101,7 @@ const XLSXDocument = ({ plans }) => {
     const maxContentLength = Math.max(...contentLengths);
     return { wch: Math.max(maxContentLength + 2, 12) };
   });
-  console.log("rows", rows);
-  console.log("cols", cols);
+ 
   generateSheets(rows, `planes${location}.xlsx`, "Planes", cols);
 };
 

@@ -4,15 +4,12 @@ import calcCost from "../../assets/functions/calcCost";
 const Cost = ({ products, costoMaquinaria, setCostoTotal, dolar }) => {
   const [totalUSD, setTotalUSD] = useState(0);
   const [argValue, setArgValue] = useState(0);
-useEffect(() => {
-  console.log("Cost debug => costoMaquinaria:", costoMaquinaria, "dolar:", dolar);
-}, [costoMaquinaria, dolar]);
 
   useEffect(() => {
     let total = 0;
 
     if (products && products.length > 0) {
-      const result = calcCost(products); // suponiendo que retorna un array con objetos que tienen { total }
+      const result = calcCost(products); 
       total = result.reduce((acc, item) => acc + (item.total || 0), 0);
     } else if (costoMaquinaria ) {
       total = costoMaquinaria;

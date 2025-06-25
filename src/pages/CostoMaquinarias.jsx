@@ -7,12 +7,13 @@ import { fetchMaquinaria } from "../services/fetchMaquinaria";
 export default function CostoMaquinaria() {
   const [tractoresMockApi, setTractoresMockApi] = useState([]);
   const [implementosMockApi, setImplementosMockApi] = useState([]);
+  const tokenMaquinaria = import.meta.env.VITE_API_TOKEN_MAQUINARIA;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data, error } = await fetchMaquinaria(
-          "534950414e2e4d617175696e6172696140316e643163346430723373"
+          tokenMaquinaria
         );
         if (!error && data) {
           const arr = Object.values(data);
@@ -32,10 +33,7 @@ export default function CostoMaquinaria() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   console.log("Tractores Mock API:", tractoresMockApi);
-  //   console.log("Implementos Mock API:", implementosMockApi);
-  // }, [tractoresMockApi, implementosMockApi]);
+
 
   const [precioCombustible, setPrecioCombustible] = useState(
     localStorage.getItem("precioCombustible") || ""
