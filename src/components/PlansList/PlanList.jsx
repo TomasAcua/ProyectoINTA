@@ -5,27 +5,33 @@ import { Trash2 } from 'lucide-react';
 import { useState, useEffect, useRef } from "react";
 
 const PlanList = ({
-    plans,
-    columnasPDF,
-    currentDolarValue,
-    onCleanPlans,
-    onSavePlan,
-    fields,
-    handleDeletePlan
+  plans,
+  columnasPDF,
+  currentDolarValue,
+  onCleanPlans,
+  onSavePlan,
+  fields,
+  handleDeletePlan,
+  location
 }) => {
-    const [indexPlan, setIndexPlan] = useState(null);
-    const [planOriginal, setPlanOriginal] = useState(null);
-    const [planAEditar, setPlanAEditar] = useState(null);
-    const [cambiosDetectados, setCambiosDetectados] = useState(false);
-    const planRefs = useRef({});
-
-    useEffect(() => {
-        if (planAEditar && planOriginal) {
-            setCambiosDetectados(JSON.stringify(planAEditar) !== JSON.stringify(planOriginal));
-        } else {
-            setCambiosDetectados(false);
-        }
-    }, [planAEditar, planOriginal]);
+  const [indexPlan, setIndexPlan] = useState(null);
+  const [planOriginal, setPlanOriginal] = useState(null);
+  const [planAEditar, setPlanAEditar] = useState(null);
+  const [cambiosDetectados, setCambiosDetectados] = useState(false);
+  const planRefs = useRef({});
+console.log("PLAN A EDITAR", planAEditar)
+console.log("PLAN ORIGINAL", planOriginal)
+console.log("CAMBIOS DETECTADOS", cambiosDetectados)
+  useEffect(() => {
+    if (planAEditar && planOriginal) {
+    
+      setCambiosDetectados(
+        JSON.stringify(planAEditar) !== JSON.stringify(planOriginal)
+      );
+    } else {
+      setCambiosDetectados(false);
+    }
+  }, [planAEditar, planOriginal]);
 
     useEffect(() => {
         if (plans.length > 0) {
@@ -83,84 +89,151 @@ const PlanList = ({
         onSavePlan(planIndex, copiaPlan);
     };
 
-    return (
-        <div className="p-0 md:p-6 lg:p-6 w-full rounded-2xl mb-8">
-            <h2 className="font-bold text-2xl mb-6 text-center text-sky-800">Planes Generados</h2>
-            {plans.length === 0 ? (
-                <p className="text-center text-gray-600">No hay planes cargados aún.</p>
-            ) : (
-                <div className="flex flex-col items-center gap-8">
-                    {plans.map((plan, planIdx) => {
-                        const enEdicion = indexPlan === planIdx;
-                        const isTratamientos = plan.hasOwnProperty("tratamientos");
-                        const isMaquinarias = plan.hasOwnProperty("maquinarias");
+  return (
+    <div className="p-0 md:p-6 lg:p-6 w-full rounded-2xl mb-8">
+      <h2 className="font-bold text-2xl mb-6 text-center text-sky-800">
+        Planes Generados
+      </h2>
+      {plans.length === 0 ? (
+        <p className="text-center text-gray-600">No hay planes cargados aún.</p>
+      ) : (
+        <div className="flex flex-col items-center gap-8">
+          {plans.map((plan, planIdx) => {
+            const enEdicion = indexPlan === planIdx;
+            const isTratamientos = plan.hasOwnProperty("tratamientos");
+            const isMaquinarias = plan.hasOwnProperty("maquinarias");
+            const editadoMaquinarias = enEdicion && location == "costo-maquinaria" ? planAEditar.maquinarias : plan.maquinarias
+            console.log("edicion", editadoMaquinarias)
+            const editadoTratamientos = enEdicion && location !== "costo-maquinaria"? planAEditar.tratamientos.productos : plan.tratamientos.productos
+            console.log("ITEM SEGUN LOCATION",itemSegunLocation)
+            console.log("edicion", editadoTratamientos)
+            console.log("EDITADO",editado)
+            return (
+              <div
+                key={plan.id}
+                ref={(el) => (planRefs.current[plan.id] = el)}
+                className="border w-full rounded-2xl shadow-lg p-2 bg-green-50 relative"
+              >
+                <h3 className="text-xl font-semibold text-sky-700 mb-4">
+                  {plan.name}
+                  {enEdicion && (
+                    <span className="text-sm text-emerald-600 ml-2">
+                      (Editando...)
+                    </span>
+                  )}
+                </h3>
 
-                        return (
-                            <div
-                                key={plan.id}
-                                ref={(el) => (planRefs.current[plan.id] = el)}
-                                className="border w-full rounded-2xl shadow-lg p-6 bg-green-50 relative"
-                            >
-                                <h3 className="text-xl font-semibold text-sky-700 mb-4">
-                                    {plan.name}
-                                    {enEdicion && (
-                                        <span className="text-sm text-emerald-600 ml-2">(Editando...)</span>
-                                    )}
-                                </h3>
+                <div className="overflow-x-auto">
+                  <div className="min-w-[700px]">
+                    <div className="flex flex-col gap-6">
+                      {isTratamientos &&
+                        plan.tratamientos.map((tratamiento, tIdx) => (
+                          <div
+                            key={tIdx}
+                            className="bg-white p-4 rounded shadow"
+                          >
+                            <h4 className="font-bold text-sky-700 mb-2">
+                              Tratamiento {tIdx + 1}
+                            </h4>
+                            {editadoTratamientos.map((prod, pIdx) => (
+                              <div
+                                key={pIdx}
+                                className="flex pb-3 border-b border-gray-300 py-2"
+                              >
+                                <div className="text-gray-600 font-semibold text-lg mx-3">
+                                  {pIdx + 1}
+                                </div>
+                                {columnasPDF.map((col) => {
+                                  const fieldDef = fields.find(
+                                    (f) => f.key === col.key
+                                  );
+                                  const valor = prod[col.key] ?? "";
 
-                                <div className="flex flex-col gap-6">
-                                    {isTratamientos && plan.tratamientos.map((tratamiento, tIdx) => (
-                                        <div key={tIdx} className="bg-white p-4 rounded shadow">
-                                            <h4 className="font-bold text-sky-700 mb-2">Tratamiento {tIdx + 1}</h4>
-                                            {tratamiento.productos.map((prod, pIdx) => (
-                                                <div key={pIdx} className="flex pb-3 border-b border-gray-300 py-2">
-                                                    <div className="text-gray-600 font-semibold text-lg mx-3">{pIdx + 1}</div>
-                                                    {columnasPDF.map((col) => {
-                                                        const fieldDef = fields.find(f => f.key === col.key);
-                                                        const valor = prod[col.key] ?? "";
+                                  return (
+                                    <div key={col.key} className="flex-1 px-2">
+                                      <p className="text-sm font-medium text-gray-700 mb-1">
+                                        {col.label}
+                                      </p>
+                                      {enEdicion && fieldDef ? (
+                                        fieldDef.type === "select" ? (
+                                          <ListaDesplegable
+                                            value={valor}
+                                            onChange={(e) =>
+                                              handleChange(
+                                                col.key,
+                                                e.target.value,
+                                                planIdx,
+                                                "tratamientos",
+                                                pIdx,
+                                                tIdx
+                                              )
+                                            }
+                                            array={
+                                              typeof fieldDef.options ===
+                                              "function"
+                                                ? fieldDef.options(prod)
+                                                : fieldDef.options
+                                            }
+                                          />
+                                        ) : (
+                                          <Input
+                                            type={fieldDef.type || "text"}
+                                            value={valor}
+                                            onChange={(e) =>
+                                              handleChange(
+                                                col.key,
+                                                e.target.value,
+                                                planIdx,
+                                                "tratamientos",
+                                                pIdx,
+                                                tIdx
+                                              )
+                                            }
+                                          />
+                                        )
+                                      ) : (
+                                        <p className="text-gray-600 bg-white rounded px-2 py-1 border border-transparent">
+                                          {valor}
+                                        </p>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                                {editadoTratamientos.length > 1 && (
+                                  <Button
+                                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-lg shadow"
+                                    onClick={() =>
+                                      eliminarItem(
+                                        pIdx,
+                                        planIdx,
+                                        "tratamientos",
+                                        tIdx
+                                      )
+                                    }
+                                  >
+                                    <Trash2 />
+                                  </Button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ))}
 
-                                                        return (
-                                                            <div key={col.key} className="flex-1 px-2">
-                                                                <p className="text-sm font-medium text-gray-700 mb-1">{col.label}</p>
-                                                                {enEdicion && fieldDef ? (
-                                                                    fieldDef.type === "select" ? (
-                                                                        <ListaDesplegable
-                                                                            value={valor}
-                                                                            onChange={(e) => handleChange(col.key, e.target.value, planIdx, 'tratamientos', pIdx, tIdx)}
-                                                                            array={typeof fieldDef.options === "function" ? fieldDef.options(prod) : fieldDef.options}
-                                                                        />
-                                                                    ) : (
-                                                                        <Input
-                                                                            type={fieldDef.type || "text"}
-                                                                            value={valor}
-                                                                            onChange={(e) => handleChange(col.key, e.target.value, planIdx, 'tratamientos', pIdx, tIdx)}
-                                                                        />
-                                                                    )
-                                                                ) : (
-                                                                    <p className="text-gray-600 bg-white rounded px-2 py-1 border border-transparent">{valor}</p>
-                                                                )}
-                                                            </div>
-                                                        );
-                                                    })}
-                                                    {tratamiento.productos.length > 1 && (
-                                                        <Button
-                                                            className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-lg shadow"
-                                                            onClick={() => eliminarItem(pIdx, planIdx, 'tratamientos', tIdx)}
-                                                        >
-                                                            <Trash2 />
-                                                        </Button>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    ))}
-
-                                    {isMaquinarias && Array.isArray(plan.maquinarias) && plan.maquinarias.map((maq, mIdx) => (
-                                        <div key={mIdx} className="flex pb-3 border-b border-gray-300 py-2 bg-white px-4 rounded shadow">
-                                            <div className="text-gray-600 font-semibold text-lg mx-3">{mIdx + 1}</div>
-                                            {columnasPDF.map((col) => {
-                                                const fieldDef = fields.find(f => f.key === col.key);
-                                                const valor = maq[col.key] ?? "";
+                      {isMaquinarias &&
+                        Array.isArray(plan.maquinarias) &&
+                        editadoMaquinarias.map((maq, mIdx) => (
+                          <div
+                            key={mIdx}
+                            className="flex pb-3 border-b border-gray-300 py-2 bg-white px-4 rounded shadow"
+                          >
+                            <div className="text-gray-600 font-semibold text-lg mx-3">
+                              {mIdx + 1}
+                            </div>
+                            {columnasPDF.map((col) => {
+                              const fieldDef = fields.find(
+                                (f) => f.key === col.key
+                              );
+                              const valor = maq[col.key] ?? "";
 
                                                 return (
                                                     <div key={col.key} className="flex-1 px-2">

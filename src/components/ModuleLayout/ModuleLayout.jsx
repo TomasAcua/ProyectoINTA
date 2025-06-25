@@ -9,7 +9,6 @@ import ProductForm from "../ProductForm/ProductForm";
 import useProductForm from "../../hooks/useProductForm";
 import usePlanList from "../../hooks/usePlanList";
 import QuickNavigate from "../QuickNavigate/QuickNavigate";
-import ModalFormulario from "../Modal/ModalFormulario";
 import CalculatorTitle from "../CalculatorTitle/CalculatorTitle";
 import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput";
 import XLSXDocument from "../XLSXDocument/XLSXDocument";
@@ -184,12 +183,13 @@ const ModuleLayout = ({
                         columnasPDF={columnasPDF}
                         currentDolarValue={currentDolarValue}
                         onCleanPlans={cleanPlans}
+                        location={location}
                         onSavePlan={(index, editedPlan) => {
                             let recalculatedPlan
                             if (location === "costo-maquinaria") {
                                 recalculatedPlan = {
                                     ...editedPlan,
-                                    maquinarias: editedPlan.productos.map((item) => ({
+                                    maquinarias: editedPlan.maquinarias.map((item) => ({
                                         ...item,
                                         costo: calcularCosto(item),
                                     })),

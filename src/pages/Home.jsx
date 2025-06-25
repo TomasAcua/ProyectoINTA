@@ -2,6 +2,8 @@ import CardGrid from '../components/CardGrid/CardGrid'
 import MainTitle from '../components/MainTitle/MainTitle';
 import FeaturesOverview from '../components/FeaturesOverview/FeaturesOverview';
 import QuickNavigate from '../components/QuickNavigate/QuickNavigate';
+// import Modal from "../components/Modal/Modal";
+import CardIntegrantes from '../components/CardIntegrantes/CardIntegrantes';
 
 function Home() {
 
@@ -11,6 +13,9 @@ function Home() {
       <CardGrid/>
       <div className="my-4 h-0.5 border-t-0  bg-black/15 mx-12"></div>
       <FeaturesOverview />
+      <div className="my-4 h-0.5 border-t-0  bg-black/15 mx-12"></div>
+      {/* <Modal/> */}
+      <CardIntegrantes/>
     </div>
   );
 }
