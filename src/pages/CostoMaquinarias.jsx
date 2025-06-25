@@ -13,7 +13,7 @@ export default function CostoMaquinaria() {
     const fetchData = async () => {
       try {
         const { data, error } = await fetchMaquinaria(
-          tokenMaquinaria
+          "534950414e2e4d617175696e6172696140316e643163346430723373"
         );
         if (!error && data) {
           const arr = Object.values(data);

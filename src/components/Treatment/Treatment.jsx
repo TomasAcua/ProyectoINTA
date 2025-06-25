@@ -1,8 +1,6 @@
 
 
 import Button from "../Button/Button";
-import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
-import Input from "../Input/Input";
 import { Trash2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -48,37 +46,7 @@ const TreatmentList = ({
     }
   }, [treatments]);
 
-  /*const seleccionaeditTreatment = (planIx, treatmentIndex) => {
-    const treatment = JSON.parse(
-      JSON.stringify(plans[planIx].tratamientos[treatmentIndex])
-    );
-    setEditTreatment(treatment);
-    setEditPlan(planIx);
-    setIndexTreatment(treatmentIndex);
-    setOriginalTreatment(
-      JSON.parse(JSON.stringify(plans[planIx].tratamientos[treatmentIndex]))
-    );
-  };
-  const saveTreatment = () => {
-    if (indexTreatment !== null && editTreatment) {
-      onSaveTreatment(editPlan, indexTreatment, editTreatment);
-      setIndexTreatment(null);
-      setEditTreatment(null);
-      setEditPlan(null);
-    }
-  };*/
 
-  /*const handleChange = (index, fieldKey, value) => {
-    const productos = editTreatment.productos;
-    const updated = [...productos];
-    updated[index][fieldKey] = value;
-
-    if (fieldKey === "tractor") {
-      updated[index]["implemento"] = "";
-    }
-
-    setEditTreatment({ ...editTreatment, productos: updated });
-  };*/
 
   const cancelarEdicion = () => {
     setIndexTreatment(null);
@@ -202,11 +170,7 @@ const TreatmentList = ({
               <div className="flex items-start justify-between mb-4">
                 <h3 className="text-xl font-semibold text-sky-700 mb-4 text-start">
                   {treatment.name}
-                  {/*enEdicion && (
-                    <span className="text-sm text-emerald-600 ml-2">
-                      (Editando...)
-                    </span>
-                  )*/}
+                  
                 </h3>
               </div>
 
@@ -228,44 +192,6 @@ const TreatmentList = ({
                               {col.label}
                             </p>
 
-                            {/*enEdicion &&
-                              fieldDef &&
-                              planIx === editPlan ? (
-                              fieldDef.type === "select" ? (
-                                <ListaDesplegable
-                                  value={valor}
-                                  onChange={(e) =>
-                                    handleChange(
-                                      idx,
-                                      col.key,
-                                      e.target.value
-                                    )
-                                  }
-                                  array={
-                                    typeof fieldDef.options === "function"
-                                      ? fieldDef.options(prod)
-                                      : fieldDef.options
-                                  }
-                                />
-                              ) : (
-                                <Input
-                                  type={fieldDef.type || "text"}
-                                  value={valor}
-                                  onChange={(e) =>
-                                    handleChange(
-                                      idx,
-                                      col.key,
-                                      e.target.value
-                                    )
-                                  }
-                                  className="border p-2 rounded w-full"
-                                />
-                              )
-                            ) : (
-                              <p className="text-gray-600 bg-white rounded px-2 py-1 border border-transparent">
-                                {valor}
-                              </p>
-                            )*/}
                           </div>
                         );
                       })}
@@ -293,32 +219,7 @@ const TreatmentList = ({
                 </div>
 
                 {
-                  /*enEdicion && planIx === editPlan ? (
-                  <div className="flex gap-4">
-                    <Button
-                      className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow"
-                      onClick={saveTreatment}
-                      disabled={!cambiosDetectados}
-                    >
-                      Guardar Cambios
-                    </Button>
-                    <Button
-                      className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-lg shadow"
-                      onClick={cancelarEdicion}
-                    >
-                      Cancelar
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex justify-between gap-2">
-                    <Button
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 my-4 py-2 rounded-lg shadow"
-                      onClick={() =>
-                        seleccionaeditTreatment(planIx, treatmentIdx)
-                      }
-                    >
-                      Editar tratamientos
-                    </Button>*/
+                
                   <div className="flex gap-4">
                     <Button
                       className="bg-red-500 hover:bg-red-600 text-white px-4 my-4 py-2 rounded-lg shadow"

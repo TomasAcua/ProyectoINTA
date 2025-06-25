@@ -66,38 +66,38 @@ const ProductForm = ({
                   ? treatments.length + 1
                   : "1"}
               </h3>
-            
+
             </div>
           )}
         </div>
 
-          <div className="">
-             {type !== "Costo Maquinarias" && (
-           
-              <Button
-                onClick={() => {
-                  const newProduct = addProductForm();
+        <div className="">
+          {type !== "Costo Maquinarias" && (
 
-                  setTimeout(() => {
-                    const ref = productRefs.current[newProduct.id];
-                    if (ref) {
-                      ref.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center",
-                      });
-                      setHighlightedId(newProduct.id);
-                      setTimeout(() => setHighlightedId(null), 2500);
-                    }
-                  }, 0);
-                }}
-                className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md mb-2 ms:mb-0"
-              >
-                <Plus size={16} />
-                <span>Ingresar nuevo producto</span>
-              </Button>
-           
+            <Button
+              onClick={() => {
+                const newProduct = addProductForm();
+
+                setTimeout(() => {
+                  const ref = productRefs.current[newProduct.id];
+                  if (ref) {
+                    ref.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                    setHighlightedId(newProduct.id);
+                    setTimeout(() => setHighlightedId(null), 2500);
+                  }
+                }, 0);
+              }}
+              className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md mb-2 ms:mb-0"
+            >
+              <Plus size={16} />
+              <span>Ingresar nuevo producto</span>
+            </Button>
+
           )}
-          </div>
+        </div>
 
       </div>
       {productForms.map((product, index) => (
@@ -122,8 +122,8 @@ const ProductForm = ({
                 value !== undefined && value !== ""
                   ? value
                   : typeof field.value === "function"
-                  ? field.value(product)
-                  : field.value ?? "";
+                    ? field.value(product)
+                    : field.value ?? "";
               return (
                 <div key={field.key} className="flex-1">
                   {field.type === "select" ? (
@@ -145,11 +145,10 @@ const ProductForm = ({
                     <Input
                       text={field.label}
                       type={field.type || "text"}
-                      className={`border p-2 rounded w-full ${
-                        product.errors[field.key]
+                      className={`border p-2 rounded w-full ${product.errors[field.key]
                           ? "border-red-500"
                           : "border-gray-300"
-                      }`}
+                        }`}
                       placeholder={field.label}
                       defaultValue={
                         typeof field.defaultValue === "function"
@@ -176,9 +175,8 @@ const ProductForm = ({
                 type="text"
                 value={
                   product.costo
-                    ? `$USD ${product.costo.toFixed(2)} / AR$ ${
-                        localStorage.getItem("dolar") * product.costo.toFixed(2)
-                      }`
+                    ? `$USD ${product.costo.toFixed(2)} / AR$ ${localStorage.getItem("dolar") * product.costo.toFixed(2)
+                    }`
                     : ""
                 }
                 readOnly
@@ -200,7 +198,7 @@ const ProductForm = ({
         </div>
       ))}
 
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 mt-4 pb-4">
         {type !== "Costo Maquinarias" ? (
           <>
             <Button
@@ -234,15 +232,19 @@ const ProductForm = ({
           Limpiar
         </Button>
       </div>
+      {type !== "Costo Maquinarias" && (
 
-      <TreatmentList
-        variante="mini"
-        treatments={treatments}
-        maxItems={3}
-        handleDeleteTreatment={handleDeleteTreatment}
-        onCleanTreatments={onCleanTreatments}
-        className="mt-4"
-      />
+        <TreatmentList
+          variante="mini"
+          treatments={treatments}
+          maxItems={3}
+          handleDeleteTreatment={handleDeleteTreatment}
+          onCleanTreatments={onCleanTreatments}
+          className="mt-4"
+        />
+
+      )}
+
     </div>
   );
 };
