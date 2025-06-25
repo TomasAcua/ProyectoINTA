@@ -14,48 +14,38 @@ const PlanList = ({
   fields,
   handleDeletePlan,
   location,
-   calcularCosto
+  calcularCosto
 }) => {
   const [indexPlan, setIndexPlan] = useState(null);
   const [planOriginal, setPlanOriginal] = useState(null);
   const [planAEditar, setPlanAEditar] = useState(null);
   const [cambiosDetectados, setCambiosDetectados] = useState(false);
   const planRefs = useRef({});
- 
+
   const obtenerProductos = (plan, enEdicion, planAEditar) => {
-  const base = enEdicion ? planAEditar : plan;
-if (!base) {
-  return [];
-}
-  if (Array.isArray(base.tratamientos)) {
-     return base.tratamientos.flatMap(t => t.productos || []);
-  }
+    const base = enEdicion ? planAEditar : plan;
+    if (!base) {
+      return [];
+    }
+    if (Array.isArray(base.tratamientos)) {
+      return base.tratamientos.flatMap(t => t.productos || []);
+    }
 
-  if (Array.isArray(base.maquinarias)) {
-    return base.maquinarias;
-  }
+    if (Array.isArray(base.maquinarias)) {
+      return base.maquinarias;
+    }
 
-  return [];
-};
+    return [];
+  };
   useEffect(() => {
     if (planAEditar && planOriginal) {
       const productosEditados = JSON.stringify(obtenerProductos(planAEditar, true, planAEditar));
-    const productosOriginales = JSON.stringify(obtenerProductos(planOriginal, true, planOriginal));      
-  setCambiosDetectados(productosEditados !== productosOriginales);
+      const productosOriginales = JSON.stringify(obtenerProductos(planOriginal, true, planOriginal));
+      setCambiosDetectados(productosEditados !== productosOriginales);
     } else {
       setCambiosDetectados(false);
     }
   }, [planAEditar, planOriginal]);
-
-  useEffect(() => {
-    if (plans.length > 0) {
-      const lastPlan = plans[plans.length - 1];
-      const ref = planRefs.current[lastPlan.id];
-      if (ref) {
-        ref.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }
-  }, [plans]);
 
   const seleccionaPlanAEditar = (planIndex) => {
     const plan = JSON.parse(JSON.stringify(plans[planIndex]));
@@ -132,56 +122,56 @@ if (!base) {
   };
 
   const handleChange = (
-  fieldKey,
-  value,
-  planIndex,
-  tipo,
-  itemIndex,
-  tratamientoIndex = null
-) => {
-  if (indexPlan === planIndex && planAEditar) {
-    const copiaPlan = JSON.parse(JSON.stringify(planAEditar));
-    let item;
-    if (tipo === "tratamientos") {
-      item = copiaPlan.tratamientos[tratamientoIndex].productos[itemIndex];
-      item[fieldKey] = value;
-      // Recalcula el costo del producto
-      item.costo = calcularCosto(item);
-      // Recalcula el costoTotal del tratamiento
-      const tratamiento = copiaPlan.tratamientos[tratamientoIndex];
-      tratamiento.costoTotal = tratamiento.productos.reduce((acc, p) => acc + (p.costo || 0), 0);
-      // Recalcula el costoTotal del plan
-      copiaPlan.costoTotal = copiaPlan.tratamientos.reduce((acc, t) => acc + (t.costoTotal || 0), 0);
-    } else if (tipo === "maquinarias") {
-      item = copiaPlan.maquinarias[itemIndex];
-      item[fieldKey] = value;
+    fieldKey,
+    value,
+    planIndex,
+    tipo,
+    itemIndex,
+    tratamientoIndex = null
+  ) => {
+    if (indexPlan === planIndex && planAEditar) {
+      const copiaPlan = JSON.parse(JSON.stringify(planAEditar));
+      let item;
+      if (tipo === "tratamientos") {
+        item = copiaPlan.tratamientos[tratamientoIndex].productos[itemIndex];
+        item[fieldKey] = value;
+        // Recalcula el costo del producto
+        item.costo = calcularCosto(item);
+        // Recalcula el costoTotal del tratamiento
+        const tratamiento = copiaPlan.tratamientos[tratamientoIndex];
+        tratamiento.costoTotal = tratamiento.productos.reduce((acc, p) => acc + (p.costo || 0), 0);
+        // Recalcula el costoTotal del plan
+        copiaPlan.costoTotal = copiaPlan.tratamientos.reduce((acc, t) => acc + (t.costoTotal || 0), 0);
+      } else if (tipo === "maquinarias") {
+        item = copiaPlan.maquinarias[itemIndex];
+        item[fieldKey] = value;
 
-      // Si cambias el tractor, limpia implemento y su precio
-      if (fieldKey === "tractor") {
-        item["implemento"] = "";
-        item["implementoPrecio"] = "";
-        // Actualiza el precio del tractor si existe en fields
-        const fieldPrecio = fields.find(f => f.key === "tractorPrecio" && typeof f.value === "function");
-        if (fieldPrecio) {
-          item["tractorPrecio"] = fieldPrecio.value(item);
+        // Si cambias el tractor, limpia implemento y su precio
+        if (fieldKey === "tractor") {
+          item["implemento"] = "";
+          item["implementoPrecio"] = "";
+          // Actualiza el precio del tractor si existe en fields
+          const fieldPrecio = fields.find(f => f.key === "tractorPrecio" && typeof f.value === "function");
+          if (fieldPrecio) {
+            item["tractorPrecio"] = fieldPrecio.value(item);
+          }
         }
-      }
-      // Si cambias el implemento, actualiza su precio
-      if (fieldKey === "implemento") {
-        const fieldPrecio = fields.find(f => f.key === "implementoPrecio" && typeof f.value === "function");
-        if (fieldPrecio) {
-          item["implementoPrecio"] = fieldPrecio.value(item);
+        // Si cambias el implemento, actualiza su precio
+        if (fieldKey === "implemento") {
+          const fieldPrecio = fields.find(f => f.key === "implementoPrecio" && typeof f.value === "function");
+          if (fieldPrecio) {
+            item["implementoPrecio"] = fieldPrecio.value(item);
+          }
         }
-      }
 
-      // Recalcula el costo de la maquinaria
-      item.costo = calcularCosto(item);
-      // Recalcula el costoTotal del plan
-      copiaPlan.costoTotal = copiaPlan.maquinarias.reduce((acc, m) => acc + (m.costo || 0), 0);
+        // Recalcula el costo de la maquinaria
+        item.costo = calcularCosto(item);
+        // Recalcula el costoTotal del plan
+        copiaPlan.costoTotal = copiaPlan.maquinarias.reduce((acc, m) => acc + (m.costo || 0), 0);
+      }
+      setPlanAEditar(copiaPlan);
     }
-    setPlanAEditar(copiaPlan);
-  }
-};
+  };
 
   return (
     <div className="p-0 md:p-6 lg:p-6 w-full rounded-2xl mb-8">
@@ -224,11 +214,11 @@ if (!base) {
                             <h4 className="font-bold text-sky-700 mb-2">
                               Tratamiento {tIdx + 1}
                             </h4>
-                            
-                            {tratamiento.productos.map((prod, pIdx) => {
-                                  
 
-                              return(<div
+                            {tratamiento.productos.map((prod, pIdx) => {
+
+
+                              return (<div
                                 key={pIdx}
                                 className="flex pb-3 border-b border-gray-300 py-2"
                               >
@@ -259,12 +249,14 @@ if (!base) {
                                                 tIdx
                                               )
                                             }
+                                            
                                             array={
                                               typeof fieldDef.options ===
-                                              "function"
+                                                "function"
                                                 ? fieldDef.options(prod)
                                                 : fieldDef.options
                                             }
+                                            required
                                           />
                                         ) : (
                                           <Input
@@ -280,6 +272,7 @@ if (!base) {
                                                 tIdx
                                               )
                                             }
+                                            required
                                           />
                                         )
                                       ) : (
@@ -289,11 +282,11 @@ if (!base) {
                                       )}
                                     </div>
                                   );
-                             
+
                                 })}
-                                
-                                {Array.isArray(tratamiento.productos) &&  tratamiento.productos.length > 1 && (
-                                 
+
+                                {Array.isArray(tratamiento.productos) && tratamiento.productos.length > 1 && (
+
                                   <Button
                                     className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-lg shadow"
                                     onClick={() =>
@@ -309,7 +302,7 @@ if (!base) {
                                   </Button>
                                 )}
                               </div>)
-          })}
+                            })}
                           </div>
                         ))}
 

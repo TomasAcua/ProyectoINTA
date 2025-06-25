@@ -78,7 +78,7 @@ const Dolar = ({ onDolarChange }) => {
                 onChange={(e) => setValorInput(e.target.value)}
                 placeholder={`Ej: ${dolarOficial}`}
                 disabled={modoPersonalizado}
-                
+                bgColor="blue-200"
               />
             
             

@@ -13,10 +13,7 @@ function CostoSanitario() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data, error } = await fetchProductos(
-tokenProductos
-        );
-      
+        const { data, error } = await fetchProductos(tokenProductos);
 
         if (!error && data) {
           // Filtra por rubro
@@ -31,8 +28,6 @@ tokenProductos
     };
     fetchData();
   }, []);
-
-
 
   const columnasPDF = [
     { label: "Producto", key: "producto", required: true },
