@@ -4,7 +4,7 @@ export const cardData = [
     {
       id: "costo-sanitario",
       name:"Fitosanitario",
-      title: "Planes Sanitarios",
+      title: "Planes Fitosanitarios",
       subtitle: "",
       description:
         "Este módulo permite calcular los costos de los insumos de un plan fitosanitario y comparar planes alternativos. Se pueden evaluar diferentes estrategias de control, analizar productos específicos y estimar el gasto total por hectárea. La herramienta facilita la toma de decisiones más eficientes, adaptadas a las necesidades productivas y económicas del productor",

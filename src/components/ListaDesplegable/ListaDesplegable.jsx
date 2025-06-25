@@ -6,7 +6,7 @@ const ListaDesplegable = ({ text, name, id, array = [], value, onChange }) => {
 
   return (
     <div className="flex flex-col gap-1 w-full">
-      <label htmlFor={name} className="text-sm text-gray-700 font-medium">
+      <label htmlFor={name} className="text-sm text-gray-700 font-bold flex pb-1 pl-5">
         {text}
       </label>
       <div className="relative">

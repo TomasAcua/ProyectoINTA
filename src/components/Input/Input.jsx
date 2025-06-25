@@ -4,7 +4,7 @@ const Input = ({ text, icon, bgColor, value, onChange, type, name, placeholder, 
     <div className="flex flex-col gap-1 w-full">
       <div className="flex gap-2 mb-1 items-center">
         
-        <div className={`${bgColor} flex items-center justify-center p-2 rounded-xl`} >{icon}</div>
+        <div className={`${bgColor} flex items-center justify-center rounded-xl`} ><span className="p-2">{icon}</span></div>
         {/* bg-sipan-green */}
         <label htmlFor={name} className="text-sm text-gray-700 font-bold">
         {text}
