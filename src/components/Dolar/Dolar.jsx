@@ -15,12 +15,16 @@ const Dolar = ({ onDolarChange }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchDolar();
-        setDolarOficial(data.venta);
-        setDolarActual(data.venta);
-        localStorage.setItem("dolar", data.venta);
+        const { data, error } = await fetchDolar()
+        if (data) {
+          setDolarOficial(data.venta)
+          setDolarActual(data.venta)
+          localStorage.setItem("dolar", data.venta)
+        } else {
+          console.error("Error al obtener el dólar:", error)
+        }
       } catch (error) {
-        console.error("Error al obtener el dólar:", error);
+        console.error("Error al obtener el dólar:", error)
       }
     };
     fetchData();
@@ -48,40 +52,34 @@ const Dolar = ({ onDolarChange }) => {
     <div className="p-4 w-full bg-white rounded">
       <div className="flex items-center justify-start gap-2 ">
         <div className="flex justify-center items-center rounded-lg p-2 bg-sipan-green text-white">
-          <Calculator/>
+          <Calculator />
         </div>
-        <h2 className="text-lg font-bold ">
-          Cotización del Dólar Oficial
-        </h2>
-
+        <h2 className="text-lg font-bold ">Cotización del Dólar Oficial</h2>
       </div>
-      
+
       {dolarOficial === null ? (
         <p className="text-center text-gray-400">Cargando datos...</p>
       ) : (
         <div className="flex flex-col gap-6  text-slate-800 w-full">
           <div>
             <div className="flex flex-row items-center justify-between">
-               <label className="block text-sm font-medium text-gray-700">
-              Valor personalizado
+              <label className="block text-sm font-medium text-gray-700">
+                Valor personalizado
               </label>
-              <Badge
-                variant={modoPersonalizado ? "active" : "disabled"}
-              >{modoPersonalizado ? "Personalizado" : "Oficial" }</Badge>
-              
+              <Badge variant={modoPersonalizado ? "active" : "disabled"}>
+                {modoPersonalizado ? "Personalizado" : "Oficial"}
+              </Badge>
             </div>
-            
-              <Input
-                type="number"
-                min={"1"}
-                value={valorInput}
-                onChange={(e) => setValorInput(e.target.value)}
-                placeholder={`Ej: ${dolarOficial}`}
-                disabled={modoPersonalizado}
-                bgColor="blue-200"
-              />
-            
-            
+
+            <Input
+              type="number"
+              min={"1"}
+              value={valorInput}
+              onChange={(e) => setValorInput(e.target.value)}
+              placeholder={`Ej: ${dolarOficial}`}
+              disabled={modoPersonalizado}
+              bgColor="blue-200"
+            />
           </div>
 
           <div className="text-center">
