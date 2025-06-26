@@ -8,14 +8,14 @@ const FeaturesOverview = () => {
             <div className="w-[90%] bg-white rounded-lg shadow-md py-5 px-10">
                 <div className='grid lg:grid-cols-3 sm:grid-cols-1 gap-8 justify-center content-center'>
                     <div className="flex flex-col items-center lg:col-span-1">
-                        <div className="bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl p-3 text-white scale-130 hover:scale-145 transition-transform duration-300 shadow-lg my-2 brightness-110">
+                        <div className="bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl p-3 text-white scale-130 hover:scale-145 transition-transform duration-300 shadow-lg my-2 brightness-110">
                             <Calculator />
                         </div>
                         <h2 className='font-bold my-3 text-gray-900 text-lg'>Precisión Científica</h2>
                         <p className='text-gray-600'>Cálculos exactos basados en metodologías validadas por INTA</p>
                     </div>
                     <div className="flex flex-col items-center lg:col-span-1 ">
-                        <div className="bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl p-3 text-white scale-130 hover:scale-145 transition-transform duration-300 shadow-lg my-2 brightness-110">
+                        <div className="bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl p-3 text-white scale-130 hover:scale-145 transition-transform duration-300 shadow-lg my-2 brightness-110">
                             <ChartColumn />
                         </div>
 

@@ -1,4 +1,4 @@
-import { maquinas } from "../assets/resources/maquinas"
+// import { maquinas } from "../assets/resources/maquinas"
 
 export function calcularCostoFertilizacion(form) {
     const dosis = parseFloat(form.dosis) || 0

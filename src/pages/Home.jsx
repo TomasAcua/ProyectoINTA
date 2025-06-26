@@ -4,6 +4,7 @@ import MainTitle from '../components/MainTitle/MainTitle';
 import FeaturesOverview from '../components/FeaturesOverview/FeaturesOverview';
 import CardIntegrantes from '../components/CardIntegrantes/CardIntegrantes';
 import ModalIntegrantes from '../components/Modal/ModalIntegrantes';
+import InstallButton from '../components/InstallButton/InstallButton';
 import Button from '../components/Button/Button';
 
 function Home() {
@@ -26,7 +27,7 @@ function Home() {
           Ver Integrantes
         </Button>
       </div>
-      
+      <InstallButton />
       <ModalIntegrantes isOpen={modalAbierto} onClose={cerrarModal}>
         <CardIntegrantes />
       </ModalIntegrantes>
