@@ -58,6 +58,13 @@ const PlanList = ({
     if (indexPlan !== null && planAEditar) {
       let recalculatedPlan;
       if (location === "costo-maquinaria") {
+         const faltanImplementos = planAEditar.maquinarias.some(
+        (item) => !item.implemento || item.implemento.trim() === ""
+      );
+      if (faltanImplementos) {
+        alert("Debes completar el campo 'implemento' antes de guardar.");
+        return;
+      }
         const maquinarias = planAEditar.maquinarias.map((item) => ({
           ...item,
           costo: calcularCosto(item),

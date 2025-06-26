@@ -7,7 +7,7 @@ export const fetchProductos = async (token) => {
       },
       body: `token=${encodeURIComponent(token)}`,
     });
-
+    
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }

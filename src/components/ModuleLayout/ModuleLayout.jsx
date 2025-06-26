@@ -3,7 +3,6 @@ import useChartData from "../../hooks/useChartData";
 import useTreatment from "../../hooks/useTreatment";
 import Chart from "../Chart/Chart";
 import Dolar from "../Dolar/Dolar";
-import TreatmentList from "../Treatment/Treatment";
 import PlanList from "../PlansList/PlanList";
 import ProductForm from "../ProductForm/ProductForm";
 import useProductForm from "../../hooks/useProductForm";
@@ -13,7 +12,6 @@ import CalculatorTitle from "../CalculatorTitle/CalculatorTitle";
 import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput";
 import XLSXDocument from "../XLSXDocument/XLSXDocument";
 import { useLocation } from "react-router-dom";
-import { fetchMaquinaria } from "../../services/fetchMaquinaria";
 
 const ModuleLayout = ({
   titulo,
@@ -82,7 +80,6 @@ const ModuleLayout = ({
   };
 
   useEffect(() => {
-    // Recalcula todos los productos actuales con el nuevo precio
     const updatedForms = productForms.map((producto) => ({
       ...producto,
       costo: calcularCosto(producto),
@@ -91,6 +88,10 @@ const ModuleLayout = ({
   }, [precioCombustible]);
   const handleAddPlan = () => {
     if (type === "Costo Maquinarias") {
+         if (!precioCombustible || parseFloat(precioCombustible) <= 0) {
+      alert("Debes ingresar un precio de combustible válido antes de guardar el plan.");
+      return;
+    }
       if (productForms.length === 0) {
         alert("Debes cargar al menos una maquinaria antes de guardar el plan.");
       }
