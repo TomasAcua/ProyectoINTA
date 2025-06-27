@@ -15,7 +15,6 @@ function Home() {
 
   return (
     <div className="w-full h-full">
-      <h1>AUTOLOAD FUNCIONANDO</h1>
       <MainTitle title={"Calculadoras de"} emphasis={" Costos Agropecuarios"} />
       <CardGrid />
       <div className="my-4 h-0.5 border-t-0  bg-black/15 mx-12"></div>

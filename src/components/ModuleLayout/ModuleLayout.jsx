@@ -112,8 +112,8 @@ const ModuleLayout = ({
       <div className="h-full rounded-none md:rounded-xl min-h-screen w-full md:w-[85%] mt-0 md:mt-5 overflow-hidden mx-auto px-2 sm:px-4">
         <QuickNavigate />
 
-        <div className="grid lg:grid-cols-6 grid-cols-1 gap-4 items-start">
-          <div className="lg:col-span-4 order-2  md:order-2 lg:order-1">
+        <div className="grid lg:grid-cols-6 grid-cols-1 gap-0 md:gap-4 lg:gap-4 items-start">
+          <div className="lg:col-span-4 order-2 md:order-2 lg:order-1">
             {showForm && (
               <ProductForm
                 cardId={location}
@@ -151,7 +151,7 @@ const ModuleLayout = ({
               />
             )}
           </div>
-          <div className="flex flex-col col-span-2 order-1 md:order-1 lg:order-2 justify-between gap-6">
+          <div className="flex flex-col col-span-2 order-1 md:order-1 lg:order-2 justify-between mb-5 rounded-lg overflow-hidden">
             <Dolar
               className="flex justify-center items-center "
               onDolarChange={updateDolarValue}

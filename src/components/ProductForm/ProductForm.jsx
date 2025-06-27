@@ -43,7 +43,7 @@ const ProductForm = ({
   const bgColor = bgMap[cardId];
 
   return (
-    <div className="rounded mb-6 w-full bg-white shadow-lg px-5">
+    <div className="rounded-lg mb-6 w-full bg-white shadow-lg px-5">
       <div className="flex justify-between items-center flex-col md:flex-row">
         <div className="flex justify-between flex-col mb-2">
           <h2 className="text-xl font-bold text-gray-700 flex items-center gap-1">
@@ -104,7 +104,7 @@ const ProductForm = ({
         <div
           key={product.id}
           ref={(el) => (productRefs.current[product.id] = el)}
-          className={`mb-6 p-4 border border-gray-200 rounded-xl shadow-sm bg-white`}
+          className={`border mb-6 p-4 border border-gray-200 rounded-xl ${bgMap[cardId] + "/50"}`}
         >
           {productForms.length > 0 && (
             <div className="px-2 flex justify-between items-center mb-4">
@@ -146,8 +146,8 @@ const ProductForm = ({
                       text={field.label}
                       type={field.type || "text"}
                       className={`border p-2 rounded w-full ${product.errors[field.key]
-                          ? "border-red-500"
-                          : "border-gray-300"
+                        ? "border-red-500"
+                        : "border-gray-300"
                         }`}
                       placeholder={field.label}
                       defaultValue={
@@ -232,19 +232,18 @@ const ProductForm = ({
           Limpiar
         </Button>
       </div>
-      {type !== "Costo Maquinarias" && (
-
-        <TreatmentList
-          variante="mini"
-          treatments={treatments}
-          maxItems={3}
-          handleDeleteTreatment={handleDeleteTreatment}
-          onCleanTreatments={onCleanTreatments}
-          className="mt-4"
-        />
-
-      )}
-
+      <div className="pb-5">
+        {type !== "Costo Maquinarias" && (
+          <TreatmentList
+            variante="mini"
+            treatments={treatments}
+            maxItems={3}
+            handleDeleteTreatment={handleDeleteTreatment}
+            onCleanTreatments={onCleanTreatments}
+            className="mt-4"
+          />
+        )}
+      </div>
     </div>
   );
 };

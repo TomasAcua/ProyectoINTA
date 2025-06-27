@@ -5,7 +5,7 @@ const PrecioCombustibleInput = ({ value, onChange }) => {
   const error = !value || Number(value) <= 0;
 
   return (
-    <div className='w-full p-4 bg-white rounded-lg'>
+    <div className='w-full p-4 bg-white'>
       <Input
         text="Precio del Combustible (USD/L)"
         icon = {<Fuel color="white"/>}

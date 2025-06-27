@@ -16,6 +16,7 @@ const Dolar = ({ onDolarChange }) => {
     const fetchData = async () => {
       try {
         const { data, error } = await fetchDolar()
+        console.log("FETCH DOLAR data: ", data, " /// error: ", error)
         if (data) {
           setDolarOficial(data.venta)
           setDolarActual(data.venta)

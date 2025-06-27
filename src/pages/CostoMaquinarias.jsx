@@ -14,24 +14,24 @@ export default function CostoMaquinaria() {
       try {
         const { data, error } = await fetchMaquinaria(
           "534950414e2e4d617175696e6172696140316e643163346430723373"
-        );
+        )
         if (!error && data) {
-          const arr = Object.values(data);
+          const arr = Object.values(data)
 
           // Filtrar tractores e implementos según el nombre
           setTractoresMockApi(
             arr.filter((p) => p.indicador?.toLowerCase().includes("tractor"))
-          );
+          )
           setImplementosMockApi(
             arr.filter((p) => !p.indicador?.toLowerCase().includes("tractor"))
-          );
+          )
         }
       } catch (error) {
-        console.error("Error fetching maquinaria:", error);
+        console.error("Error fetching maquinaria:", error)
       }
-    };
-    fetchData();
-  }, []);
+    }
+    fetchData()
+  }, [])
 
 
 

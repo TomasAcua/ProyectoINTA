@@ -15,6 +15,7 @@ export const fetchDolar = async (type = "oficial") => {
       return await res.json()
     }
   })
+  return  { data, error }
 }
 
 export default fetchDolar
