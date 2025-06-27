@@ -2,51 +2,72 @@ import { useEffect, useState } from "react"
 import fetchDolar from "../services/fetchDolar"
 
 const useCalculoValor = () => {
-    const [dolarOficial, setDolarOficial] = useState(null);
-    const [dolarActual, setDolarActual] = useState(null)
-    const [estado, setEstado] = useState("Cambiar");
-    const [value, setValue] = useState("");
-    const [cantDolar, setCantDolar] = useState(1)
+  const [dolarOficial, setDolarOficial] = useState(null)
+  const [dolarActual, setDolarActual] = useState(null)
+  const [modoPersonalizado, setModoPersonalizado] = useState(false)
+  const [valorInput, setValorInput] = useState("")
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    const valorPersonalizado = localStorage.getItem("dolarPersonalizado")
+    const dolarGuardado = localStorage.getItem("dolar")
 
-    const fetchData = async () => {
-        try {
-            const data = await fetchDolar();
-            setDolarOficial(data.venta);
-            setDolarActual(data.venta);
-            localStorage.setItem("dolarOficial", data.venta);
-        } catch (error) {
-            console.error("Error fetching data:", error);
+    if (valorPersonalizado && dolarGuardado) {
+      try {
+        const { data, error } = await fetchDolar()
+        if (data) {
+          setDolarOficial(data.venta)
+          setDolarActual(Number(dolarGuardado))
+          setValorInput(dolarGuardado)
+          setModoPersonalizado(true)
+        } else {
+          console.error("Error al obtener el dólar:", error)
         }
-    };
-
-    const cambiarEstado = () => {
-        if (estado === "Cambiar") {
-            const nuevoValor = parseFloat(value)
-            if (!isNaN(nuevoValor) && nuevoValor > 0) {
-                setDolarActual(nuevoValor)
-                setEstado("Restaurar")
-            }
-        } else if (estado === "Restaurar") {
-            setDolarActual(dolarOficial)
-            setEstado("Cambiar")
-            setValue("")
+      } catch (error) {
+        console.error("Error al obtener el dólar:", error)
+      }
+    } else {
+      try {
+        const { data, error } = await fetchDolar()
+        if (data) {
+          setDolarOficial(data.venta)
+          setDolarActual(data.venta)
+          localStorage.setItem("dolar", data.venta)
+        } else {
+          console.error("Error al obtener el dólar:", error)
         }
+      } catch (error) {
+        console.error("Error al obtener el dólar:", error)
+      }
     }
+  }
+  fetchData()
+}, [])
 
-    return {
-        dolarOficial,
-        dolarActual,
-        estado,
-        value,
-        setValue,
-        cantDolar,
-        setCantDolar,
-        cambiarEstado
+  const manejarCambio = () => {
+    if (!modoPersonalizado && valorInput) {
+      const nuevoValor = Number(valorInput)
+      setDolarActual(nuevoValor)
+      localStorage.setItem("dolar", nuevoValor)
+      localStorage.setItem("dolarPersonalizado", "true")
+      setModoPersonalizado(true)
+    } else {
+      setDolarActual(dolarOficial)
+      localStorage.setItem("dolar", dolarOficial)
+      localStorage.removeItem("dolarPersonalizado")
+      setValorInput("")
+      setModoPersonalizado(false)
     }
+  }
+
+  return {
+    dolarOficial,
+    dolarActual,
+    modoPersonalizado,
+    valorInput,
+    setValorInput,
+    manejarCambio
+  }
 }
 
 export default useCalculoValor

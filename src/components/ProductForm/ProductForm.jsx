@@ -43,7 +43,7 @@ const ProductForm = ({
   const bgColor = bgMap[cardId];
 
   return (
-    <div className="rounded-lg mb-6 w-full bg-white shadow-lg px-5">
+    <div className="rounded-lg mb-6 w-full bg-white shadow-lg px-0 md:px-5 lg:px-5">
       <div className="flex justify-between items-center flex-col md:flex-row">
         <div className="flex justify-between flex-col mb-2">
           <h2 className="text-xl font-bold text-gray-700 flex items-center gap-1">
@@ -73,7 +73,6 @@ const ProductForm = ({
 
         <div className="">
           {type !== "Costo Maquinarias" && (
-
             <Button
               onClick={() => {
                 const newProduct = addProductForm();
@@ -104,7 +103,7 @@ const ProductForm = ({
         <div
           key={product.id}
           ref={(el) => (productRefs.current[product.id] = el)}
-          className={`border mb-6 p-4 border border-gray-200 rounded-xl ${bgMap[cardId] + "/50"}`}
+          className={`border sm:border-none mb-6 p-4 border-gray-200 rounded-xl ${bgMap[cardId] + "/50"}`}
         >
           {productForms.length > 0 && (
             <div className="px-2 flex justify-between items-center mb-4">
@@ -131,11 +130,12 @@ const ProductForm = ({
                       text={field.label}
                       name={field.key}
                       id={field.key}
-                      array={
-                        typeof field.options === "function"
+                      array={[
+                        { value: "", label: "Seleccioná una opción" },
+                        ...(typeof field.options === "function"
                           ? field.options(product)
-                          : field.options
-                      }
+                          : field.options),
+                      ]}
                       value={product[field.key]}
                       onChange={(e) =>
                         handleInputChange(product.id, field.key, e.target.value)
@@ -168,19 +168,15 @@ const ProductForm = ({
           </div>
           <div className="flex justify-between items-center">
             <div className="mt-4 px-4">
-              <label className="block text-sm text-gray-700 font-medium mb-1">
-                Costo
-              </label>
-              <Input
-                type="text"
-                value={
+              <div className="">
+                <span className="block text-sm text-gray-700 font-medium mb-1">Costo</span>
+                {
                   product.costo
                     ? `$USD ${product.costo.toFixed(2)} / AR$ ${localStorage.getItem("dolar") * product.costo.toFixed(2)
                     }`
                     : ""
                 }
-                readOnly
-              />
+              </div>
             </div>
             {type !== "Costo Maquinarias" && (
               <>
@@ -198,7 +194,7 @@ const ProductForm = ({
         </div>
       ))}
 
-      <div className="flex gap-2 mt-4 pb-4">
+      <div className="flex gap-2 mt-4 mx-4 md:mx-0 pb-4">
         {type !== "Costo Maquinarias" ? (
           <>
             <Button

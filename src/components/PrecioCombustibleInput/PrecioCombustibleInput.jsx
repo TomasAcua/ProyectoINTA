@@ -10,7 +10,6 @@ const PrecioCombustibleInput = ({ value, onChange }) => {
         text="Precio del Combustible (USD/L)"
         icon = {<Fuel color="white"/>}
         bgColor = "bg-orange-400"
-    
         type="number"
         className={`border p-2 rounded  border-black ${error ? "border-red-500" : "border-gray-300"}`}
         placeholder="Precio del Combustible"

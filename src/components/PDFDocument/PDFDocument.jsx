@@ -122,13 +122,12 @@ const styles = StyleSheet.create({
     color: '#6c757d',
     marginVertical: 4,
   },
-});
+})
 
 const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Encabezado con logo SIPAN */}
         <View style={styles.headerContainer}>
           <Image
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Logo_INTA.svg/2048px-Logo_INTA.svg.png"
@@ -139,8 +138,6 @@ const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
             <Text style={styles.headerSubtitle}>Reporte de planes y productos</Text>
           </View>
         </View>
-
-        {/* Gráfico */}
         {chartImage && (
           <>
             <Text style={styles.sectionTitle}>Gráfico de Costos</Text>
@@ -149,8 +146,6 @@ const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
             </View>
           </>
         )}
-
-        {/* Sección Planes */}
         <Text style={styles.sectionTitle}>Planes y Productos</Text>
 
         {plansToRender.map((plan, idx) => (
@@ -158,45 +153,83 @@ const PDFDocument = ({ chartImage, plansToRender, columnasPDF }) => {
             <Text style={styles.planTitle}>
               {plan.name} — Total: ${plan.costoTotal?.toLocaleString()}
             </Text>
+            {Array.isArray(plan.tratamientos) ? (
+              plan.tratamientos.length > 0 ? (
+                plan.tratamientos.map((tratamiento, i) => (
+                  <View key={i} wrap={false} style={styles.treatmentContainer}>
+                    <Text style={styles.treatmentTitle}>
+                      {tratamiento.name} — Total: ${tratamiento.costoTotal?.toLocaleString()}
+                    </Text>
 
-            {plan.tratamientos?.length > 0 ? (
-              plan.tratamientos.map((tratamiento, i) => (
-                <View key={i} wrap={false} style={styles.treatmentContainer}>
-                  <Text style={styles.treatmentTitle}>
-                    {tratamiento.name} — Total: ${tratamiento.costoTotal?.toLocaleString()}
-                  </Text>
-
-                  {tratamiento.productos?.length > 0 ? (
-                    <View style={styles.table}>
-                      <View style={[styles.tableRow, styles.tableHeader]}>
-                        {columnasPDF.map(col => (
-                          <Text style={styles.tableCell} key={col.key}>{col.label}</Text>
-                        ))}
-                      </View>
-                      {tratamiento.productos.map((prod, j) => (
-                        <View style={styles.tableRow} key={j}>
+                    {tratamiento.productos?.length > 0 ? (
+                      <View style={styles.table}>
+                        <View style={[styles.tableRow, styles.tableHeader]}>
                           {columnasPDF.map(col => (
-                            <Text style={styles.tableCell} key={col.key}>
-                              {prod[col.key] !== undefined ? prod[col.key] : ""}
-                            </Text>
+                            <Text style={styles.tableCell} key={col.key}>{col.label}</Text>
                           ))}
                         </View>
-                      ))}
+                        {tratamiento.productos.map((prod, j) => (
+                          <View style={styles.tableRow} key={j}>
+                            {columnasPDF.map(col => (
+                              <Text style={styles.tableCell} key={col.key}>
+                                {prod[col.key] !== undefined ? prod[col.key] : ""}
+                              </Text>
+                            ))}
+                          </View>
+                        ))}
+                      </View>
+                    ) : (
+                      <Text style={styles.italicText}>No hay productos en este tratamiento.</Text>
+                    )}
+                  </View>
+                ))
+              ) : (
+                <Text style={styles.italicText}>No hay tratamientos en este plan.</Text>
+              )
+            ) : Array.isArray(plan.maquinarias) ? (
+              <View style={styles.treatmentContainer}>
+                <Text style={styles.treatmentTitle}>Maquinaria</Text>
+                <View style={styles.table}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    {columnasPDF.map((col) => (
+                      <Text key={col.key} style={styles.tableCell}>{col.label}</Text>
+                    ))}
+                  </View>
+                  {plan.maquinarias.map((fila, filaIdx) => (
+                    <View style={styles.tableRow} key={filaIdx}>
+                      {columnasPDF.map((col) => {
+                        let value = "";
+                        switch (col.key) {
+                          case "tractor":
+                            value = `${fila.tractor} - $${Number(fila.tractorPrecio).toLocaleString()}`;
+                            break;
+                          case "implemento":
+                            value = `${fila.implemento} - $${Number(fila.implementoPrecio).toLocaleString()}`;
+                            break;
+                          case "costo":
+                            value = `$${Number(fila.costo).toLocaleString()}`;
+                            break;
+                          default:
+                            value = fila[col.key] || "—";
+                        }
+                        return (
+                          <Text key={col.key} style={styles.tableCell}>
+                            {value}
+                          </Text>
+                        );
+                      })}
                     </View>
-                  ) : (
-                    <Text style={styles.italicText}>No hay productos en este tratamiento.</Text>
-                  )}
+                  ))}
                 </View>
-              ))
+              </View>
             ) : (
-              <Text style={styles.italicText}>No hay tratamientos en este plan.</Text>
+              <Text style={styles.italicText}>Formato de plan no reconocido.</Text>
             )}
           </View>
         ))}
-
       </Page>
     </Document>
-  );
-};
+  )
+}
 
-export default PDFDocument;
+export default PDFDocument

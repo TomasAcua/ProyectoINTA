@@ -1,17 +1,17 @@
-import { useState, useRef, useEffect } from "react";
-import useChartData from "../../hooks/useChartData";
-import useTreatment from "../../hooks/useTreatment";
-import Chart from "../Chart/Chart";
-import Dolar from "../Dolar/Dolar";
-import PlanList from "../PlansList/PlanList";
-import ProductForm from "../ProductForm/ProductForm";
-import useProductForm from "../../hooks/useProductForm";
-import usePlanList from "../../hooks/usePlanList";
-import QuickNavigate from "../QuickNavigate/QuickNavigate";
-import CalculatorTitle from "../CalculatorTitle/CalculatorTitle";
-import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput";
-import XLSXDocument from "../XLSXDocument/XLSXDocument";
-import { useLocation } from "react-router-dom";
+import { useState, useRef, useEffect } from "react"
+import useChartData from "../../hooks/useChartData"
+import useTreatment from "../../hooks/useTreatment"
+import Chart from "../Chart/Chart"
+import Dolar from "../Dolar/Dolar"
+import PlanList from "../PlansList/PlanList"
+import ProductForm from "../ProductForm/ProductForm"
+import useProductForm from "../../hooks/useProductForm"
+import usePlanList from "../../hooks/usePlanList"
+import QuickNavigate from "../QuickNavigate/QuickNavigate"
+import CalculatorTitle from "../CalculatorTitle/CalculatorTitle"
+import PrecioCombustibleInput from "../PrecioCombustibleInput/PrecioCombustibleInput"
+import XLSXDocument from "../XLSXDocument/XLSXDocument"
+import { useLocation } from "react-router-dom"
 
 const ModuleLayout = ({
   titulo,
@@ -23,7 +23,7 @@ const ModuleLayout = ({
   setPrecioCombustible,
   type,
 }) => {
-  const location = useLocation().pathname.split("/")[1];
+  const location = useLocation().pathname.split("/")[1]
   const {
     productForms,
     addProductForm,
@@ -32,7 +32,8 @@ const ModuleLayout = ({
     cleanProducts,
     isCurrentPlanValid,
     resetProductForms,
-  } = useProductForm(fields, calcularCosto, storageKey, precioCombustible);
+  } = useProductForm(fields, calcularCosto, storageKey, precioCombustible)
+
   const {
     treatments,
     addTreatment,
@@ -40,7 +41,8 @@ const ModuleLayout = ({
     showaddTreatmentForm,
     handleDeleteTreatment,
     updateTreatmentAtIndexTreatment,
-  } = useTreatment("Treatment" + storageKey);
+  } = useTreatment("Treatment" + storageKey)
+
   const {
     plans,
     showForm,
@@ -51,61 +53,62 @@ const ModuleLayout = ({
     handleDeletePlan,
     updateTreatmentAtIndex,
     deleteTreatmentFromPlan,
-  } = usePlanList("plans" + storageKey);
+  } = usePlanList("plans" + storageKey)
 
   const { chartData, chartOptions, isFormValid } = useChartData(
     plans,
     location
-  );
+  )
 
-  const [showChart, setShowChart] = useState(false);
-  const chartRef = useRef(null);
-  const toggleChart = () => setShowChart((prev) => !prev);
+  const [showChart, setShowChart] = useState(false)
+  const chartRef = useRef(null)
+  const toggleChart = () => setShowChart((prev) => !prev)
 
   const [currentDolarValue, setCurrentDolarValue] = useState(
     localStorage.getItem("dolarOficial") || 0
-  );
+  )
 
   const updateDolarValue = (newValue) => {
-    setCurrentDolarValue(newValue);
-  };
+    setCurrentDolarValue(newValue)
+  }
 
   const handleCargarProductos = () => {
     if (!isCurrentPlanValid()) {
-      alert("Por favor, complete todos los datos requeridos.");
-      return;
+      alert("Por favor, complete todos los datos requeridos.")
+      return
     }
-    addTreatment(productForms);
-    resetProductForms();
-  };
+    addTreatment(productForms)
+    resetProductForms()
+  }
 
   useEffect(() => {
     const updatedForms = productForms.map((producto) => ({
       ...producto,
       costo: calcularCosto(producto),
-    }));
-    resetProductForms(updatedForms);
-  }, [precioCombustible]);
+    }))
+    resetProductForms(updatedForms)
+  }, [precioCombustible])
   const handleAddPlan = () => {
     if (type === "Costo Maquinarias") {
          if (!precioCombustible || parseFloat(precioCombustible) <= 0) {
-      alert("Debes ingresar un precio de combustible válido antes de guardar el plan.");
-      return;
+      alert("Debes ingresar un precio de combustible válido antes de guardar el plan.")
+      return
     }
       if (productForms.length === 0) {
-        alert("Debes cargar al menos una maquinaria antes de guardar el plan.");
+        alert("Debes cargar al menos una maquinaria antes de guardar el plan.")
       }
-      addPlan(productForms, "maquinarias");
-      cleanProducts();
+      addPlan(productForms, "maquinarias")
+      cleanProducts()
     } else {
       if (treatments.length === 0) {
-        alert("Debes cargar al menos un tratamiento antes de guardar el plan.");
+        alert("Debes cargar al menos un tratamiento antes de guardar el plan.")
       }
 
-      addPlan(treatments, "tratamientos");
-      cleanTreatments();
+      addPlan(treatments, "tratamientos")
+      cleanTreatments()
     }
-  };
+  }
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen w-full bg-gray-50">
       <CalculatorTitle title={titulo} />
@@ -138,13 +141,13 @@ const ModuleLayout = ({
                     })),
                     costoTotal: editedTreatment.productos.reduce(
                       (acc, producto) => {
-                        return acc + calcularCosto(producto);
+                        return acc + calcularCosto(producto)
                       },
                       0
                     ),
                   };
 
-                  updateTreatmentAtIndexTreatment(index, recalculatedPlan);
+                  updateTreatmentAtIndexTreatment(index, recalculatedPlan)
                 }}
                 type={type}
                 columnasPDF={columnasPDF}
@@ -177,7 +180,7 @@ const ModuleLayout = ({
             location={location}
             calcularCosto={calcularCosto}
             onSavePlan={(index, editedPlanYaCalculado) => {
-              updatePlanAtIndex(index, editedPlanYaCalculado);
+              updatePlanAtIndex(index, editedPlanYaCalculado)
             }}
             fields={fields}
             handleDeletePlan={handleDeletePlan}
@@ -193,13 +196,14 @@ const ModuleLayout = ({
             showChart={showChart}
             toggleChart={toggleChart}
           />
-
+          {console.log("PLANS EN PDF: ", plans)}
           <div className="my-4">
               <XLSXDocument plans={plans} />
           </div>
         </div>
       </div>
     </div>
-  );
-};
-export default ModuleLayout;
+  )
+}
+
+export default ModuleLayout

@@ -1,53 +1,23 @@
-import { useEffect, useState } from "react";
-import fetchDolar from "../../services/fetchDolar";
-import Input from "../Input/Input";
-import Button from "../Button/Button";
-import { RefreshCcw, Check, Calculator } from "lucide-react";
-import Badge from "../Badge/Badge";
+import { useEffect } from "react"
+import { RefreshCcw, Check, Calculator } from "lucide-react"
+import Input from "../Input/Input"
+import Button from "../Button/Button"
+import Badge from "../Badge/Badge"
+import useCalculoValor from "../../hooks/useCalculoValor"
 
 const Dolar = ({ onDolarChange }) => {
-  const [dolarOficial, setDolarOficial] = useState(null);
-  const [dolarActual, setDolarActual] = useState(null);
-  const [modoPersonalizado, setModoPersonalizado] = useState(false);
-  const [valorInput, setValorInput] = useState("");
-  const [cantDolar, setCantDolar] = useState(1);
+  const {
+    dolarOficial,
+    dolarActual,
+    modoPersonalizado,
+    valorInput,
+    setValorInput,
+    manejarCambio,
+  } = useCalculoValor()
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data, error } = await fetchDolar()
-        console.log("FETCH DOLAR data: ", data, " /// error: ", error)
-        if (data) {
-          setDolarOficial(data.venta)
-          setDolarActual(data.venta)
-          localStorage.setItem("dolar", data.venta)
-        } else {
-          console.error("Error al obtener el dólar:", error)
-        }
-      } catch (error) {
-        console.error("Error al obtener el dólar:", error)
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (onDolarChange) onDolarChange(dolarActual);
-  }, [dolarActual]);
-
-  const manejarCambio = () => {
-    if (!modoPersonalizado && valorInput) {
-      const nuevoValor = Number(valorInput);
-      setDolarActual(nuevoValor);
-      localStorage.setItem("dolar", nuevoValor);
-      setModoPersonalizado(true);
-    } else {
-      setDolarActual(dolarOficial);
-      localStorage.setItem("dolar", dolarOficial);
-      setValorInput("");
-      setModoPersonalizado(false);
-    }
-  };
+    if (onDolarChange) onDolarChange(dolarActual)
+  }, [dolarActual])
 
   return (
     <div className="p-4 w-full bg-white rounded">
@@ -61,7 +31,7 @@ const Dolar = ({ onDolarChange }) => {
       {dolarOficial === null ? (
         <p className="text-center text-gray-400">Cargando datos...</p>
       ) : (
-        <div className="flex flex-col gap-6  text-slate-800 w-full">
+        <div className="flex flex-col gap-6 text-slate-800 w-full">
           <div>
             <div className="flex flex-row items-center justify-between">
               <label className="block text-sm font-medium text-gray-700">
@@ -71,10 +41,9 @@ const Dolar = ({ onDolarChange }) => {
                 {modoPersonalizado ? "Personalizado" : "Oficial"}
               </Badge>
             </div>
-
             <Input
               type="number"
-              min={"1"}
+              min="1"
               value={valorInput}
               onChange={(e) => setValorInput(e.target.value)}
               placeholder={`Ej: ${dolarOficial}`}
@@ -109,7 +78,7 @@ const Dolar = ({ onDolarChange }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Dolar;
+export default Dolar

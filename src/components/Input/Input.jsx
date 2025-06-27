@@ -14,6 +14,7 @@ const Input = ({ text, icon, bgColor, value, onChange, type, name, placeholder, 
       <input
         type={type}
         onChange={onChange}
+        onWheel={(e) => e.target.blur()}
         value={value}
         name={name}
         className={`text-sm shadow-sm rounded-md w-full px-3 py-2 outline-none transition ${className || ""}`}

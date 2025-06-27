@@ -4,7 +4,6 @@
 
 import {fetchOffline} from "../utils/fetchOffline"
 
-
 export const fetchDolar = async (type = "oficial") => {
   const key = `${type}`
   return await fetchOffline({

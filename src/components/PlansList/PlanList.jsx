@@ -1,9 +1,9 @@
 
-import Button from "../Button/Button";
-import ListaDesplegable from "../ListaDesplegable/ListaDesplegable";
-import Input from "../Input/Input";
-import { Trash2 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import Button from "../Button/Button"
+import ListaDesplegable from "../ListaDesplegable/ListaDesplegable"
+import Input from "../Input/Input"
+import { Trash2 } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 
 const PlanList = ({
   plans,
@@ -16,55 +16,55 @@ const PlanList = ({
   location,
   calcularCosto
 }) => {
-  const [indexPlan, setIndexPlan] = useState(null);
-  const [planOriginal, setPlanOriginal] = useState(null);
-  const [planAEditar, setPlanAEditar] = useState(null);
-  const [cambiosDetectados, setCambiosDetectados] = useState(false);
-  const planRefs = useRef({});
+  const [indexPlan, setIndexPlan] = useState(null)
+  const [planOriginal, setPlanOriginal] = useState(null)
+  const [planAEditar, setPlanAEditar] = useState(null)
+  const [cambiosDetectados, setCambiosDetectados] = useState(false)
+  const planRefs = useRef({})
 
   const obtenerProductos = (plan, enEdicion, planAEditar) => {
-    const base = enEdicion ? planAEditar : plan;
+    const base = enEdicion ? planAEditar : plan
     if (!base) {
-      return [];
+      return []
     }
     if (Array.isArray(base.tratamientos)) {
-      return base.tratamientos.flatMap(t => t.productos || []);
+      return base.tratamientos.flatMap(t => t.productos || [])
     }
 
     if (Array.isArray(base.maquinarias)) {
-      return base.maquinarias;
+      return base.maquinarias
     }
 
-    return [];
-  };
+    return []
+  }
   useEffect(() => {
     if (planAEditar && planOriginal) {
-      const productosEditados = JSON.stringify(obtenerProductos(planAEditar, true, planAEditar));
-      const productosOriginales = JSON.stringify(obtenerProductos(planOriginal, true, planOriginal));
-      setCambiosDetectados(productosEditados !== productosOriginales);
+      const productosEditados = JSON.stringify(obtenerProductos(planAEditar, true, planAEditar))
+      const productosOriginales = JSON.stringify(obtenerProductos(planOriginal, true, planOriginal))
+      setCambiosDetectados(productosEditados !== productosOriginales)
     } else {
-      setCambiosDetectados(false);
+      setCambiosDetectados(false)
     }
-  }, [planAEditar, planOriginal]);
+  }, [planAEditar, planOriginal])
 
   const seleccionaPlanAEditar = (planIndex) => {
-    const plan = JSON.parse(JSON.stringify(plans[planIndex]));
-    setPlanAEditar(plan);
-    setIndexPlan(planIndex);
-    setPlanOriginal(plan);
-  };
+    const plan = JSON.parse(JSON.stringify(plans[planIndex]))
+    setPlanAEditar(plan)
+    setIndexPlan(planIndex)
+    setPlanOriginal(plan)
+  }
 
   const guardarPlan = () => {
     if (indexPlan !== null && planAEditar) {
       let recalculatedPlan;
       if (location === "costo-maquinaria") {
-         const faltanImplementos = planAEditar.maquinarias.some(
-        (item) => !item.implemento || item.implemento.trim() === ""
-      );
-      if (faltanImplementos) {
-        alert("Debes completar el campo 'implemento' antes de guardar.");
-        return;
-      }
+        const faltanImplementos = planAEditar.maquinarias.some(
+          (item) => !item.implemento || item.implemento.trim() === ""
+        );
+        if (faltanImplementos) {
+          alert("Debes completar el campo 'implemento' antes de guardar.");
+          return;
+        }
         const maquinarias = planAEditar.maquinarias.map((item) => ({
           ...item,
           costo: calcularCosto(item),
@@ -73,7 +73,7 @@ const PlanList = ({
           ...planAEditar,
           maquinarias,
           costoTotal: maquinarias.reduce((acc, item) => acc + item.costo, 0),
-        };
+        }
       } else {
         const tratamientos = planAEditar.tratamientos.map((t) => ({
           ...t,
@@ -81,27 +81,27 @@ const PlanList = ({
             ...p,
             costo: calcularCosto(p),
           })),
-        }));
+        }))
         const costoTotal = tratamientos.reduce((acc, t) => {
-          const subtotal = t.productos.reduce((s, p) => s + calcularCosto(p), 0);
-          return acc + subtotal;
-        }, 0);
+          const subtotal = t.productos.reduce((s, p) => s + calcularCosto(p), 0)
+          return acc + subtotal
+        }, 0)
         recalculatedPlan = {
           ...planAEditar,
           tratamientos,
           costoTotal,
-        };
+        }
       }
-      onSavePlan(indexPlan, recalculatedPlan);
-      cancelarEdicion();
+      onSavePlan(indexPlan, recalculatedPlan)
+      cancelarEdicion()
     }
-  };
+  }
 
   const cancelarEdicion = () => {
-    setIndexPlan(null);
-    setPlanAEditar(null);
-    setPlanOriginal(null);
-  };
+    setIndexPlan(null)
+    setPlanAEditar(null)
+    setPlanOriginal(null)
+  }
 
   const eliminarItem = (
     prodIndex,
@@ -110,23 +110,23 @@ const PlanList = ({
     tratamientoIndex = null
   ) => {
     if (indexPlan === planIndex && planAEditar) {
-      const copiaPlan = JSON.parse(JSON.stringify(planAEditar));
+      const copiaPlan = JSON.parse(JSON.stringify(planAEditar))
       if (tipo === "tratamientos") {
-        copiaPlan.tratamientos[tratamientoIndex].productos.splice(prodIndex, 1);
+        copiaPlan.tratamientos[tratamientoIndex].productos.splice(prodIndex, 1)
       } else {
-        copiaPlan.maquinarias.splice(prodIndex, 1);
+        copiaPlan.maquinarias.splice(prodIndex, 1)
       }
-      setPlanAEditar(copiaPlan);
+      setPlanAEditar(copiaPlan)
     } else {
-      const copiaPlan = JSON.parse(JSON.stringify(plans[planIndex]));
+      const copiaPlan = JSON.parse(JSON.stringify(plans[planIndex]))
       if (tipo === "tratamientos") {
-        copiaPlan.tratamientos[tratamientoIndex].productos.splice(prodIndex, 1);
+        copiaPlan.tratamientos[tratamientoIndex].productos.splice(prodIndex, 1)
       } else {
-        copiaPlan.maquinarias.splice(prodIndex, 1);
+        copiaPlan.maquinarias.splice(prodIndex, 1)
       }
-      onSavePlan(planIndex, copiaPlan);
+      onSavePlan(planIndex, copiaPlan)
     }
-  };
+  }
 
   const handleChange = (
     fieldKey,
@@ -137,48 +137,39 @@ const PlanList = ({
     tratamientoIndex = null
   ) => {
     if (indexPlan === planIndex && planAEditar) {
-      const copiaPlan = JSON.parse(JSON.stringify(planAEditar));
-      let item;
+      const copiaPlan = JSON.parse(JSON.stringify(planAEditar))
+      let item
       if (tipo === "tratamientos") {
-        item = copiaPlan.tratamientos[tratamientoIndex].productos[itemIndex];
-        item[fieldKey] = value;
-        // Recalcula el costo del producto
-        item.costo = calcularCosto(item);
-        // Recalcula el costoTotal del tratamiento
-        const tratamiento = copiaPlan.tratamientos[tratamientoIndex];
-        tratamiento.costoTotal = tratamiento.productos.reduce((acc, p) => acc + (p.costo || 0), 0);
-        // Recalcula el costoTotal del plan
-        copiaPlan.costoTotal = copiaPlan.tratamientos.reduce((acc, t) => acc + (t.costoTotal || 0), 0);
+        item = copiaPlan.tratamientos[tratamientoIndex].productos[itemIndex]
+        item[fieldKey] = value
+        item.costo = calcularCosto(item)
+        const tratamiento = copiaPlan.tratamientos[tratamientoIndex]
+        tratamiento.costoTotal = tratamiento.productos.reduce((acc, p) => acc + (p.costo || 0), 0)
+        copiaPlan.costoTotal = copiaPlan.tratamientos.reduce((acc, t) => acc + (t.costoTotal || 0), 0)
       } else if (tipo === "maquinarias") {
-        item = copiaPlan.maquinarias[itemIndex];
-        item[fieldKey] = value;
+        item = copiaPlan.maquinarias[itemIndex]
+        item[fieldKey] = value
 
-        // Si cambias el tractor, limpia implemento y su precio
         if (fieldKey === "tractor") {
-          item["implemento"] = "";
-          item["implementoPrecio"] = "";
-          // Actualiza el precio del tractor si existe en fields
-          const fieldPrecio = fields.find(f => f.key === "tractorPrecio" && typeof f.value === "function");
+          item["implemento"] = ""
+          item["implementoPrecio"] = ""
+          const fieldPrecio = fields.find(f => f.key === "tractorPrecio" && typeof f.value === "function")
           if (fieldPrecio) {
-            item["tractorPrecio"] = fieldPrecio.value(item);
+            item["tractorPrecio"] = fieldPrecio.value(item)
           }
         }
-        // Si cambias el implemento, actualiza su precio
         if (fieldKey === "implemento") {
-          const fieldPrecio = fields.find(f => f.key === "implementoPrecio" && typeof f.value === "function");
+          const fieldPrecio = fields.find(f => f.key === "implementoPrecio" && typeof f.value === "function")
           if (fieldPrecio) {
-            item["implementoPrecio"] = fieldPrecio.value(item);
+            item["implementoPrecio"] = fieldPrecio.value(item)
           }
         }
-
-        // Recalcula el costo de la maquinaria
-        item.costo = calcularCosto(item);
-        // Recalcula el costoTotal del plan
-        copiaPlan.costoTotal = copiaPlan.maquinarias.reduce((acc, m) => acc + (m.costo || 0), 0);
+        item.costo = calcularCosto(item)
+        copiaPlan.costoTotal = copiaPlan.maquinarias.reduce((acc, m) => acc + (m.costo || 0), 0)
       }
-      setPlanAEditar(copiaPlan);
+      setPlanAEditar(copiaPlan)
     }
-  };
+  }
 
   return (
     <div className="p-0 md:p-6 lg:p-6 w-full rounded-2xl mb-8">
@@ -191,9 +182,9 @@ const PlanList = ({
         <div className="flex flex-col items-center gap-8">
           {plans.map((plan, planIdx) => {
             const enEdicion = indexPlan === planIdx;
-            const isTratamientos = plan.hasOwnProperty("tratamientos");
-            const isMaquinarias = plan.hasOwnProperty("maquinarias");
-            const currentPlan = enEdicion && planAEditar ? planAEditar : plan;
+            const isTratamientos = plan.hasOwnProperty("tratamientos")
+            const isMaquinarias = plan.hasOwnProperty("maquinarias")
+            const currentPlan = enEdicion && planAEditar ? planAEditar : plan
             return (
               <div
                 key={plan.id}
@@ -235,8 +226,8 @@ const PlanList = ({
                                 {columnasPDF.map((col) => {
                                   const fieldDef = fields.find(
                                     (f) => f.key === col.key
-                                  );
-                                  const valor = prod[col.key] ?? "";
+                                  )
+                                  const valor = prod[col.key] ?? ""
                                   return (
                                     <div key={col.key} className="flex-1 px-2">
                                       <p className="text-sm font-medium text-gray-700 mb-1">
@@ -256,7 +247,7 @@ const PlanList = ({
                                                 tIdx
                                               )
                                             }
-                                            
+
                                             array={
                                               typeof fieldDef.options ===
                                                 "function"
@@ -288,12 +279,9 @@ const PlanList = ({
                                         </p>
                                       )}
                                     </div>
-                                  );
-
+                                  )
                                 })}
-
                                 {Array.isArray(tratamiento.productos) && tratamiento.productos.length > 1 && (
-
                                   <Button
                                     className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-lg shadow"
                                     onClick={() =>
@@ -312,7 +300,6 @@ const PlanList = ({
                             })}
                           </div>
                         ))}
-
                       {isMaquinarias &&
                         Array.isArray(currentPlan.maquinarias) &&
                         currentPlan.maquinarias.map((maq, mIdx) => (
@@ -326,7 +313,7 @@ const PlanList = ({
                             {columnasPDF.map((col) => {
                               const fieldDef = fields.find(
                                 (f) => f.key === col.key
-                              );
+                              )
                               const valor = maq[col.key] ?? "";
                               return (
                                 <div key={col.key} className="flex-1 px-2">
@@ -390,7 +377,6 @@ const PlanList = ({
                     </div>
                   </div>
                 </div>
-
                 <div className="mt-6 flex md:flex-row flex-col justify-between items-center font-bold text-gray-800 p-4 rounded">
                   <div className="bg-sky-100 border border-sky-300 rounded-lg p-4">
                     <p className="text-sm text-gray-600">Total estimado:</p>
@@ -433,7 +419,7 @@ const PlanList = ({
                   )}
                 </div>
               </div>
-            );
+            )
           })}
 
           <div className="flex flex-wrap justify-center gap-4 mb-6">
@@ -449,7 +435,7 @@ const PlanList = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default PlanList;
+export default PlanList

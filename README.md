@@ -4,6 +4,8 @@
 [![React](https://img.shields.io/badge/built%20with-React-blue)](https://reactjs.org/)  
 [![Tailwind](https://img.shields.io/badge/styled%20with-TailwindCSS-38bdf8)](https://tailwindcss.com/)
 
+### Probá la app en Vercel haciendo click [acá](https://proyecto-inta.vercel.app/)
+
 ---
 
 ## 📋 Descripción
