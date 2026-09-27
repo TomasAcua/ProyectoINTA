@@ -12,9 +12,7 @@ export default function CostoMaquinaria() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data, error } = await fetchMaquinaria(
-          "534950414e2e4d617175696e6172696140316e643163346430723373"
-        )
+        const { data, error } = await fetchMaquinaria(tokenMaquinaria)
         if (!error && data) {
           const arr = Object.values(data)
 
@@ -26,7 +24,7 @@ export default function CostoMaquinaria() {
             arr.filter((p) => !p.indicador?.toLowerCase().includes("tractor"))
           )
         }
-      } catch (error) {
+      } catch (error) { 
         console.error("Error fetching maquinaria:", error)
       }
     }

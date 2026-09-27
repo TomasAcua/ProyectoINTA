@@ -14,15 +14,13 @@ const columnasPDF = [
 ];
 
 export default function Fertilizacion() {
-// const tokenProductos = import.meta.env.VITE_API_TOKEN_PRODUCTOS;
+const tokenProductos = import.meta.env.VITE_API_TOKEN_PRODUCTOS;
 
   const [productosMockApi, setProductosMockApi] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data, error } = await fetchProductos(
-          "534950414e2e50726f647563746f7340316e643163346430723373"
-        );
+        const { data, error } = await fetchProductos(tokenProductos);
         if (!error && data) {
           const productosFiltrados = Object.values(data).filter(
             (p) => p.rubro && p.rubro.toLowerCase().includes("fertilizante")
