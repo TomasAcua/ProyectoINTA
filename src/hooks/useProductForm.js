@@ -8,13 +8,20 @@ const useProductForm = (fields, calcularCosto, storageKey = "productForms", prec
     const defaultErrors = fields.reduce((acc, field) => ({ ...acc, [field.key]: "" }), {});
 
     const [productForms, setProductForms] = useState(() => {
-        const stored = localStorage.getItem(storageKey)
-        if (stored) {
-            return JSON.parse(stored).map(form => ({
-                ...defaultValues,
-                ...form,
-                errors: { ...defaultErrors }
-            }));
+        try {
+            const stored = localStorage.getItem(storageKey)
+            if (stored) {
+                const parsed = JSON.parse(stored)
+                if (Array.isArray(parsed)) {
+                    return parsed.map(form => ({
+                        ...defaultValues,
+                        ...form,
+                        errors: { ...defaultErrors }
+                    }));
+                }
+            }
+        } catch (error) {
+            console.error(`Error al leer "${storageKey}" desde localStorage:`, error)
         }
         return [{ id: 1, ...defaultValues, errors: { ...defaultErrors } }]
     })

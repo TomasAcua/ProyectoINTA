@@ -9,33 +9,45 @@ const usePlanList = (storageKey = "plans") => {
 
     // Estado para almacenar todos los planes con detalles de productos
     // Controla mostrar u ocultar el formulario de carga
-    const [plans, setPlans] = useState(JSON.parse(localStorage.getItem(storageKey)) || []);
+    const [plans, setPlans] = useState(() => {
+        try {
+            const stored = localStorage.getItem(storageKey)
+            const parsed = stored ? JSON.parse(stored) : []
+            return Array.isArray(parsed) ? parsed : []
+        } catch (error) {
+            console.error(`Error al leer "${storageKey}" desde localStorage:`, error)
+            return []
+        }
+    });
     const [showForm, setShowForm] = useState(true);
 
-  
+    // Contador que solo crece: evita que se repitan nombres (ej. "Plan C")
+    // cuando se borra un plan y luego se agrega uno nuevo.
+    const [planCounter, setPlanCounter] = useState(() => {
+        try {
+            const stored = localStorage.getItem(storageKey + "Counter")
+            if (stored !== null) return parseInt(stored, 10) || 0
+        } catch (error) {
+            console.error(`Error al leer el contador de "${storageKey}":`, error)
+        }
+        return plans.length
+    });
 
     const addPlan = (data, type = "tratamientos") => {
         const isTratamientos = type === "tratamientos"
-        if(type === "tratamientos"){
-            const newPlan = {
+        const costoTotal = isTratamientos
+            ? data.reduce((acc, item) => acc + parseFloat(item.costoTotal), 0)
+            : data.reduce((acc, item) => acc + parseFloat(item.costo), 0)
+
+        const newPlan = {
             id: crypto.randomUUID(),
-            name: `Plan ${String.fromCharCode(65 + plans.length)}`,
-           [type]: data, 
-            costoTotal: data.reduce((acc, item) => acc + parseFloat(item.costoTotal), 0)
-            
+            name: `Plan ${String.fromCharCode(65 + planCounter)}`,
+            [type]: data,
+            costoTotal
         };
+
         setPlans([...plans, newPlan]);
-        }else{
-            const newPlan = {
-            id: crypto.randomUUID(),
-            name: `Plan ${String.fromCharCode(65 + plans.length)}`,
-           [type]: data, 
-            costoTotal: data.reduce((acc, item) => acc + parseFloat(item.costo), 0)
-            
-        };
-        setPlans([...plans, newPlan]);
-        }
-        
+        setPlanCounter((prev) => prev + 1);
         setShowForm(true);
     }
 
@@ -51,6 +63,10 @@ const usePlanList = (storageKey = "plans") => {
     useEffect(() => {
         localStorage.setItem(storageKey, JSON.stringify(plans));
     }, [plans, storageKey])
+
+    useEffect(() => {
+        localStorage.setItem(storageKey + "Counter", String(planCounter));
+    }, [planCounter, storageKey])
 
     
     const updatePlanAtIndex = (index, updatedPlan) => {

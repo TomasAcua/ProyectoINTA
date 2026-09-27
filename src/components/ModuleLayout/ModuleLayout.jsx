@@ -90,18 +90,20 @@ const ModuleLayout = ({
   }, [precioCombustible])
   const handleAddPlan = () => {
     if (type === "Costo Maquinarias") {
-         if (!precioCombustible || parseFloat(precioCombustible) <= 0) {
-      alert("Debes ingresar un precio de combustible válido antes de guardar el plan.")
-      return
-    }
+      if (!precioCombustible || parseFloat(precioCombustible) <= 0) {
+        alert("Debes ingresar un precio de combustible válido antes de guardar el plan.")
+        return
+      }
       if (productForms.length === 0) {
         alert("Debes cargar al menos una maquinaria antes de guardar el plan.")
+        return
       }
       addPlan(productForms, "maquinarias")
       cleanProducts()
     } else {
       if (treatments.length === 0) {
         alert("Debes cargar al menos un tratamiento antes de guardar el plan.")
+        return
       }
 
       addPlan(treatments, "tratamientos")
@@ -196,7 +198,6 @@ const ModuleLayout = ({
             showChart={showChart}
             toggleChart={toggleChart}
           />
-          {console.log("PLANS EN PDF: ", plans)}
           <div className="my-4">
               <XLSXDocument plans={plans} />
           </div>

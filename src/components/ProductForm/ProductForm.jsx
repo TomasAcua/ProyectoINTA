@@ -183,7 +183,7 @@ const ProductForm = ({
                 {" "}
                 <Button
                   onClick={() => deleteProductForm(product.id)}
-                  className="text-white bg-red-700 px-3 py-2 transition-colors rounded-md flex items-center gap-2"
+                  className="my-2 text-white bg-red-700 px-3 py-2 transition-colors rounded-md flex items-center gap-2"
                 >
                   <Trash2 size={20} />
                   <span>Eliminar Producto</span>

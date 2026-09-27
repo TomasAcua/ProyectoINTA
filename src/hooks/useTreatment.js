@@ -1,19 +1,35 @@
 import { useState, useEffect } from 'react'
 
 /**
- * Básicamente acá manejamos los useState y useEffect del componente TreatmentList.jsx
+ * Acá manejamos los useState y useEffect del componente TreatmentList.jsx
  * @returns estados, handles, funciones necesarias
  */
 
 const useTreatment = ( storageKey = "treatments") => {
     // Estado para almacenar todos los Treatmentes con detalles de productos
     // Controla mostrar u ocultar el formulario de carga
-    const [treatments, setTreatments] = useState(JSON.parse(localStorage.getItem(storageKey)) || []);
-    //     {Object.keys(subjects).map((keyName, i) => (
-    //     <li className="travelcompany-input" key={i}>
-    //         <span className="input-label">key: {i} Name: {subjects[keyName]}</span>
-    //     </li>
-    // ))}
+    const [treatments, setTreatments] = useState(() => {
+        try {
+            const stored = localStorage.getItem(storageKey)
+            const parsed = stored ? JSON.parse(stored) : []
+            return Array.isArray(parsed) ? parsed : []
+        } catch (error) {
+            console.error(`Error al leer "${storageKey}" desde localStorage:`, error)
+            return []
+        }
+    });
+
+    // Contador que solo crece: evita que se repitan nombres (ej. "Tratamiento 2")
+    // cuando se borra un tratamiento y luego se agrega uno nuevo.
+    const [treatmentCounter, setTreatmentCounter] = useState(() => {
+        try {
+            const stored = localStorage.getItem(storageKey + "Counter")
+            if (stored !== null) return parseInt(stored, 10) || 0
+        } catch (error) {
+            console.error(`Error al leer el contador de "${storageKey}":`, error)
+        }
+        return treatments.length
+    });
 
     const addTreatment = (productForms) => {
 
@@ -21,12 +37,13 @@ const useTreatment = ( storageKey = "treatments") => {
 
         const newTreatment = {
             id: crypto.randomUUID(),
-            name:  `Tratamiento ${treatments.length +1}`,
+            name:  `Tratamiento ${treatmentCounter + 1}`,
             productos: productsArray.map(({ id, ...content }) => content),
             costoTotal: productsArray.reduce((acc, prod) => acc + parseFloat(prod.costo), 0)
         };
 
         setTreatments([...treatments, newTreatment]);
+        setTreatmentCounter((prev) => prev + 1);
     }
 
     const cleanTreatments = () => {
@@ -37,6 +54,10 @@ const useTreatment = ( storageKey = "treatments") => {
     useEffect(() => {
         localStorage.setItem(storageKey, JSON.stringify(treatments));
     }, [treatments, storageKey])
+
+    useEffect(() => {
+        localStorage.setItem(storageKey + "Counter", String(treatmentCounter));
+    }, [treatmentCounter, storageKey])
 
     const updateTreatmentAtIndexTreatment = (index, updatedTreatment) => {
        

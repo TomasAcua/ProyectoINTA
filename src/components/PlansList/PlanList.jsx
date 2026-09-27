@@ -1,4 +1,3 @@
-
 import Button from "../Button/Button"
 import ListaDesplegable from "../ListaDesplegable/ListaDesplegable"
 import Input from "../Input/Input"
@@ -128,6 +127,26 @@ const PlanList = ({
     }
   }
 
+  const sumarCostoTratamientos = (tratamientos) =>
+    tratamientos.reduce((acc, t) => acc + (t.costoTotal || 0), 0)
+
+  const eliminarTratamiento = (planIndex, tratamientoIndex) => {
+    if (!window.confirm("¿Seguro que deseas eliminar este tratamiento completo del plan?")) {
+      return
+    }
+    if (indexPlan === planIndex && planAEditar) {
+      const copiaPlan = JSON.parse(JSON.stringify(planAEditar))
+      copiaPlan.tratamientos.splice(tratamientoIndex, 1)
+      copiaPlan.costoTotal = sumarCostoTratamientos(copiaPlan.tratamientos)
+      setPlanAEditar(copiaPlan)
+    } else {
+      const copiaPlan = JSON.parse(JSON.stringify(plans[planIndex]))
+      copiaPlan.tratamientos.splice(tratamientoIndex, 1)
+      copiaPlan.costoTotal = sumarCostoTratamientos(copiaPlan.tratamientos)
+      onSavePlan(planIndex, copiaPlan)
+    }
+  }
+
   const handleChange = (
     fieldKey,
     value,
@@ -209,9 +228,23 @@ const PlanList = ({
                             key={tIdx}
                             className="bg-white p-4 rounded shadow"
                           >
-                            <h4 className="font-bold text-sky-700 mb-2">
-                              Tratamiento {tIdx + 1}
-                            </h4>
+                            <div className="flex items-center justify-between mb-2 gap-2">
+                              <h4 className="font-bold text-sky-700">
+                                Tratamiento {tIdx + 1}
+                              </h4>
+                              {Array.isArray(currentPlan.tratamientos) &&
+                                currentPlan.tratamientos.length > 1 && (
+                                  <Button
+                                    className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 text-sm rounded-lg shadow flex items-center gap-1"
+                                    onClick={() =>
+                                      eliminarTratamiento(planIdx, tIdx)
+                                    }
+                                  >
+                                    <Trash2 size={16} />
+                                    Eliminar tratamiento
+                                  </Button>
+                                )}
+                            </div>
 
                             {tratamiento.productos.map((prod, pIdx) => {
 
@@ -411,7 +444,15 @@ const PlanList = ({
                       </Button>
                       <Button
                         className="bg-red-500 hover:bg-red-600 text-white px-4 my-4 py-2 rounded-lg shadow"
-                        onClick={() => handleDeletePlan(plan.id)}
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              "¿Seguro que deseas eliminar este plan completo? Esta acción no se puede deshacer."
+                            )
+                          ) {
+                            handleDeletePlan(plan.id)
+                          }
+                        }}
                       >
                         Eliminar Plan
                       </Button>
@@ -426,7 +467,15 @@ const PlanList = ({
             {onCleanPlans && (
               <Button
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow"
-                onClick={onCleanPlans}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "¿Seguro que deseas eliminar todos los planes? Esta acción no se puede deshacer."
+                    )
+                  ) {
+                    onCleanPlans()
+                  }
+                }}
               >
                 Limpiar planes
               </Button>
